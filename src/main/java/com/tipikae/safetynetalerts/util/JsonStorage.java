@@ -11,20 +11,22 @@ import java.util.Properties;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.tipikae.safetynetalerts.models.Storage;
+import com.tipikae.safetynetalerts.model.Storage;
 
 public class JsonStorage {
 	
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
+	private static final String PROPERTIES_FILE = "/application.properties";
+	private static final String PROPERTY_KEY_FILE = "storage.file";
 
 	public Storage readStorage() {
 		Gson gson = new GsonBuilder().setDateFormat(DATE_FORMAT).create();
-		try (InputStream fis = this.getClass().getResourceAsStream("/application.properties")) {
+		try (InputStream fis = this.getClass().getResourceAsStream(PROPERTIES_FILE)) {
 			
 			Properties prop = new Properties();
 			prop.load(fis);
 			
-			Reader reader = Files.newBufferedReader(Paths.get(prop.getProperty("storage.file")));
+			Reader reader = Files.newBufferedReader(Paths.get(prop.getProperty(PROPERTY_KEY_FILE)));
 			
 			Storage storage = gson.fromJson(reader, Storage.class);
 			reader.close();
@@ -39,12 +41,12 @@ public class JsonStorage {
 	
 	public boolean writeStorage(Storage storage) {
 		Gson gson = new GsonBuilder().setDateFormat(DATE_FORMAT).create();
-		try (InputStream fis = this.getClass().getResourceAsStream("/application.properties")) {
+		try (InputStream fis = this.getClass().getResourceAsStream(PROPERTIES_FILE)) {
 			
 			Properties prop = new Properties();
 			prop.load(fis);
 			
-			Writer writer = new FileWriter(prop.getProperty("storage.file"));
+			Writer writer = new FileWriter(prop.getProperty(PROPERTY_KEY_FILE));
 			gson.toJson(storage, writer);
 			writer.close();
 			

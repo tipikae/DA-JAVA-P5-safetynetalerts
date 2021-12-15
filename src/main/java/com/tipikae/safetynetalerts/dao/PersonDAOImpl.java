@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.tipikae.safetynetalerts.models.Person;
+import com.tipikae.safetynetalerts.model.Person;
 import com.tipikae.safetynetalerts.util.JsonStorage;
 
 @Repository

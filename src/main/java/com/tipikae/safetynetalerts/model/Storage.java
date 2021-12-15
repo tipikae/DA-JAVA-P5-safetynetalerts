@@ -1,4 +1,4 @@
-package com.tipikae.safetynetalerts.models;
+package com.tipikae.safetynetalerts.model;
 
 import java.util.List;
 

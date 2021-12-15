@@ -1,9 +1,8 @@
-package com.tipikae.safetynetalerts.models;
+package com.tipikae.safetynetalerts.model;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class MedicalRecord implements Serializable {
 

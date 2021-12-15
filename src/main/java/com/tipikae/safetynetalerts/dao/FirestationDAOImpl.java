@@ -1,19 +1,34 @@
 package com.tipikae.safetynetalerts.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
-import com.tipikae.safetynetalerts.models.Firestation;
+import com.tipikae.safetynetalerts.model.Firestation;
+import com.tipikae.safetynetalerts.model.Storage;
 import com.tipikae.safetynetalerts.util.JsonStorage;
 
 @Repository
 public class FirestationDAOImpl implements IFirestationDAO {
+	
+	private static final Logger LOGGER = LogManager.getLogger("FirestationDAOImpl");
 
 	@Override
-	public Firestation save(String address, int station) {
-		// TODO Auto-generated method stub
-		return null;
+	public Firestation save(Firestation firestation) {
+		Firestation added = null;
+		JsonStorage jsonStorage = new JsonStorage();
+		Storage storage = jsonStorage.readStorage();
+		List<Firestation> firestations = storage.getFirestations();
+		firestations.add(firestation);
+		storage.setFirestations(firestations);
+		if(jsonStorage.writeStorage(storage)) {
+			added = firestation;
+		}
+		
+		return added;
 	}
 
 	@Override
@@ -23,33 +38,105 @@ public class FirestationDAOImpl implements IFirestationDAO {
 	}
 
 	@Override
-	public List<Firestation> findByAddress(String address) {
-		// TODO Auto-generated method stub
-		return null;
+	public Firestation findByAddress(String address) {
+		Firestation firestation = null;
+		List<Firestation> firestations = findAll();
+		
+		for(Firestation item: firestations) {
+			if(item.getAddress().equals(address)) {
+				firestation = new Firestation(item.getAddress(), item.getStation());
+				break;
+			}
+		}
+		
+		return firestation;
 	}
 
 	@Override
 	public List<Firestation> findByStation(int station) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Firestation> results = new ArrayList<>();
+		List<Firestation> firestations = findAll();
+		
+		for(Firestation item: firestations) {
+			if(item.getStation() == station) {
+				results.add(item);
+			}
+		}
+		
+		return results;
 	}
 
 	@Override
-	public void update(String address, int station) {
-		// TODO Auto-generated method stub
+	public boolean update(Firestation newFirestation) {
+		boolean found = false;
+		JsonStorage jsonStorage = new JsonStorage();
+		Storage storage = jsonStorage.readStorage();
+		List<Firestation> firestations = storage.getFirestations();
 		
+		for(int i = 0; i < firestations.size(); i++) {
+			if(firestations.get(i).getAddress().equals(newFirestation.getAddress())) {
+				found = true;
+				firestations.set(i, newFirestation);
+				break;
+			}
+		}
+		
+		if(found) {
+			storage.setFirestations(firestations);
+			if(jsonStorage.writeStorage(storage)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	@Override
-	public void deleteByAddress(String address) {
-		// TODO Auto-generated method stub
+	public boolean deleteByAddress(String address) {
+		boolean found = false;
+		JsonStorage jsonStorage = new JsonStorage();
+		Storage storage = jsonStorage.readStorage();
+		List<Firestation> firestations = storage.getFirestations();
 		
+		for(int i = 0; i < firestations.size(); i++) {
+			if(firestations.get(i).getAddress().equals(address)) {
+				found = true;
+				firestations.remove(i);
+				break;
+			}
+		}
+		
+		if(found) {
+			storage.setFirestations(firestations);
+			if(jsonStorage.writeStorage(storage)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	@Override
-	public void deleteByStation(int station) {
-		// TODO Auto-generated method stub
+	public boolean deleteByStation(int station) {
+		boolean found = false;
+		JsonStorage jsonStorage = new JsonStorage();
+		Storage storage = jsonStorage.readStorage();
+		List<Firestation> firestations = storage.getFirestations();
 		
+		for(int i = 0; i < firestations.size(); i++) {
+			if(firestations.get(i).getStation() == station) {
+				found = true;
+				firestations.remove(i);
+			}
+		}
+		
+		if(found) {
+			storage.setFirestations(firestations);
+			if(jsonStorage.writeStorage(storage)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
-
 }

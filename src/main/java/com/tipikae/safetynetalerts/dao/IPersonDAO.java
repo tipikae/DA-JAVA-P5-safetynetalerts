@@ -2,7 +2,7 @@ package com.tipikae.safetynetalerts.dao;
 
 import java.util.List;
 
-import com.tipikae.safetynetalerts.models.Person;
+import com.tipikae.safetynetalerts.model.Person;
 
 public interface IPersonDAO {
 

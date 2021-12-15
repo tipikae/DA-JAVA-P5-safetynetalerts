@@ -2,7 +2,7 @@ package com.tipikae.safetynetalerts.dao;
 
 import java.util.List;
 
-import com.tipikae.safetynetalerts.models.MedicalRecord;
+import com.tipikae.safetynetalerts.model.MedicalRecord;
 
 public interface IMedicalRecordDAO {
 

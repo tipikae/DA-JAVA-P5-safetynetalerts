@@ -1,4 +1,4 @@
-package com.tipikae.safetynetalerts.unit;
+package com.tipikae.safetynetalerts.unit.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,10 @@ class FirestationControllerTest {
 	
 	@Test
 	void testAllFirestations_whenOk() throws Exception {
-		when(service.getFirestations()).thenReturn(new ArrayList<Firestation>());
+		List<Firestation> firestations = new ArrayList<>();
+		Firestation firestation = new Firestation("", 0);
+		firestations.add(firestation);
+		when(service.getFirestations()).thenReturn(firestations);
 		mockMvc.perform(get("/firestations"))
         .andExpect(status().isOk());
 	}
@@ -48,7 +52,10 @@ class FirestationControllerTest {
 	
 	@Test
 	void testFirestationsByStation_whenOk() throws Exception {
-		when(service.getFirestationsByStation(1)).thenReturn(new ArrayList<Firestation>());
+		List<Firestation> firestations = new ArrayList<>();
+		Firestation firestation = new Firestation("", 0);
+		firestations.add(firestation);
+		when(service.getFirestationsByStation(1)).thenReturn(firestations);
 		mockMvc.perform(get("/firestations/1"))
         .andExpect(status().isOk());
 	}
@@ -79,7 +86,7 @@ class FirestationControllerTest {
 		when(service.addFirestationMapping(any(Firestation.class))).thenReturn(new Firestation("", 0));
 		mockMvc.perform(post("/firestations")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{}"))
+				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"3\" }"))
         .andExpect(status().isOk());
 	}
 	
@@ -97,7 +104,7 @@ class FirestationControllerTest {
 		when(service.updateFirestationMapping(any(Firestation.class))).thenReturn(true);
 		mockMvc.perform(put("/firestations")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{}"))
+				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"3\" }"))
         .andExpect(status().isOk());
 	}
 	

@@ -1,7 +1,11 @@
 package com.tipikae.safetynetalerts.unit.dao;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,6 +31,7 @@ class PersonDAOTest {
 	private static Person person;
 	private static Person updatedPerson;
 	private static Person emptyPerson;
+	private static Person wrongPerson;
 	
 	@BeforeAll
 	private static void setUp() {
@@ -34,16 +39,27 @@ class PersonDAOTest {
 		person = new Person("Bob", "BOB", "route de la soie", "Paris", "75000", "841-874-6512", "bob@bob.com");
 		updatedPerson = new Person("Bob", "BOB", "avenue", "Paris", "75000", "841-874-6512", "bob@bob.com");
 		emptyPerson = new Person("", "", "", "", "", "", "");
+		wrongPerson = new Person("Alice", "BOB", "route de la soie", "Paris", "75000", 
+				"841-874-6512", "bob@bob.com");
 	}
 
 	@Test
 	void testSave_whenOk() {
+		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(true);
+		dao.setJsonStorage(jsonStorage);
 		assertEquals(person, dao.save(person));
 	}
 
 	@Test
 	void testSave_whenNull() {
 		assertNull(dao.save(emptyPerson));
+	}
+
+	@Test
+	void testSave_whenError() {
+		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(false);
+		dao.setJsonStorage(jsonStorage);
+		assertNull(dao.save(person));
 	}
 
 	@Test
@@ -71,7 +87,12 @@ class PersonDAOTest {
 	
 	@Test
 	void testUpdate_whenOk() {
-		testSave_whenOk();
+		List<Person> persons = new ArrayList<>();
+		persons.add(person);
+		when(storage.getPersons()).thenReturn(persons);
+		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(true);
+		dao.setJsonStorage(jsonStorage);
+		dao.setStorage(storage);
 		assertEquals(true, dao.update(updatedPerson));
 	}
 	
@@ -82,15 +103,21 @@ class PersonDAOTest {
 	
 	@Test
 	void testUpdate_whenNotFound() {
-		testSave_whenOk();
-		Person wrongPerson = new Person("Alice", "BOB", "route de la soie", "Paris", "75000", 
-				"841-874-6512", "bob@bob.com");
+		List<Person> persons = new ArrayList<>();
+		persons.add(person);
+		when(storage.getPersons()).thenReturn(persons);
+		dao.setStorage(storage);
 		assertEquals(false, dao.update(wrongPerson));
 	}
 	
 	@Test
 	void testDeleteByName_whenOk() {
-		testSave_whenOk();
+		List<Person> persons = new ArrayList<>();
+		persons.add(person);
+		when(storage.getPersons()).thenReturn(persons);
+		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(true);
+		dao.setJsonStorage(jsonStorage);
+		dao.setStorage(storage);
 		assertEquals(true, dao.deleteByName("Bob", "BOB"));
 	}
 	
@@ -101,7 +128,10 @@ class PersonDAOTest {
 	
 	@Test
 	void testDeleteByName_whenNotFound() {
-		testSave_whenOk();
+		List<Person> persons = new ArrayList<>();
+		persons.add(person);
+		when(storage.getPersons()).thenReturn(persons);
+		dao.setStorage(storage);
 		assertEquals(false, dao.deleteByName("Bobby", "BOB"));
 	}
 }

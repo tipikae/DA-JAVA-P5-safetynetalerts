@@ -13,10 +13,40 @@ public class PersonServiceImpl implements IPersonService {
 
 	@Autowired
 	private IPersonDAO personDao;
+
+	@Override
+	public Person addPerson(Person person) {
+		return personDao.save(person);
+	}
 	
 	@Override
 	public List<Person> getPersons() {
 		return personDao.findAll();
+	}
+
+	@Override
+	public List<Person> getPersonsByAddress(String address) {
+		return personDao.findByAddress(address);
+	}
+
+	@Override
+	public List<Person> getPersonsByCity(String city) {
+		return personDao.findByCity(city);
+	}
+
+	@Override
+	public Person getPersonByName(String firstname, String lastname) {
+		return personDao.findByName(firstname, lastname);
+	}
+
+	@Override
+	public boolean updatePerson(Person person) {
+		return personDao.update(person);
+	}
+
+	@Override
+	public boolean deletePerson(String firstname, String lastname) {
+		return personDao.deleteByName(firstname, lastname);
 	}
 
 }

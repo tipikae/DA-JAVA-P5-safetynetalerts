@@ -13,10 +13,30 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 
 	@Autowired
 	private IMedicalRecordDAO medicalRecordDao;
+
+	@Override
+	public MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) {
+		return medicalRecordDao.save(medicalRecord);
+	}
 	
 	@Override
 	public List<MedicalRecord> getMedicalRecords() {
 		return medicalRecordDao.findAll();
+	}
+
+	@Override
+	public MedicalRecord getMedicalRecordByName(String firstname, String lastname) {
+		return medicalRecordDao.findByName(firstname, lastname);
+	}
+
+	@Override
+	public boolean updateMedicalRecord(MedicalRecord medicalRecord) {
+		return medicalRecordDao.update(medicalRecord);
+	}
+
+	@Override
+	public boolean deleteMedicalRecord(String firstname, String lastname) {
+		return medicalRecordDao.delete(firstname, lastname);
 	}
 
 }

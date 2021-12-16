@@ -40,14 +40,14 @@ class FirestationControllerTest {
 		firestations.add(firestation);
 		when(service.getFirestations()).thenReturn(firestations);
 		mockMvc.perform(get("/firestations"))
-        .andExpect(status().isOk());
+        	.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testAllFirestations_whenNull() throws Exception {
 		when(service.getFirestations()).thenReturn(null);
 		mockMvc.perform(get("/firestations"))
-        .andExpect(status().is(204));
+        	.andExpect(status().is(204));
 	}
 	
 	@Test
@@ -57,28 +57,28 @@ class FirestationControllerTest {
 		firestations.add(firestation);
 		when(service.getFirestationsByStation(1)).thenReturn(firestations);
 		mockMvc.perform(get("/firestations/1"))
-        .andExpect(status().isOk());
+        	.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testFirestationsByStation_whenNull() throws Exception {
 		when(service.getFirestationsByStation(anyInt())).thenReturn(null);
 		mockMvc.perform(get("/firestations/1"))
-        .andExpect(status().is(204));
+        	.andExpect(status().is(204));
 	}
 	
 	@Test
 	void testFirestationByAddress_whenOk() throws Exception {
 		when(service.getFirestationByAddress(anyString())).thenReturn(new Firestation("", 0));
 		mockMvc.perform(get("/firestation?address=1509%20Culver%20St"))
-        .andExpect(status().isOk());
+        	.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testFirestationByAddress_whenNull() throws Exception {
 		when(service.getFirestationByAddress(anyString())).thenReturn(null);
 		mockMvc.perform(get("/firestation?address=1509%20Culver%20St"))
-        .andExpect(status().is(204));
+        	.andExpect(status().is(204));
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ class FirestationControllerTest {
 		mockMvc.perform(post("/firestations")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"3\" }"))
-        .andExpect(status().isOk());
+        	.andExpect(status().isOk());
 	}
 	
 	@Test
@@ -96,7 +96,7 @@ class FirestationControllerTest {
 		mockMvc.perform(post("/firestations")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
-        .andExpect(status().is(204));
+        	.andExpect(status().is(204));
 	}
 	
 	@Test
@@ -105,7 +105,7 @@ class FirestationControllerTest {
 		mockMvc.perform(put("/firestations")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"3\" }"))
-        .andExpect(status().isOk());
+        	.andExpect(status().isOk());
 	}
 	
 	@Test
@@ -114,34 +114,34 @@ class FirestationControllerTest {
 		mockMvc.perform(put("/firestations")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
-        .andExpect(status().is(304));
+        	.andExpect(status().is(304));
 	}
 	
 	@Test
 	void testDeleteFirestationsByStation_whenOk() throws Exception {
 		when(service.deleteFirestationsByStation(anyInt())).thenReturn(true);
 		mockMvc.perform(delete("/firestations/1"))
-        .andExpect(status().isOk());
+			.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testDeleteFirestationsByStation_whenNotOk() throws Exception {
 		when(service.deleteFirestationsByStation(anyInt())).thenReturn(false);
 		mockMvc.perform(delete("/firestations/1"))
-        .andExpect(status().is(304));
+        	.andExpect(status().is(304));
 	}
 	
 	@Test
 	void testDeleteFirestationByAddress_whenOk() throws Exception {
 		when(service.deleteFirestationByAddress(anyString())).thenReturn(true);
 		mockMvc.perform(delete("/firestation?address=badaboum"))
-        .andExpect(status().isOk());
+        	.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testDeleteFirestationByAddress_whenNotOk() throws Exception {
 		when(service.deleteFirestationByAddress(anyString())).thenReturn(false);
 		mockMvc.perform(delete("/firestation?address=badaboum"))
-        .andExpect(status().is(304));
+        	.andExpect(status().is(304));
 	}
 }

@@ -25,7 +25,7 @@ import com.tipikae.safetynetalerts.util.JsonStorage;
 
 @SpringBootTest(properties= {"storage.file=storage/data-test.json"})
 @AutoConfigureMockMvc
-class FirestationControllerIT {
+class FirestationIT {
 
 	@Autowired
     private MockMvc mockMvc;

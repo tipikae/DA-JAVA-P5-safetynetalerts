@@ -48,8 +48,7 @@ public class FirestationController {
 	@GetMapping("/firestation")
     public ResponseEntity<Firestation> firestationByAddress(@RequestParam String address) {
 		if (address != null) {
-			Firestation firestation;
-			firestation = service.getFirestationByAddress(address);
+			Firestation firestation = service.getFirestationByAddress(address);
 			if (firestation != null) {
 				return new ResponseEntity<>(firestation, HttpStatus.OK); 
 			}

@@ -100,10 +100,11 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	}
 
 	@Override
-	public boolean update(Person person) {
+	public boolean update(String firstname, String lastname, Person person) {
 		if (!person.getFirstname().equals("") && !person.getLastname().equals("") && 
 				!person.getAddress().equals("") && !person.getCity().equals("") && !person.getZip().equals("") && 
-				!person.getPhone().equals("") && !person.getEmail().equals("")) {
+				!person.getPhone().equals("") && !person.getEmail().equals("") && 
+				firstname.equals(person.getFirstname()) && lastname.equals(person.getLastname())) {
 			boolean found = false;
 			
 			if (storage!= null) {

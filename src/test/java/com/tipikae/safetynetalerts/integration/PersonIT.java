@@ -123,7 +123,7 @@ class PersonIT {
 	@Test
 	@Order(11)
 	void testUpdatePerson_whenOk() throws Exception {
-		mockMvc.perform(put("/persons")
+		mockMvc.perform(put("/persons?firstname=John&lastname=Boyd")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Paris\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
 			.andExpect(status().isOk());
@@ -132,7 +132,7 @@ class PersonIT {
 	@Test
 	@Order(12)
 	void testUpdatePerson_whenNull() throws Exception {
-		mockMvc.perform(put("/persons")
+		mockMvc.perform(put("/persons?firstname=Bob&lastname=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
 			.andExpect(status().is(304));

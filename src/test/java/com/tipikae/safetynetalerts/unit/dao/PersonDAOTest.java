@@ -93,12 +93,12 @@ class PersonDAOTest {
 		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(true);
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertEquals(true, dao.update(updatedPerson));
+		assertEquals(true, dao.update("Bob", "BOB", updatedPerson));
 	}
 	
 	@Test
 	void testUpdate_whenNull() {
-		assertEquals(false, dao.update(emptyPerson));
+		assertEquals(false, dao.update("Bob", "BOB", emptyPerson));
 	}
 	
 	@Test
@@ -107,7 +107,7 @@ class PersonDAOTest {
 		persons.add(person);
 		when(storage.getPersons()).thenReturn(persons);
 		dao.setStorage(storage);
-		assertEquals(false, dao.update(wrongPerson));
+		assertEquals(false, dao.update("Alice", "BOB", wrongPerson));
 	}
 	
 	@Test

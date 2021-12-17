@@ -85,8 +85,9 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	}
 
 	@Override
-	public boolean update(Firestation newFirestation) {
-		if (!newFirestation.getAddress().equals("") && newFirestation.getStation() != 0) {
+	public boolean update(String address, Firestation newFirestation) {
+		if (!newFirestation.getAddress().equals("") && newFirestation.getStation() != 0 && 
+				address.equals(newFirestation.getAddress())) {
 			boolean found = false;
 			
 			if (storage!= null) {

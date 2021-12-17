@@ -101,8 +101,8 @@ class FirestationControllerTest {
 	
 	@Test
 	void testUpdateFirestationMapping_whenOk() throws Exception {
-		when(service.updateFirestationMapping(any(Firestation.class))).thenReturn(true);
-		mockMvc.perform(put("/firestations")
+		when(service.updateFirestationMapping(anyString(), any(Firestation.class))).thenReturn(true);
+		mockMvc.perform(put("/firestations/3200 chemin de Pâle")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"3\" }"))
         	.andExpect(status().isOk());
@@ -110,8 +110,8 @@ class FirestationControllerTest {
 	
 	@Test
 	void testUpdateFirestationMapping_whenNotOk() throws Exception {
-		when(service.updateFirestationMapping(any(Firestation.class))).thenReturn(false);
-		mockMvc.perform(put("/firestations")
+		when(service.updateFirestationMapping(anyString(), any(Firestation.class))).thenReturn(false);
+		mockMvc.perform(put("/firestations/3200 chemin de Pâle")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
         	.andExpect(status().is(304));

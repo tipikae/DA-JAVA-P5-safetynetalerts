@@ -66,10 +66,11 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 	}
 
 	@Override
-	public boolean update(MedicalRecord medicalRecord) {
+	public boolean update(String firstname, String lastname, MedicalRecord medicalRecord) {
 		if (!medicalRecord.getFirstname().equals("") && !medicalRecord.getLastname().equals("") && 
 				medicalRecord.getBirthdate() != null && medicalRecord.getMedications() != null && 
-				medicalRecord.getAllergies() != null) {
+				medicalRecord.getAllergies() != null && firstname.equals(medicalRecord.getFirstname()) && 
+				lastname.equals(medicalRecord.getLastname())) {
 			boolean found = false;
 			
 			if (storage!= null) {

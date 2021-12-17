@@ -35,8 +35,8 @@ public class FirestationServiceImpl implements IFirestationService {
 	}
 
 	@Override
-	public boolean updateFirestationMapping(Firestation firestation) {
-		return firestationDao.update(firestation);
+	public boolean updateFirestationMapping(String address, Firestation firestation) {
+		return firestationDao.update(address, firestation);
 	}
 
 	@Override

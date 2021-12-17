@@ -86,12 +86,12 @@ class MedicalRecordDAOTest {
 		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(true);
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertEquals(true, dao.update(updatedMedicalRecord));
+		assertEquals(true, dao.update("Bob", "BOB", updatedMedicalRecord));
 	}
 	
 	@Test
 	void testUpdate_whenNull() {
-		assertEquals(false, dao.update(emptyMedicalRecord));
+		assertEquals(false, dao.update("Bob", "BOB", emptyMedicalRecord));
 	}
 	
 	@Test
@@ -100,6 +100,6 @@ class MedicalRecordDAOTest {
 		medicalRecords.add(medicalRecord);
 		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
 		dao.setStorage(storage);
-		assertEquals(false, dao.update(wrongMedicalRecord));
+		assertEquals(false, dao.update("Alice", "BOB", wrongMedicalRecord));
 	}
 }

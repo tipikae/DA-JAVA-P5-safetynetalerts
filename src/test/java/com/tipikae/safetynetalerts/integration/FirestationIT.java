@@ -69,7 +69,7 @@ class FirestationIT {
 	@Test
 	@Order(4)
 	void testUpdateFirestationMapping_whenOk() throws Exception {
-		mockMvc.perform(put("/firestations")
+		mockMvc.perform(put("/firestations/3200 chemin de Pâle")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"1\" }"))
 			.andExpect(status().isOk());
@@ -78,7 +78,7 @@ class FirestationIT {
 	@Test
 	@Order(5)
 	void testUpdateFirestationMapping_whenNull() throws Exception {
-		mockMvc.perform(put("/firestations")
+		mockMvc.perform(put("/firestations/route de Pâle")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"address\":\"route de Pâle\", \"station\":\"1\" }"))
 			.andExpect(status().is(304));

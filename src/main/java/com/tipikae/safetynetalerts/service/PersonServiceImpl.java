@@ -40,8 +40,8 @@ public class PersonServiceImpl implements IPersonService {
 	}
 
 	@Override
-	public boolean updatePerson(Person person) {
-		return personDao.update(person);
+	public boolean updatePerson(String firstname, String lastname, Person person) {
+		return personDao.update(firstname, lastname, person);
 	}
 
 	@Override

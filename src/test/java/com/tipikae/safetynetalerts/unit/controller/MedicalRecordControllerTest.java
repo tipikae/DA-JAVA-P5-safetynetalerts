@@ -85,8 +85,8 @@ class MedicalRecordControllerTest {
 	
 	@Test
 	void testUpdateMedicalRecord_whenOk() throws Exception {
-		when(service.updateMedicalRecord(any(MedicalRecord.class))).thenReturn(true);
-		mockMvc.perform(put("/medicalrecords")
+		when(service.updateMedicalRecord(anyString(), anyString(), any(MedicalRecord.class))).thenReturn(true);
+		mockMvc.perform(put("/medicalrecords?firstname=John&lastname=Boyd")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:400mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
         	.andExpect(status().isOk());
@@ -94,8 +94,8 @@ class MedicalRecordControllerTest {
 	
 	@Test
 	void testUpdateMedicalRecord_whenNotOk() throws Exception {
-		when(service.updateMedicalRecord(any(MedicalRecord.class))).thenReturn(false);
-		mockMvc.perform(put("/medicalrecords")
+		when(service.updateMedicalRecord(anyString(), anyString(), any(MedicalRecord.class))).thenReturn(false);
+		mockMvc.perform(put("/medicalrecords?firstname=John&lastname=Boyd")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
         	.andExpect(status().is(304));

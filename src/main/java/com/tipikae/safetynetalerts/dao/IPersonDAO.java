@@ -11,6 +11,6 @@ public interface IPersonDAO {
 	Person findByName(String firstname, String lastname);
 	List<Person> findByAddress(String address);
 	List<Person> findByCity(String city);
-	boolean update(Person person);
+	boolean update(String firstname, String lastname, Person person);
 	boolean deleteByName(String firstname, String lastname);
 }

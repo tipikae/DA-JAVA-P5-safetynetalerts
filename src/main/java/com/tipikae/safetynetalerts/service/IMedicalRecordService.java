@@ -9,6 +9,6 @@ public interface IMedicalRecordService {
 	MedicalRecord addMedicalRecord(MedicalRecord medicalRecord);
 	List<MedicalRecord> getMedicalRecords();
 	MedicalRecord getMedicalRecordByName(String firstname, String lastname);
-	boolean updateMedicalRecord(MedicalRecord medicalRecord);
+	boolean updateMedicalRecord(String firstname, String lastname, MedicalRecord medicalRecord);
 	boolean deleteMedicalRecord(String firstname, String lastname);
 }

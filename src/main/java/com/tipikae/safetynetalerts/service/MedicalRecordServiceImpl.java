@@ -30,8 +30,8 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	}
 
 	@Override
-	public boolean updateMedicalRecord(MedicalRecord medicalRecord) {
-		return medicalRecordDao.update(medicalRecord);
+	public boolean updateMedicalRecord(String firstname, String lastname, MedicalRecord medicalRecord) {
+		return medicalRecordDao.update(firstname, lastname, medicalRecord);
 	}
 
 	@Override

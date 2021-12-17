@@ -115,8 +115,8 @@ class PersonControllerTest {
 	
 	@Test
 	void testUpdatePerson_whenOk() throws Exception {
-		when(service.updatePerson(any(Person.class))).thenReturn(true);
-		mockMvc.perform(put("/persons")
+		when(service.updatePerson(anyString(), anyString(), any(Person.class))).thenReturn(true);
+		mockMvc.perform(put("/persons?firstname=John&lastname=Boyd")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Paris\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
         	.andExpect(status().isOk());
@@ -124,8 +124,8 @@ class PersonControllerTest {
 	
 	@Test
 	void testUpdatePerson_whenNotOk() throws Exception {
-		when(service.updatePerson(any(Person.class))).thenReturn(false);
-		mockMvc.perform(put("/persons")
+		when(service.updatePerson(anyString(), anyString(), any(Person.class))).thenReturn(false);
+		mockMvc.perform(put("/persons?firstname=John&lastname=Boyd")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
         	.andExpect(status().is(304));

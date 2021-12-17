@@ -2,6 +2,8 @@ package com.tipikae.safetynetalerts.controller;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ import com.tipikae.safetynetalerts.service.IFirestationService;
 @RestController
 public class FirestationController {
 	
+	private static final Logger LOGGER = LogManager.getLogger("FirestationController");
+	
 	@Autowired
 	private IFirestationService service;
 
@@ -27,9 +31,11 @@ public class FirestationController {
     public ResponseEntity<List<Firestation>> allFirestations() {
 		List<Firestation> firestations = service.getFirestations();
 		if(firestations != null && !firestations.isEmpty()) {
+			LOGGER.info("allFirestations: OK");
 			return new ResponseEntity<>(firestations, HttpStatus.OK);
 		}
-		
+
+		LOGGER.info("allFirestations: NOK");
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
@@ -67,10 +73,12 @@ public class FirestationController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
-	@PutMapping(value="/firestations", consumes={"application/json"})
-	public ResponseEntity<Firestation> updateFirestationMapping(@RequestBody Firestation firestation) {
-		if(firestation.getAddress() != null && firestation.getStation() != 0) {
-			if (service.updateFirestationMapping(firestation)) {
+	@PutMapping(value="/firestations/{address}", consumes={"application/json"})
+	public ResponseEntity<Firestation> updateFirestationMapping(
+			@PathVariable String address, 
+			@RequestBody Firestation firestation) {
+		if(address != null && firestation.getAddress() != null && firestation.getStation() != 0) {
+			if (service.updateFirestationMapping(address, firestation)) {
 				return new ResponseEntity<>(HttpStatus.OK);
 			}
 		}

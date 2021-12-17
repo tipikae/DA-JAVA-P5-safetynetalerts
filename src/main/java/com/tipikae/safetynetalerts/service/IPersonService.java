@@ -11,6 +11,6 @@ public interface IPersonService {
 	List<Person> getPersonsByAddress(String address);
 	List<Person> getPersonsByCity(String city);
 	Person getPersonByName(String firstname, String lastname);
-	boolean updatePerson(Person person);
+	boolean updatePerson(String firstname, String lastname, Person person);
 	boolean deletePerson(String firstname, String lastname);
 }

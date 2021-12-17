@@ -82,12 +82,15 @@ public class PersonController {
 	}
 	
 	@PutMapping(value="/persons", consumes={"application/json"})
-	public ResponseEntity<Person> updatePerson(@RequestBody Person person) {
+	public ResponseEntity<Person> updatePerson(
+			@RequestParam String firstname, 
+			@RequestParam String lastname, 
+			@RequestBody Person person) {
 		if(person.getFirstname() != null && person.getLastname() != null && 
 				person.getAddress() != null && person.getCity() != null && person.getZip() != null && 
-				person.getPhone() != null && person.getEmail() != null) {
+				person.getPhone() != null && person.getEmail() != null && firstname != null && lastname != null) {
 			
-			if (service.updatePerson(person)) {
+			if (service.updatePerson(firstname, lastname, person)) {
 				return new ResponseEntity<>(HttpStatus.OK);
 			}
 		}

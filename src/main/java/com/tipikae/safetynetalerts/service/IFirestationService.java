@@ -10,7 +10,7 @@ public interface IFirestationService {
 	Firestation getFirestationByAddress(String address);
 	List<Firestation> getFirestationsByStation(int station);
 	Firestation addFirestationMapping(Firestation firestation);
-	boolean updateFirestationMapping(Firestation firestation);
+	boolean updateFirestationMapping(String address, Firestation firestation);
 	boolean deleteFirestationsByStation(int station);
 	boolean deleteFirestationByAddress(String address);
 }

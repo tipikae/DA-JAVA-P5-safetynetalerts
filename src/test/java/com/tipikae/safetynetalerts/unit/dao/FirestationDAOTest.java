@@ -88,12 +88,12 @@ class FirestationDAOTest {
 		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(true);
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertEquals(true, dao.update(updatedFirestation));
+		assertEquals(true, dao.update("route", updatedFirestation));
 	}
 	
 	@Test
 	void testUpdate_whenNull() {
-		assertEquals(false, dao.update(emptyFirestation));
+		assertEquals(false, dao.update("route", emptyFirestation));
 	}
 	
 	@Test
@@ -102,7 +102,7 @@ class FirestationDAOTest {
 		firestations.add(firestation);
 		when(storage.getFirestations()).thenReturn(firestations);
 		dao.setStorage(storage);
-		assertEquals(false, dao.update(wrongFirestation));
+		assertEquals(false, dao.update("chemin", wrongFirestation));
 	}
 	
 	@Test

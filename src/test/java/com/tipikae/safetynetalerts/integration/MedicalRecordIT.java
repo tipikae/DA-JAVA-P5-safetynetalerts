@@ -77,7 +77,7 @@ class MedicalRecordIT {
 	@Test
     @Order(5)
 	void testUpdateMedicalRecord_whenOk() throws Exception {
-		mockMvc.perform(put("/medicalrecords")
+		mockMvc.perform(put("/medicalrecords?firstname=John&lastname=Boyd")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:400mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
 			.andExpect(status().isOk());
@@ -86,7 +86,7 @@ class MedicalRecordIT {
 	@Test
     @Order(6)
 	void testUpdateMedicalRecord_whenNull() throws Exception {
-		mockMvc.perform(put("/medicalrecords")
+		mockMvc.perform(put("/medicalrecords?firstname=Bob&lastname=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
 			.andExpect(status().is(304));

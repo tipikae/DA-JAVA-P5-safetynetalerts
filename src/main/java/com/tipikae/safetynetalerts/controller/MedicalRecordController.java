@@ -57,22 +57,29 @@ public class MedicalRecordController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
+
+	// /medicalrecords?firstname={firstname}&lastname={lastname}
 	@PutMapping(value="/medicalrecords", consumes={"application/json"})
-	public ResponseEntity<MedicalRecord> updateMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+	public ResponseEntity<MedicalRecord> updateMedicalRecord(
+			@RequestParam String firstname, 
+			@RequestParam String lastname,
+			@RequestBody MedicalRecord medicalRecord) {
 		if(medicalRecord.getFirstname() != null && medicalRecord.getLastname() != null && 
 				medicalRecord.getBirthdate() != null && medicalRecord.getMedications() != null && 
-				medicalRecord.getAllergies() != null) {
+				medicalRecord.getAllergies() != null && firstname != null && lastname != null) {
 			
-			if (service.updateMedicalRecord(medicalRecord)) {
+			if (service.updateMedicalRecord(firstname, lastname, medicalRecord)) {
 				return new ResponseEntity<>(HttpStatus.OK);
 			}
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 
-	// /medicalrecord?firstname={firstname}&lastname={lastname}
+	// /medicalrecords?firstname={firstname}&lastname={lastname}
 	@DeleteMapping("/medicalrecords")
-	public ResponseEntity<MedicalRecord> deleteMedicalRecord(@RequestParam String firstname, @RequestParam String lastname) {
+	public ResponseEntity<MedicalRecord> deleteMedicalRecord(
+			@RequestParam String firstname, 
+			@RequestParam String lastname) {
 		if(firstname != null && lastname != null) {
 			if (service.deleteMedicalRecord(firstname, lastname)) {
 				return new ResponseEntity<>(HttpStatus.OK);

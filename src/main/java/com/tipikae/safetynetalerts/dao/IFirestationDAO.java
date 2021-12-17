@@ -10,7 +10,7 @@ public interface IFirestationDAO {
 	List<Firestation> findAll();
 	Firestation findByAddress(String address);
 	List<Firestation> findByStation(int station);
-	boolean update(Firestation firestation);
+	boolean update(String address, Firestation firestation);
 	boolean deleteByAddress(String address);
 	boolean deleteByStation(int station);
 }

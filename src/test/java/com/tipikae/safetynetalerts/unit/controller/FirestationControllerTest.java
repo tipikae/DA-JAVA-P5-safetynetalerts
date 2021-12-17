@@ -56,28 +56,28 @@ class FirestationControllerTest {
 		Firestation firestation = new Firestation("", 0);
 		firestations.add(firestation);
 		when(service.getFirestationsByStation(1)).thenReturn(firestations);
-		mockMvc.perform(get("/firestations/1"))
+		mockMvc.perform(get("/firestations?station=1"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testFirestationsByStation_whenNull() throws Exception {
 		when(service.getFirestationsByStation(anyInt())).thenReturn(null);
-		mockMvc.perform(get("/firestations/1"))
+		mockMvc.perform(get("/firestations?station=1"))
         	.andExpect(status().is(204));
 	}
 	
 	@Test
 	void testFirestationByAddress_whenOk() throws Exception {
 		when(service.getFirestationByAddress(anyString())).thenReturn(new Firestation("", 0));
-		mockMvc.perform(get("/firestation?address=1509%20Culver%20St"))
+		mockMvc.perform(get("/firestations/1509%20Culver%20St"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testFirestationByAddress_whenNull() throws Exception {
 		when(service.getFirestationByAddress(anyString())).thenReturn(null);
-		mockMvc.perform(get("/firestation?address=1509%20Culver%20St"))
+		mockMvc.perform(get("/firestations/1509%20Culver%20St"))
         	.andExpect(status().is(204));
 	}
 	
@@ -120,28 +120,28 @@ class FirestationControllerTest {
 	@Test
 	void testDeleteFirestationsByStation_whenOk() throws Exception {
 		when(service.deleteFirestationsByStation(anyInt())).thenReturn(true);
-		mockMvc.perform(delete("/firestations/1"))
+		mockMvc.perform(delete("/firestations?station=1"))
 			.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testDeleteFirestationsByStation_whenNotOk() throws Exception {
 		when(service.deleteFirestationsByStation(anyInt())).thenReturn(false);
-		mockMvc.perform(delete("/firestations/1"))
+		mockMvc.perform(delete("/firestations?station=1"))
         	.andExpect(status().is(304));
 	}
 	
 	@Test
 	void testDeleteFirestationByAddress_whenOk() throws Exception {
 		when(service.deleteFirestationByAddress(anyString())).thenReturn(true);
-		mockMvc.perform(delete("/firestation?address=badaboum"))
+		mockMvc.perform(delete("/firestations/badaboum"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testDeleteFirestationByAddress_whenNotOk() throws Exception {
 		when(service.deleteFirestationByAddress(anyString())).thenReturn(false);
-		mockMvc.perform(delete("/firestation?address=badaboum"))
+		mockMvc.perform(delete("/firestations/badaboum"))
         	.andExpect(status().is(304));
 	}
 }

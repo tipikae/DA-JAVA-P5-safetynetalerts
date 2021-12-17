@@ -33,11 +33,11 @@ public class PersonController {
 	}
 	
 	// /persons?address={address}
-	@GetMapping("/persons")
+	@GetMapping(value="/persons", params="address")
     public ResponseEntity<List<Person>> personsByAddress(@RequestParam String address) {
-		if (address != "") {
+		if (address != null) {
 			List<Person> persons = service.getPersonsByAddress(address);
-			if (persons != null) {
+			if (persons != null && !persons.isEmpty()) {
 				return new ResponseEntity<>(persons, HttpStatus.OK); 
 			}
 		}
@@ -45,11 +45,11 @@ public class PersonController {
 	}
 	
 	// /persons?city={city}
-	@GetMapping("/persons")
+	@GetMapping(value="/persons", params="city")
     public ResponseEntity<List<Person>> personsByCity(@RequestParam String city) {
 		if (city != "") {
 			List<Person> persons = service.getPersonsByCity(city);
-			if (persons != null) {
+			if (persons != null && !persons.isEmpty()) {
 				return new ResponseEntity<>(persons, HttpStatus.OK); 
 			}
 		}
@@ -57,9 +57,9 @@ public class PersonController {
 	}
 	
 	// /persons?firstname={firstname}&lastname={lastname}
-	@GetMapping("/persons")
+	@GetMapping(value="/persons", params={"firstname", "lastname"})
     public ResponseEntity<Person> personByName(@RequestParam String firstname, @RequestParam String lastname) {
-		if (firstname != "" && lastname != "") {
+		if (firstname != null && lastname != null) {
 			Person person = service.getPersonByName(firstname, lastname);
 			if (person != null) {
 				return new ResponseEntity<>(person, HttpStatus.OK); 
@@ -70,9 +70,9 @@ public class PersonController {
 	
 	@PostMapping(value="/persons", consumes={"application/json"})
 	public ResponseEntity<Person> addPerson(@RequestBody Person person) {
-		if(!person.getFirstname().equals("") && !person.getLastname().equals("") && 
-				!person.getAddress().equals("") && !person.getCity().equals("") && !person.getZip().equals("") && 
-				!person.getPhone().equals("") && !person.getEmail().equals("")) {
+		if(person.getFirstname() != null && person.getLastname() != null && 
+				person.getAddress() != null && person.getCity() != null && person.getZip() != null && 
+				person.getPhone() != null && person.getEmail() != null) {
 			Person added = service.addPerson(person);
 			if(added != null) {
 				return new ResponseEntity<>(person, HttpStatus.OK);
@@ -83,9 +83,9 @@ public class PersonController {
 	
 	@PutMapping(value="/persons", consumes={"application/json"})
 	public ResponseEntity<Person> updatePerson(@RequestBody Person person) {
-		if(!person.getFirstname().equals("") && !person.getLastname().equals("") && 
-				!person.getAddress().equals("") && !person.getCity().equals("") && !person.getZip().equals("") && 
-				!person.getPhone().equals("") && !person.getEmail().equals("")) {
+		if(person.getFirstname() != null && person.getLastname() != null && 
+				person.getAddress() != null && person.getCity() != null && person.getZip() != null && 
+				person.getPhone() != null && person.getEmail() != null) {
 			
 			if (service.updatePerson(person)) {
 				return new ResponseEntity<>(HttpStatus.OK);
@@ -95,9 +95,9 @@ public class PersonController {
 	}
 
 	// /person?firstname={firstname}&lastname={lastname}
-	@DeleteMapping("/person")
+	@DeleteMapping("/persons")
 	public ResponseEntity<Person> deletePerson(@RequestParam String firstname, @RequestParam String lastname) {
-		if(firstname != "" && lastname != "") {
+		if(firstname != null && lastname != null) {
 			if (service.deletePerson(firstname, lastname)) {
 				return new ResponseEntity<>(HttpStatus.OK);
 			}

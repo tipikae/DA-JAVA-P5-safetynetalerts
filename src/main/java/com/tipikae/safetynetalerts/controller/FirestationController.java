@@ -33,24 +33,24 @@ public class FirestationController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	@GetMapping("/firestations/{station}")
-    public ResponseEntity<List<Firestation>> firestationsByStation(@PathVariable int station) {
-		if (station != 0) {
-			List<Firestation> firestations = service.getFirestationsByStation(station);
-			if (firestations != null && !firestations.isEmpty()) {
-				return new ResponseEntity<>(firestations, HttpStatus.OK);
+	@GetMapping("/firestations/{address}")
+    public ResponseEntity<Firestation> firestationByAddress(@PathVariable String address) {
+		if (address != null) {
+			Firestation firestation = service.getFirestationByAddress(address);
+			if (firestation != null) {
+				return new ResponseEntity<>(firestation, HttpStatus.OK);
 			} 
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	// /firestation?address={address}
-	@GetMapping("/firestation")
-    public ResponseEntity<Firestation> firestationByAddress(@RequestParam String address) {
-		if (address != null) {
-			Firestation firestation = service.getFirestationByAddress(address);
-			if (firestation != null) {
-				return new ResponseEntity<>(firestation, HttpStatus.OK); 
+	// /firestations?station={station}
+	@GetMapping(value="/firestations", params="station")
+    public ResponseEntity<List<Firestation>> firestationsByStation(@RequestParam int station) {
+		if (station != 0) {
+			List<Firestation> firestations = service.getFirestationsByStation(station);
+			if (firestations != null && !firestations.isEmpty()) {
+				return new ResponseEntity<>(firestations, HttpStatus.OK); 
 			}
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -77,21 +77,21 @@ public class FirestationController {
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 	
-	@DeleteMapping("/firestations/{station}")
-	public ResponseEntity<Firestation> deleteFirestationsByStation(@PathVariable int station) {
-		if(station != 0) {
-			if (service.deleteFirestationsByStation(station)) {
+	@DeleteMapping("/firestations/{address}")
+	public ResponseEntity<Firestation> deleteFirestationsByAddress(@PathVariable String address ) {
+		if(address != null) {
+			if (service.deleteFirestationByAddress(address)) {
 				return new ResponseEntity<>(HttpStatus.OK);
 			}
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 
-	// /firestation?address={address}
-	@DeleteMapping("/firestation")
-	public ResponseEntity<Firestation> deleteFirestationByAddress(@RequestParam String address) {
-		if(!address.isEmpty()) {
-			if (service.deleteFirestationByAddress(address)) {
+	// /firestations?station={station}
+	@DeleteMapping("/firestations")
+	public ResponseEntity<Firestation> deleteFirestationByStation(@RequestParam int station) {
+		if(station != 0) {
+			if (service.deleteFirestationsByStation(station)) {
 				return new ResponseEntity<>(HttpStatus.OK);
 			}
 		}

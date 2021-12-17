@@ -70,7 +70,7 @@ class MedicalRecordControllerTest {
 				new MedicalRecord(null, null, null, null, null));
 		mockMvc.perform(post("/medicalrecords")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"03/06/1984\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
+				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
         	.andExpect(status().isOk());
 	}
 	
@@ -88,7 +88,7 @@ class MedicalRecordControllerTest {
 		when(service.updateMedicalRecord(any(MedicalRecord.class))).thenReturn(true);
 		mockMvc.perform(put("/medicalrecords")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"03/06/1984\", \"medications\":[\"aznol:400mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
+				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:400mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
         	.andExpect(status().isOk());
 	}
 	

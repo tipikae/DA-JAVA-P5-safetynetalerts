@@ -33,9 +33,9 @@ public class MedicalRecordController {
 	}
 	
 	// /medicalrecords?firstname={firstname}&lastname={lastname}
-	@GetMapping("/medicalrecords")
+	@GetMapping(value="/medicalrecords", params={"firstname", "lastname"})
     public ResponseEntity<MedicalRecord> medicalrecordByName(@RequestParam String firstname, @RequestParam String lastname) {
-		if (firstname != "" && lastname != "") {
+		if (firstname != null && lastname != null) {
 			MedicalRecord medicalrecord = service.getMedicalRecordByName(firstname, lastname);
 			if (medicalrecord != null) {
 				return new ResponseEntity<>(medicalrecord, HttpStatus.OK); 
@@ -46,7 +46,7 @@ public class MedicalRecordController {
 	
 	@PostMapping(value="/medicalrecords", consumes={"application/json"})
 	public ResponseEntity<MedicalRecord> addMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
-		if(!medicalRecord.getFirstname().equals("") && !medicalRecord.getLastname().equals("") && 
+		if(medicalRecord.getFirstname() != null && medicalRecord.getLastname() != null && 
 				medicalRecord.getBirthdate() != null && medicalRecord.getMedications() != null && 
 				medicalRecord.getAllergies() != null) {
 			MedicalRecord added = service.addMedicalRecord(medicalRecord);
@@ -59,7 +59,7 @@ public class MedicalRecordController {
 	
 	@PutMapping(value="/medicalrecords", consumes={"application/json"})
 	public ResponseEntity<MedicalRecord> updateMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
-		if(!medicalRecord.getFirstname().equals("") && !medicalRecord.getLastname().equals("") && 
+		if(medicalRecord.getFirstname() != null && medicalRecord.getLastname() != null && 
 				medicalRecord.getBirthdate() != null && medicalRecord.getMedications() != null && 
 				medicalRecord.getAllergies() != null) {
 			
@@ -71,9 +71,9 @@ public class MedicalRecordController {
 	}
 
 	// /medicalrecord?firstname={firstname}&lastname={lastname}
-	@DeleteMapping("/medicalrecord")
+	@DeleteMapping("/medicalrecords")
 	public ResponseEntity<MedicalRecord> deleteMedicalRecord(@RequestParam String firstname, @RequestParam String lastname) {
-		if(firstname != "" && lastname != "") {
+		if(firstname != null && lastname != null) {
 			if (service.deleteMedicalRecord(firstname, lastname)) {
 				return new ResponseEntity<>(HttpStatus.OK);
 			}

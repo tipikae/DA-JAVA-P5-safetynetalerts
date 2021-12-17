@@ -51,7 +51,8 @@ class PersonControllerTest {
 	
 	@Test
 	void testPersonsByAddress_whenOk() throws Exception {
-		when(service.getPersonsByAddress(anyString())).thenReturn(new ArrayList<Person>());
+		when(service.getPersonsByAddress(anyString())).thenReturn(
+				List.of(new Person(null, null, null, null, null, null, null)));
 		mockMvc.perform(get("/persons?address=1509%20Culver%20St"))
         	.andExpect(status().isOk());
 	}
@@ -65,7 +66,8 @@ class PersonControllerTest {
 	
 	@Test
 	void testPersonsByCity_whenOk() throws Exception {
-		when(service.getPersonsByCity(anyString())).thenReturn(new ArrayList<Person>());
+		when(service.getPersonsByCity(anyString())).thenReturn(
+				List.of(new Person(null, null, null, null, null, null, null)));
 		mockMvc.perform(get("/persons?city=Paris"))
         	.andExpect(status().isOk());
 	}

@@ -11,8 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,64 +27,80 @@ import com.tipikae.safetynetalerts.util.JsonStorage;
 
 @SpringBootTest(properties= {"storage.file=storage/data-test.json"})
 @AutoConfigureMockMvc
+@TestMethodOrder(OrderAnnotation.class)
 class MedicalRecordIT {
 
 	@Autowired
     private MockMvc mockMvc;
 	
-	private static JsonStorage jsonStorage;
-	
 	@BeforeAll
     private static void setUp() {
-		jsonStorage = new JsonStorage();
-    }
-
-    @BeforeEach
-    private void setUpPerTest() {
-        Storage storage = jsonStorage.readStorage();
-        storage.setMedicalRecords(new ArrayList<MedicalRecord>());
+		JsonStorage jsonStorage = new JsonStorage();
+		Storage storage = jsonStorage.readStorage();
+		storage.setMedicalRecords(new ArrayList<MedicalRecord>());
         jsonStorage.writeStorage(storage);
     }
     
     @Test
+    @Order(1)
 	void testAllMedicalRecords_whenEmpty() throws Exception {
 		mockMvc.perform(get("/medicalrecords"))
         	.andExpect(status().is(204));
 	}
+
+	@Test
+    @Order(2)
+	void testAddMedicalRecord_whenOk() throws Exception {
+		mockMvc.perform(post("/medicalrecords")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
+			.andExpect(status().isOk())
+	        .andExpect(jsonPath("$.firstname", is("John")));	
+	}
 	
 	@Test
+    @Order(3)
 	void testAllMedicalRecords_whenOk() throws Exception {
-		testAddMedicalRecord_whenOk();
 		mockMvc.perform(get("/medicalrecords"))
         	.andExpect(status().isOk())
 	        .andExpect(jsonPath("$[0].firstname", is("John")));
 	}
 	
 	@Test
+    @Order(4)
 	void testMedicalRecordByName_whenOk() throws Exception {
-		testAddMedicalRecord_whenOk();
 		mockMvc.perform(get("/medicalrecords?firstname=John&lastname=Boyd"))
         	.andExpect(status().isOk())
 	        .andExpect(jsonPath("$.firstname", is("John")));
 	}
 	
 	@Test
+    @Order(5)
+	void testUpdateMedicalRecord_whenOk() throws Exception {
+		mockMvc.perform(put("/medicalrecords")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:400mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
+			.andExpect(status().isOk());
+	}
+	
+	@Test
+    @Order(6)
+	void testUpdateMedicalRecord_whenNull() throws Exception {
+		mockMvc.perform(put("/medicalrecords")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
+			.andExpect(status().is(304));
+	}
+	
+	@Test
+    @Order(7)
 	void testMedicalRecordByName_whenNull() throws Exception {
-		testAddMedicalRecord_whenOk();
 		mockMvc.perform(get("/medicalrecords?firstname=Bob&lastname=BOB"))
         	.andExpect(status().is(204));
 	}
 
 	@Test
-	void testAddMedicalRecord_whenOk() throws Exception {
-		mockMvc.perform(post("/medicalrecords")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"03/06/1984\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
-			.andExpect(status().isOk())
-	        .andExpect(jsonPath("$.firstname", is("John")));	
-	}
-
-	@Test
+    @Order(8)
 	void testAddMedicalRecord_whenNull() throws Exception {
 		mockMvc.perform(post("/medicalrecords")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -91,35 +109,16 @@ class MedicalRecordIT {
 	}
 	
 	@Test
-	void testUpdateMedicalRecord_whenOk() throws Exception {
-		testAddMedicalRecord_whenOk();
-		mockMvc.perform(post("/medicalrecords")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"03/06/1984\", \"medications\":[\"aznol:400mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
-			.andExpect(status().isOk())
-	        .andExpect(jsonPath("$.station", is(1)));
-	}
-	
-	@Test
-	void testUpdateMedicalRecord_whenNull() throws Exception {
-		testAddMedicalRecord_whenOk();
-		mockMvc.perform(put("/medicalrecords")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"birthdate\":\"03/06/1984\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
-			.andExpect(status().is(304));
-	}
-	
-	@Test
+    @Order(9)
 	void testDeleteMedicalRecord_whenOk() throws Exception {
-		testAddMedicalRecord_whenOk();
 		mockMvc.perform(delete("/medicalrecords?firstname=John&lastname=Boyd"))
 			.andExpect(status().isOk());
 	}
 	
 	@Test
+    @Order(10)
 	void testDeleteMedicalRecord_whenNull() throws Exception {
-		testAddMedicalRecord_whenOk();
-		mockMvc.perform(delete("/medicalrecords?firstname=Bob&lastname=BOB"))
+		mockMvc.perform(delete("/medicalrecords?firstname=Alice&lastname=BOB"))
 			.andExpect(status().is(304));
 	}
 }

@@ -79,7 +79,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 			if (persons != null && !persons.isEmpty()) {
 				results = new ArrayList<>();
 				for (Person item : persons) {
-					if (item.getAddress().equals(city)) {
+					if (item.getCity().equals(city)) {
 						results.add(item);
 					}
 				}

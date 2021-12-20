@@ -2,7 +2,9 @@ package com.tipikae.safetynetalerts.unit.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tipikae.safetynetalerts.dao.FirestationDAOImpl;
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 import com.tipikae.safetynetalerts.storage.JsonStorage;
 import com.tipikae.safetynetalerts.storage.Storage;
@@ -35,7 +38,7 @@ class FirestationDAOTest {
 	private static Firestation wrongFirestation;
 	
 	@BeforeAll
-	private static void setUp() {
+	private static void setUp() throws Exception {
 		dao = new FirestationDAOImpl();
 		firestation = new Firestation("route", 1);
 		updatedFirestation = new Firestation("route", 2);
@@ -44,22 +47,14 @@ class FirestationDAOTest {
 	}
 
 	@Test
-	void testSave_whenOk() {
-		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(true);
-		dao.setJsonStorage(jsonStorage);
+	void testSave_whenOk() throws StorageException {
 		assertEquals(firestation, dao.save(firestation));
 	}
 
 	@Test
-	void testSave_whenNull() {
-		assertNull(dao.save(emptyFirestation));
-	}
-
-	@Test
-	void testSave_whenError() {
-		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(false);
-		dao.setJsonStorage(jsonStorage);
-		assertNull(dao.save(firestation));
+	void testSave_whenException() throws StorageException {
+		doThrow(Exception.class).when(jsonStorage).writeStorage(any(Storage.class));
+		assertThrows(StorageException.class, () -> dao.save(firestation));
 	}
 
 	@Test

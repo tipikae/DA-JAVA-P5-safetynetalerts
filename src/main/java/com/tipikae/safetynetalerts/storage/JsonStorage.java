@@ -1,7 +1,6 @@
 package com.tipikae.safetynetalerts.storage;
 
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
@@ -10,8 +9,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.model.Person;
@@ -21,6 +24,8 @@ public class JsonStorage {
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
 	private static final String PROPERTIES_FILE = "/application.properties";
 	private static final String PROPERTY_KEY_FILE = "storage.file";
+	
+	private static final Logger LOGGER = LogManager.getLogger("JsonStorage");
 	
 	private Properties prop;
 	
@@ -32,7 +37,7 @@ public class JsonStorage {
 		this.prop = prop;
 	}
 
-	public Storage readStorage() {
+	public Storage readStorage() throws StorageException {
 		Gson gson = new GsonBuilder().setDateFormat(DATE_FORMAT).create();
 		try (InputStream fis = this.getClass().getResourceAsStream(PROPERTIES_FILE)) {
 			
@@ -48,14 +53,13 @@ public class JsonStorage {
 			}
 			
 			return storage;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error("An error occured when reading storage file: " + e.getMessage(), e);
+			throw new StorageException("An error occured when reading storage file.", e);
 		}
-		return null;
 	}
 	
-	public boolean writeStorage(Storage storage) {
+	public void writeStorage(Storage storage) throws StorageException {
 		Gson gson = new GsonBuilder().setDateFormat(DATE_FORMAT).create();
 		try (InputStream fis = this.getClass().getResourceAsStream(PROPERTIES_FILE)) {
 			
@@ -64,12 +68,9 @@ public class JsonStorage {
 			Writer writer = new FileWriter(prop.getProperty(PROPERTY_KEY_FILE), false);
 			gson.toJson(storage, writer);
 			writer.close();
-			
-			return true;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error("An error occured when writing storage file: " + e.getMessage(), e);
+			throw new StorageException("An error occured when writing storage file.", e);
 		}
-		return false;
 	}
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tipikae.safetynetalerts.dao.IFirestationDAO;
+import com.tipikae.safetynetalerts.exception.ServiceException;
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 
 @Service
@@ -13,6 +15,11 @@ public class FirestationServiceImpl implements IFirestationService {
 
 	@Autowired
 	private IFirestationDAO firestationDao;
+
+	@Override
+	public Firestation addFirestationMapping(Firestation firestation) throws StorageException {
+		return firestationDao.save(firestation);
+	}
 	
 	@Override
 	public List<Firestation> getFirestations() {
@@ -20,8 +27,13 @@ public class FirestationServiceImpl implements IFirestationService {
 	}
 
 	@Override
-	public Firestation getFirestationByAddress(String address) {
-		return firestationDao.findByAddress(address);
+	public Firestation getFirestationByAddress(String address) throws ServiceException {
+		Firestation firestation = firestationDao.findByAddress(address);
+		if (firestation != null) {
+			return firestationDao.findByAddress(address);
+		} else {
+			throw new ServiceException("Address: " + address + " not found in Firestation.");
+		}
 	}
 
 	@Override
@@ -30,13 +42,14 @@ public class FirestationServiceImpl implements IFirestationService {
 	}
 
 	@Override
-	public Firestation addFirestationMapping(Firestation firestation) {
-		return firestationDao.save(firestation);
-	}
-
-	@Override
-	public boolean updateFirestationMapping(String address, Firestation firestation) {
-		return firestationDao.update(address, firestation);
+	public Firestation updateFirestationMapping(String address, Firestation newFirestation) 
+			throws ServiceException, StorageException {
+		Firestation oldFirestation = firestationDao.findByAddress(address);
+		if(oldFirestation != null) {
+			return firestationDao.update(oldFirestation, newFirestation);
+		} else {
+			throw new ServiceException("Address: " + address + " not found in Firestation.");
+		}
 	}
 
 	@Override

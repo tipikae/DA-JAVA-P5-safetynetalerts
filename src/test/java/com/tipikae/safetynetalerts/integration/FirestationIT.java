@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 import com.tipikae.safetynetalerts.storage.JsonStorage;
 import com.tipikae.safetynetalerts.storage.Storage;
@@ -34,7 +35,7 @@ class FirestationIT {
     private MockMvc mockMvc;
 	
 	@BeforeAll
-    private static void setUp() {
+    private static void setUp() throws StorageException {
 		JsonStorage jsonStorage = new JsonStorage();
 		Storage storage = jsonStorage.readStorage();
     	storage.setFirestations(new ArrayList<Firestation>());
@@ -120,7 +121,7 @@ class FirestationIT {
 		mockMvc.perform(post("/firestations")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
-			.andExpect(status().is(204));	
+			.andExpect(status().is(406));	
 	}
 	
 	@Test

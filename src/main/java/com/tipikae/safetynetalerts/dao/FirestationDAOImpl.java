@@ -3,114 +3,68 @@ package com.tipikae.safetynetalerts.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 
 @Repository
 public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationDAO {
 	
-	public FirestationDAOImpl() {
+	public FirestationDAOImpl() throws StorageException {
 		super();
 	}
-	
-	private static final Logger LOGGER = LogManager.getLogger("FirestationDAOImpl");
 
 	@Override
-	public Firestation save(Firestation firestation) {
-		if (!firestation.getAddress().equals("") && firestation.getStation() != 0) {
-			
-			if (storage != null) {
-				List<Firestation> firestations = storage.getFirestations();
-				if(firestations == null) {
-					firestations = new ArrayList<>();
-				}
-				
-				firestations.add(firestation);
-				storage.setFirestations(firestations);
-				
-				if (jsonStorage.writeStorage(storage)) {
-					return firestation;
-				}
-			}
-		}
-		return null;
+	public Firestation save(Firestation firestation) throws StorageException {
+		List<Firestation> firestations = storage.getFirestations();
+		firestations.add(firestation);
+		storage.setFirestations(firestations);
+		jsonStorage.writeStorage(storage);
+		
+		return firestation;
 	}
 
 	@Override
 	public List<Firestation> findAll() {
-		List<Firestation> firestations = null;
-		
-		if(storage != null) {
-			firestations = storage.getFirestations();
-		}
-		
-		return firestations;
+		return storage.getFirestations();
 	}
 
 	@Override
 	public Firestation findByAddress(String address) {
 		Firestation firestation = null;
-		if (address != "") {
-			List<Firestation> firestations = findAll();
-			if (firestations != null && !firestations.isEmpty()) {
-				for (Firestation item : firestations) {
-					if (item.getAddress().equals(address)) {
-						firestation = new Firestation(item.getAddress(), item.getStation());
-						break;
-					}
-				}
-			} 
+		for (Firestation item : storage.getFirestations()) {
+			if (item.getAddress().equals(address)) {
+				firestation = new Firestation(item.getAddress(), item.getStation());
+				break;
+			}
 		}
+		
 		return firestation;
 	}
 
 	@Override
 	public List<Firestation> findByStation(int station) {
-		List<Firestation> results = null;
-		if (station != 0) {
-			List<Firestation> firestations = findAll();
-			if (firestations != null && !firestations.isEmpty()) {
-				results = new ArrayList<>();
-				for (Firestation item : firestations) {
-					if (item.getStation() == station) {
-						results.add(item);
-					}
-				}
-			} 
+		List<Firestation> results = new ArrayList<>();
+		for (Firestation item : storage.getFirestations()) {
+			if (item.getStation() == station) {
+				results.add(item);
+			}
 		}
+		
 		return results;
 	}
 
 	@Override
-	public boolean update(String address, Firestation newFirestation) {
-		if (!newFirestation.getAddress().equals("") && newFirestation.getStation() != 0 && 
-				address.equals(newFirestation.getAddress())) {
-			boolean found = false;
-			
-			if (storage!= null) {
-				List<Firestation> firestations = storage.getFirestations();
-				
-				if (firestations != null) {
-					for (int i = 0; i < firestations.size(); i++) {
-						if (firestations.get(i).getAddress().equals(newFirestation.getAddress())) {
-							found = true;
-							firestations.set(i, newFirestation);
-							break;
-						}
-					}
-					if (found) {
-						storage.setFirestations(firestations);
-						if (jsonStorage.writeStorage(storage)) {
-							return true;
-						}
-					} 
-				} 
-			} 
-		}
-		return false;
+	public Firestation update(Firestation oldFirestation, Firestation newFirestation) throws StorageException {
+		List<Firestation> firestations = storage.getFirestations();
+		int i = firestations.indexOf(oldFirestation);
+		firestations.set(i, newFirestation);
+		
+		storage.setFirestations(firestations);
+		jsonStorage.writeStorage(storage);
+		
+		return newFirestation;
 	}
 
 	/**

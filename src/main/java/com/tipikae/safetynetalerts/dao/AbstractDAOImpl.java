@@ -1,5 +1,6 @@
 package com.tipikae.safetynetalerts.dao;
 
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.storage.JsonStorage;
 import com.tipikae.safetynetalerts.storage.Storage;
 
@@ -8,7 +9,7 @@ public abstract class AbstractDAOImpl {
 	protected JsonStorage jsonStorage;
 	protected Storage storage;
 	
-	public AbstractDAOImpl() {
+	public AbstractDAOImpl() throws StorageException {
 		this.jsonStorage = new JsonStorage();
 		this.storage = this.jsonStorage.readStorage();
 	}

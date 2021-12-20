@@ -16,8 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tipikae.safetynetalerts.dao.FirestationDAOImpl;
 import com.tipikae.safetynetalerts.model.Firestation;
-import com.tipikae.safetynetalerts.model.Storage;
-import com.tipikae.safetynetalerts.util.JsonStorage;
+import com.tipikae.safetynetalerts.storage.JsonStorage;
+import com.tipikae.safetynetalerts.storage.Storage;
 
 @ExtendWith(MockitoExtension.class)
 class FirestationDAOTest {

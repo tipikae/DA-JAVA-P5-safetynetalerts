@@ -1,6 +1,10 @@
-package com.tipikae.safetynetalerts.model;
+package com.tipikae.safetynetalerts.storage;
 
 import java.util.List;
+
+import com.tipikae.safetynetalerts.model.Firestation;
+import com.tipikae.safetynetalerts.model.MedicalRecord;
+import com.tipikae.safetynetalerts.model.Person;
 
 public class Storage {
 

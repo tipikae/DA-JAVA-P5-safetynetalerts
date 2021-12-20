@@ -1,7 +1,7 @@
 package com.tipikae.safetynetalerts.dao;
 
-import com.tipikae.safetynetalerts.model.Storage;
-import com.tipikae.safetynetalerts.util.JsonStorage;
+import com.tipikae.safetynetalerts.storage.JsonStorage;
+import com.tipikae.safetynetalerts.storage.Storage;
 
 public abstract class AbstractDAOImpl {
 

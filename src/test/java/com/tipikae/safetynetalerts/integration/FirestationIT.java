@@ -22,8 +22,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.tipikae.safetynetalerts.model.Firestation;
-import com.tipikae.safetynetalerts.model.Storage;
-import com.tipikae.safetynetalerts.util.JsonStorage;
+import com.tipikae.safetynetalerts.storage.JsonStorage;
+import com.tipikae.safetynetalerts.storage.Storage;
 
 @SpringBootTest(properties= {"storage.file=storage/data-test.json"})
 @AutoConfigureMockMvc

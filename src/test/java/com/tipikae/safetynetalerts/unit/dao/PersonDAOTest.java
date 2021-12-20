@@ -15,8 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tipikae.safetynetalerts.dao.PersonDAOImpl;
 import com.tipikae.safetynetalerts.model.Person;
-import com.tipikae.safetynetalerts.model.Storage;
-import com.tipikae.safetynetalerts.util.JsonStorage;
+import com.tipikae.safetynetalerts.storage.JsonStorage;
+import com.tipikae.safetynetalerts.storage.Storage;
 
 @ExtendWith(MockitoExtension.class)
 class PersonDAOTest {

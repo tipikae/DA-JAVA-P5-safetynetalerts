@@ -1,4 +1,4 @@
-package com.tipikae.safetynetalerts.util;
+package com.tipikae.safetynetalerts.storage;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,7 +15,6 @@ import com.google.gson.GsonBuilder;
 import com.tipikae.safetynetalerts.model.Firestation;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.model.Person;
-import com.tipikae.safetynetalerts.model.Storage;
 
 public class JsonStorage {
 	

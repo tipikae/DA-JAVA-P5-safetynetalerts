@@ -16,8 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.google.gson.JsonIOException;
-import com.tipikae.safetynetalerts.model.Storage;
-import com.tipikae.safetynetalerts.util.JsonStorage;
+import com.tipikae.safetynetalerts.storage.JsonStorage;
+import com.tipikae.safetynetalerts.storage.Storage;
 
 @ExtendWith(MockitoExtension.class)
 class JsonStorageTest {

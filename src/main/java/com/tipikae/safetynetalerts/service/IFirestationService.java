@@ -11,9 +11,9 @@ public interface IFirestationService {
 	Firestation addFirestationMapping(Firestation firestation) throws StorageException;
 	List<Firestation> getFirestations();
 	Firestation getFirestationByAddress(String address) throws ServiceException;
-	List<Firestation> getFirestationsByStation(int station);
+	List<Firestation> getFirestationsByStation(int station) throws ServiceException;
 	Firestation updateFirestationMapping(String address, Firestation newFirestation) 
 			throws ServiceException, StorageException;
-	boolean deleteFirestationsByStation(int station);
-	boolean deleteFirestationByAddress(String address);
+	void deleteFirestationByAddress(String address) throws StorageException, ServiceException;
+	void deleteFirestationsByStation(int station) throws ServiceException, StorageException;
 }

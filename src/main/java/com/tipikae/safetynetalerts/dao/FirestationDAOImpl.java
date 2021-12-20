@@ -71,60 +71,26 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	 * Delete one map address-station
 	 */
 	@Override
-	public boolean deleteByAddress(String address) {
-		if (!address.equals("")) {
-			boolean found = false;
-			
-			if (storage != null) {
-				List<Firestation> firestations = storage.getFirestations();
-				
-				if (firestations != null) {
-					for (int i = 0; i < firestations.size(); i++) {
-						if (firestations.get(i).getAddress().equals(address)) {
-							found = true;
-							firestations.remove(i);
-							break;
-						}
-					}
-					if (found) {
-						storage.setFirestations(firestations);
-						if (jsonStorage.writeStorage(storage)) {
-							return true;
-						}
-					} 
-				} 
-			} 
-		}
-		return false;
+	public void delete(Firestation firestation) throws StorageException {
+		List<Firestation> firestations = storage.getFirestations();
+		firestations.remove(firestation);
+		
+		storage.setFirestations(firestations);
+		jsonStorage.writeStorage(storage);
 	}
 
 	/**
 	 * Delete all maps with station number
+	 * @throws StorageException 
 	 */
 	@Override
-	public boolean deleteByStation(int station) {
-		if (station != 0) {
-			boolean found = false;
-			
-			if (storage != null) {
-				List<Firestation> firestations = storage.getFirestations();
-				
-				if (firestations != null) {
-					for (int i = 0; i < firestations.size(); i++) {
-						if (firestations.get(i).getStation() == station) {
-							found = true;
-							firestations.remove(i);
-						}
-					}
-					if (found) {
-						storage.setFirestations(firestations);
-						if (jsonStorage.writeStorage(storage)) {
-							return true;
-						}
-					} 
-				} 
-			} 
+	public void deleteFirestations(List<Firestation> firestationsToRemove) throws StorageException {
+		List<Firestation> firestations = storage.getFirestations();
+		for(Firestation firestationToRemove: firestationsToRemove) {
+			firestations.remove(firestationToRemove);
 		}
-		return false;
+		
+		storage.setFirestations(firestations);
+		jsonStorage.writeStorage(storage);
 	}
 }

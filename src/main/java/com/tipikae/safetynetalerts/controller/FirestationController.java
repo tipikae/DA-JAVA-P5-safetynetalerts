@@ -52,9 +52,14 @@ public class FirestationController {
 
 	// /firestations?station={station}
 	@GetMapping(value="/firestations", params="station")
-    public ResponseEntity<List<Firestation>> firestationsByStation(@RequestParam @Positive int station) {
-		List<Firestation> firestations = service.getFirestationsByStation(station);
-		return new ResponseEntity<>(firestations, HttpStatus.OK);
+    public ResponseEntity<Object> firestationsByStation(@RequestParam @Positive int station) {
+		try {
+			List<Firestation> firestations = service.getFirestationsByStation(station);
+			return new ResponseEntity<>(firestations, HttpStatus.OK);
+		} catch (ServiceException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@PostMapping(value="/firestations", consumes={"application/json"})
@@ -85,23 +90,31 @@ public class FirestationController {
 	}
 	
 	@DeleteMapping("/firestations/{address}")
-	public ResponseEntity<Firestation> deleteFirestationsByAddress(@PathVariable String address ) {
-		if(address != null) {
-			if (service.deleteFirestationByAddress(address)) {
-				return new ResponseEntity<>(HttpStatus.OK);
-			}
+	public ResponseEntity<Object> deleteFirestationsByAddress(@PathVariable @NotBlank String address ) {
+		try {
+			service.deleteFirestationByAddress(address);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch(StorageException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.INSUFFICIENT_STORAGE);
+		} catch(ServiceException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 
 	// /firestations?station={station}
 	@DeleteMapping("/firestations")
-	public ResponseEntity<Firestation> deleteFirestationByStation(@RequestParam int station) {
-		if(station != 0) {
-			if (service.deleteFirestationsByStation(station)) {
-				return new ResponseEntity<>(HttpStatus.OK);
-			}
+	public ResponseEntity<Object> deleteFirestationByStation(@RequestParam @Positive int station) {
+		try {
+			service.deleteFirestationsByStation(station);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch(StorageException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.INSUFFICIENT_STORAGE);
+		} catch(ServiceException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 }

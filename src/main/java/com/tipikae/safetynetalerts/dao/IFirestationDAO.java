@@ -12,6 +12,6 @@ public interface IFirestationDAO {
 	List<Firestation> findByStation(int station);
 	Firestation save(Firestation firestation) throws StorageException;
 	Firestation update(Firestation oldFirestation, Firestation firestation) throws StorageException;
-	boolean deleteByAddress(String address);
-	boolean deleteByStation(int station);
+	void delete(Firestation firestation) throws StorageException;
+	void deleteFirestations(List<Firestation> firestationsToRemove) throws StorageException;
 }

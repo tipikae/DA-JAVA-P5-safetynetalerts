@@ -2,6 +2,8 @@ package com.tipikae.safetynetalerts.service;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import com.tipikae.safetynetalerts.model.Firestation;
 
 @Service
 public class FirestationServiceImpl implements IFirestationService {
+	
+	private static final Logger LOGGER = LogManager.getLogger("JsonStorage");
 
 	@Autowired
 	private IFirestationDAO firestationDao;
@@ -32,13 +36,29 @@ public class FirestationServiceImpl implements IFirestationService {
 		if (firestation != null) {
 			return firestationDao.findByAddress(address);
 		} else {
+			LOGGER.error("getFirestationByAddress: Address: " + address + " not found in Firestation.");
 			throw new ServiceException("Address: " + address + " not found in Firestation.");
 		}
 	}
 
 	@Override
-	public List<Firestation> getFirestationsByStation(int station) {
-		return firestationDao.findByStation(station);
+	public List<Firestation> getFirestationsByStation(int station) throws ServiceException {
+		List<Firestation> firestations = firestationDao.findAll();
+		boolean exist = false;
+		
+		for(Firestation firestation: firestations) {
+			if(firestation.getStation() == station) {
+				exist = true;
+				break;
+			}
+		}
+		
+		if(exist) {
+			return firestationDao.findByStation(station);
+		} else {
+			LOGGER.error("getFirestationsByStation: Station: " + station + " not found in Firestation.");
+			throw new ServiceException("Station: " + station + " not found in Firestation.");
+		}
 	}
 
 	@Override
@@ -48,18 +68,31 @@ public class FirestationServiceImpl implements IFirestationService {
 		if(oldFirestation != null) {
 			return firestationDao.update(oldFirestation, newFirestation);
 		} else {
+			LOGGER.error("updateFirestationMapping: Address: " + address + " not found in Firestation.");
 			throw new ServiceException("Address: " + address + " not found in Firestation.");
 		}
 	}
 
 	@Override
-	public boolean deleteFirestationsByStation(int station) {
-		return firestationDao.deleteByStation(station);
+	public void deleteFirestationByAddress(String address) throws StorageException, ServiceException {
+		Firestation firestation = firestationDao.findByAddress(address);
+		if(firestation != null) {
+			firestationDao.delete(firestation);
+		} else {
+			LOGGER.error("deleteFirestationByAddress: Address: " + address + " not found in Firestation.");
+			throw new ServiceException("Address: " + address + " not found in Firestation.");
+		}
 	}
 
 	@Override
-	public boolean deleteFirestationByAddress(String address) {
-		return firestationDao.deleteByAddress(address);
+	public void deleteFirestationsByStation(int station) throws ServiceException, StorageException {
+		List<Firestation> firestations = firestationDao.findByStation(station);
+		if(firestations != null) {
+			firestationDao.deleteFirestations(firestations);
+		} else {
+			LOGGER.error("deleteFirestationsByStation: Station: " + station + " not found in Firestation.");
+			throw new ServiceException("Station: " + station + " not found in Firestation.");
+		}
 	}
 
 }

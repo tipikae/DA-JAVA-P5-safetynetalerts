@@ -46,7 +46,7 @@ class FirestationIT {
     @Order(1)
 	void testAllFirestations_whenEmpty() throws Exception {
 		mockMvc.perform(get("/firestations"))
-        	.andExpect(status().is(204));
+        	.andExpect(status().isOk());
 	}
 
 	@Test

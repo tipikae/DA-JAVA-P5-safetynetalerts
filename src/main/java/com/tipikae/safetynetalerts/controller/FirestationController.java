@@ -3,6 +3,7 @@ package com.tipikae.safetynetalerts.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -33,10 +34,26 @@ public class FirestationController {
 	@Autowired
 	private IFirestationService service;
 
+	@PostMapping(value="/firestations", consumes={"application/json"})
+	public ResponseEntity<Object> addFirestationMapping(@Valid @RequestBody Firestation firestation) {
+		try {
+			Firestation added = service.addFirestationMapping(firestation);
+			return new ResponseEntity<>(added, HttpStatus.OK);
+		} catch (StorageException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.INSUFFICIENT_STORAGE);
+		}
+	}
+
 	@GetMapping("/firestations")
-    public ResponseEntity<List<Firestation>> allFirestations() {
-		List<Firestation> firestations = service.getFirestations();
-		return new ResponseEntity<>(firestations, HttpStatus.OK);
+    public ResponseEntity<Object> allFirestations() {
+		try {
+			List<Firestation> firestations = service.getFirestations();
+			return new ResponseEntity<>(firestations, HttpStatus.OK);
+		} catch (StorageException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.INSUFFICIENT_STORAGE);
+		}
 	}
 
 	@GetMapping("/firestations/{address}")
@@ -47,6 +64,9 @@ public class FirestationController {
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
+		} catch (StorageException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
 
@@ -59,17 +79,12 @@ public class FirestationController {
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
-		}
-	}
-	
-	@PostMapping(value="/firestations", consumes={"application/json"})
-	public ResponseEntity<Object> addFirestationMapping(@Valid @RequestBody Firestation firestation) {
-		try {
-			Firestation added = service.addFirestationMapping(firestation);
-			return new ResponseEntity<>(added, HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
+		} catch(ConstraintViolationException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 	
@@ -115,6 +130,9 @@ public class FirestationController {
 		} catch(ServiceException e) {
 			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
+		} catch(ConstraintViolationException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 }

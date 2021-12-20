@@ -7,9 +7,9 @@ import com.tipikae.safetynetalerts.model.Firestation;
 
 public interface IFirestationDAO {
 
-	List<Firestation> findAll();
-	Firestation findByAddress(String address);
-	List<Firestation> findByStation(int station);
+	List<Firestation> findAll() throws StorageException;
+	Firestation findByAddress(String address) throws StorageException;
+	List<Firestation> findByStation(int station) throws StorageException;
 	Firestation save(Firestation firestation) throws StorageException;
 	Firestation update(Firestation oldFirestation, Firestation firestation) throws StorageException;
 	void delete(Firestation firestation) throws StorageException;

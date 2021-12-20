@@ -9,9 +9,9 @@ import com.tipikae.safetynetalerts.model.Firestation;
 public interface IFirestationService {
 
 	Firestation addFirestationMapping(Firestation firestation) throws StorageException;
-	List<Firestation> getFirestations();
-	Firestation getFirestationByAddress(String address) throws ServiceException;
-	List<Firestation> getFirestationsByStation(int station) throws ServiceException;
+	List<Firestation> getFirestations() throws StorageException;
+	Firestation getFirestationByAddress(String address) throws ServiceException, StorageException;
+	List<Firestation> getFirestationsByStation(int station) throws ServiceException, StorageException;
 	Firestation updateFirestationMapping(String address, Firestation newFirestation) 
 			throws ServiceException, StorageException;
 	void deleteFirestationByAddress(String address) throws StorageException, ServiceException;

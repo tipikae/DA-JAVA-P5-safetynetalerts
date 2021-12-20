@@ -20,21 +20,25 @@ public class FirestationServiceImpl implements IFirestationService {
 	@Autowired
 	private IFirestationDAO firestationDao;
 
+	public void setFirestationDao(IFirestationDAO firestationDao) {
+		this.firestationDao = firestationDao;
+	}
+
 	@Override
 	public Firestation addFirestationMapping(Firestation firestation) throws StorageException {
 		return firestationDao.save(firestation);
 	}
 	
 	@Override
-	public List<Firestation> getFirestations() {
+	public List<Firestation> getFirestations() throws StorageException {
 		return firestationDao.findAll();
 	}
 
 	@Override
-	public Firestation getFirestationByAddress(String address) throws ServiceException {
+	public Firestation getFirestationByAddress(String address) throws ServiceException, StorageException {
 		Firestation firestation = firestationDao.findByAddress(address);
 		if (firestation != null) {
-			return firestationDao.findByAddress(address);
+			return firestation;
 		} else {
 			LOGGER.error("getFirestationByAddress: Address: " + address + " not found in Firestation.");
 			throw new ServiceException("Address: " + address + " not found in Firestation.");
@@ -42,7 +46,7 @@ public class FirestationServiceImpl implements IFirestationService {
 	}
 
 	@Override
-	public List<Firestation> getFirestationsByStation(int station) throws ServiceException {
+	public List<Firestation> getFirestationsByStation(int station) throws ServiceException, StorageException {
 		List<Firestation> firestations = firestationDao.findAll();
 		boolean exist = false;
 		

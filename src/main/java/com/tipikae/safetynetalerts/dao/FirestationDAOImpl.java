@@ -7,16 +7,18 @@ import org.springframework.stereotype.Repository;
 
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
+import com.tipikae.safetynetalerts.storage.JsonStorage;
 
 @Repository
 public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationDAO {
 	
-	public FirestationDAOImpl() throws StorageException {
-		super();
+	public FirestationDAOImpl() {
+		jsonStorage = new JsonStorage();
 	}
 
 	@Override
 	public Firestation save(Firestation firestation) throws StorageException {
+		storage = jsonStorage.readStorage();
 		List<Firestation> firestations = storage.getFirestations();
 		firestations.add(firestation);
 		storage.setFirestations(firestations);
@@ -26,12 +28,14 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	}
 
 	@Override
-	public List<Firestation> findAll() {
+	public List<Firestation> findAll() throws StorageException {
+		storage = jsonStorage.readStorage();
 		return storage.getFirestations();
 	}
 
 	@Override
-	public Firestation findByAddress(String address) {
+	public Firestation findByAddress(String address) throws StorageException {
+		storage = jsonStorage.readStorage();
 		Firestation firestation = null;
 		for (Firestation item : storage.getFirestations()) {
 			if (item.getAddress().equals(address)) {
@@ -44,7 +48,8 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	}
 
 	@Override
-	public List<Firestation> findByStation(int station) {
+	public List<Firestation> findByStation(int station) throws StorageException {
+		storage = jsonStorage.readStorage();
 		List<Firestation> results = new ArrayList<>();
 		for (Firestation item : storage.getFirestations()) {
 			if (item.getStation() == station) {
@@ -57,6 +62,7 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 
 	@Override
 	public Firestation update(Firestation oldFirestation, Firestation newFirestation) throws StorageException {
+		storage = jsonStorage.readStorage();
 		List<Firestation> firestations = storage.getFirestations();
 		int i = firestations.indexOf(oldFirestation);
 		firestations.set(i, newFirestation);
@@ -72,6 +78,7 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	 */
 	@Override
 	public void delete(Firestation firestation) throws StorageException {
+		storage = jsonStorage.readStorage();
 		List<Firestation> firestations = storage.getFirestations();
 		firestations.remove(firestation);
 		
@@ -85,6 +92,7 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	 */
 	@Override
 	public void deleteFirestations(List<Firestation> firestationsToRemove) throws StorageException {
+		storage = jsonStorage.readStorage();
 		List<Firestation> firestations = storage.getFirestations();
 		for(Firestation firestationToRemove: firestationsToRemove) {
 			firestations.remove(firestationToRemove);

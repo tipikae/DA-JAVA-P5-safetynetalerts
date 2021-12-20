@@ -1,10 +1,10 @@
 package com.tipikae.safetynetalerts.unit.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tipikae.safetynetalerts.dao.FirestationDAOImpl;
@@ -34,119 +35,131 @@ class FirestationDAOTest {
 	private static FirestationDAOImpl dao;
 	private static Firestation firestation;
 	private static Firestation updatedFirestation;
-	private static Firestation emptyFirestation;
-	private static Firestation wrongFirestation;
 	
 	@BeforeAll
 	private static void setUp() throws Exception {
 		dao = new FirestationDAOImpl();
 		firestation = new Firestation("route", 1);
 		updatedFirestation = new Firestation("route", 2);
-		emptyFirestation = new Firestation("", 0);
-		wrongFirestation = new Firestation("chemin", 2);
 	}
 
 	@Test
 	void testSave_whenOk() throws StorageException {
+		List<Firestation> firestations = new ArrayList<>();
+		firestations.add(firestation);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getFirestations()).thenReturn(firestations);
+		dao.setJsonStorage(jsonStorage);
+		dao.setStorage(storage);
 		assertEquals(firestation, dao.save(firestation));
 	}
 
 	@Test
 	void testSave_whenException() throws StorageException {
-		doThrow(Exception.class).when(jsonStorage).writeStorage(any(Storage.class));
+		List<Firestation> firestations = new ArrayList<>();
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getFirestations()).thenReturn(firestations);
+		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
+		dao.setJsonStorage(jsonStorage);
+		dao.setStorage(storage);
 		assertThrows(StorageException.class, () -> dao.save(firestation));
 	}
 
 	@Test
-	void testFindByAddress_whenNull() {
-		assertNull(dao.findByAddress(""));
+	void testFindAll_whenException() throws StorageException {
+		doThrow(StorageException.class).when(jsonStorage).readStorage();
+		dao.setJsonStorage(jsonStorage);
+		assertThrows(StorageException.class, () -> dao.findAll());
 	}
 
 	@Test
-	void testFindByStation_whenNull() {
-		assertNull(dao.findByStation(0));
+	void testFindByAddress_whenException() throws StorageException {
+		doThrow(StorageException.class).when(jsonStorage).readStorage();
+		dao.setJsonStorage(jsonStorage);
+		assertThrows(StorageException.class, () -> dao.findByAddress("route"));
 	}
 
 	@Test
-	void testFindAll_whenNull() {
-		when(storage.getFirestations()).thenReturn(null);
+	void testFindByStation_whenException() throws StorageException {
+		doThrow(StorageException.class).when(jsonStorage).readStorage();
+		dao.setJsonStorage(jsonStorage);
+		assertThrows(StorageException.class, () -> dao.findByStation(1));
+	}
+	
+	@Test
+	void testUpdate_whenOk() throws StorageException {
+		List<Firestation> firestations = new ArrayList<>();
+		firestations.add(firestation);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getFirestations()).thenReturn(firestations);
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertNull(dao.findAll());
+		Firestation result = dao.update(firestation, updatedFirestation);
+		assertEquals(updatedFirestation.getAddress(),result.getAddress());
+		assertEquals(updatedFirestation.getStation(),result.getStation());
 	}
 	
 	@Test
-	void testUpdate_whenOk() {
+	void testUpdate_whenException() throws StorageException {
 		List<Firestation> firestations = new ArrayList<>();
 		firestations.add(firestation);
+		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
-		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(true);
+		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertEquals(true, dao.update("route", updatedFirestation));
+		assertThrows(StorageException.class, () -> dao.save(firestation));
 	}
 	
 	@Test
-	void testUpdate_whenNull() {
-		assertEquals(false, dao.update("route", emptyFirestation));
-	}
-	
-	@Test
-	void testUpdate_whenNotFound() {
+	void testDelete_whenOk() throws StorageException {
 		List<Firestation> firestations = new ArrayList<>();
 		firestations.add(firestation);
+		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
-		dao.setStorage(storage);
-		assertEquals(false, dao.update("chemin", wrongFirestation));
-	}
-	
-	@Test
-	void testDeleteByAddress_whenOk() {
-		List<Firestation> firestations = new ArrayList<>();
-		firestations.add(firestation);
-		when(storage.getFirestations()).thenReturn(firestations);
-		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(true);
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertEquals(true, dao.deleteByAddress("route"));
+		dao.delete(firestation);
+		verify(jsonStorage, Mockito.times(1)).writeStorage(storage);
 	}
 	
 	@Test
-	void testDeleteByAddress_whenNull() {
-		assertEquals(false, dao.deleteByAddress(""));
-	}
-	
-	@Test
-	void testDeleteByAddress_whenNotFound() {
+	void testDelete_whenException() throws StorageException {
 		List<Firestation> firestations = new ArrayList<>();
 		firestations.add(firestation);
+		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
-		dao.setStorage(storage);
-		assertEquals(false, dao.deleteByAddress("chemin"));
-	}
-	
-	@Test
-	void testDeleteByStation_whenOk() {
-		List<Firestation> firestations = new ArrayList<>();
-		firestations.add(firestation);
-		when(storage.getFirestations()).thenReturn(firestations);
-		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(true);
+		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertEquals(true, dao.deleteByStation(1));
+		assertThrows(StorageException.class, () -> dao.delete(firestation));
 	}
 	
 	@Test
-	void testDeleteByStation_whenNull() {
-		assertEquals(false, dao.deleteByStation(0));
-	}
-	
-	@Test
-	void testDeleteByStation_whenNotFound() {
+	void testDeleteFirestations_whenOk() throws StorageException {
 		List<Firestation> firestations = new ArrayList<>();
 		firestations.add(firestation);
+		List<Firestation> firestationsToRemove = new ArrayList<>();
+		firestationsToRemove.add(firestation);
+		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
+		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertEquals(false, dao.deleteByStation(3));
+		dao.deleteFirestations(firestationsToRemove);
+		verify(jsonStorage, Mockito.times(1)).writeStorage(storage);
+	}
+	
+	@Test
+	void testDeleteFirestations_whenException() throws StorageException {
+		List<Firestation> firestations = new ArrayList<>();
+		firestations.add(firestation);
+		List<Firestation> firestationsToRemove = new ArrayList<>();
+		firestationsToRemove.add(firestation);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getFirestations()).thenReturn(firestations);
+		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
+		dao.setJsonStorage(jsonStorage);
+		dao.setStorage(storage);
+		assertThrows(StorageException.class, () -> dao.deleteFirestations(firestationsToRemove));
 	}
 }

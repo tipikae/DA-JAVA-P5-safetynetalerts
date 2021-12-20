@@ -81,6 +81,7 @@ public class PersonController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
+	// /persons/firstname/lastname
 	@PutMapping(value="/persons", consumes={"application/json"})
 	public ResponseEntity<Person> updatePerson(
 			@RequestParam String firstname, 

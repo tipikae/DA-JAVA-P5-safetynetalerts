@@ -16,9 +16,9 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 
 	@Override
 	public Person save(Person person) {
-		if (!person.getFirstname().equals("") && !person.getLastname().equals("") && 
-				!person.getAddress().equals("") && !person.getCity().equals("") && !person.getZip().equals("") && 
-				!person.getPhone().equals("") && !person.getEmail().equals("")) {
+//		if (!person.getFirstname().equals("") && !person.getLastname().equals("") && 
+//				!person.getAddress().equals("") && !person.getCity().equals("") && !person.getZip().equals("") && 
+//				!person.getPhone().equals("") && !person.getEmail().equals("")) {
 			
 			if (storage != null) {
 				List<Person> persons = storage.getPersons();
@@ -33,7 +33,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 					return person;
 				}
 			}
-		}
+		//}
 		return null;
 	}
 	

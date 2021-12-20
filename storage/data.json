@@ -206,6 +206,15 @@
 			"zip": "97451",
 			"phone": "841-874-7458",
 			"email": "gramps@email.com"
+		},
+		{
+			"firstName": "Rostow",
+			"lastName": "Pascal",
+			"address": "26 rue du Louvre",
+			"city": "Paris",
+			"zip": "75000",
+			"phone": "06858965",
+			"email": "rostow@gmail.com"
 		}
 	],
 	"firestations": [

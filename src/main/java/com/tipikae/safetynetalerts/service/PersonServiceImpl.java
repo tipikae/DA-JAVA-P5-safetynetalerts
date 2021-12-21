@@ -20,7 +20,7 @@ public class PersonServiceImpl implements IPersonService {
 	@Autowired
 	private IPersonDAO personDao;
 
-	public void setPersonnDao(IPersonDAO personDao) {
+	public void setPersonDao(IPersonDAO personDao) {
 		this.personDao = personDao;
 	}
 

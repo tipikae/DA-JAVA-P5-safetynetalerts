@@ -2,6 +2,7 @@ package com.tipikae.safetynetalerts.unit.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,7 +11,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.tipikae.safetynetalerts.controller.PersonController;
+import com.tipikae.safetynetalerts.exception.ServiceException;
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
 import com.tipikae.safetynetalerts.service.IPersonService;
 
 @WebMvcTest(controllers = PersonController.class)
 class PersonControllerTest {
+	
+	private static final String BODY_REQ = "{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }";
 
 	@Autowired
     private MockMvc mockMvc;
@@ -33,115 +37,180 @@ class PersonControllerTest {
 	private IPersonService service;
 	
 	@Test
+	void testAddPerson_whenOk() throws Exception {
+		when(service.addPerson(any(Person.class)))
+			.thenReturn(new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "jaboyd@email.com"));
+		mockMvc.perform(post("/persons")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(BODY_REQ))
+        	.andExpect(status().isOk());
+	}
+	
+	@Test
+	void testAddPerson_whenException() throws Exception {
+		doThrow(StorageException.class).when(service).addPerson(any(Person.class));
+		mockMvc.perform(post("/persons")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(BODY_REQ))
+        	.andExpect(status().is(507));
+	}
+	
+	@Test
+	void testAddPerson_whenInvalid() throws Exception {
+		mockMvc.perform(post("/persons")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{}"))
+        	.andExpect(status().is(400));
+	}
+	
+	@Test
 	void testAllPersons_whenOk() throws Exception {
-		List<Person> persons = new ArrayList<>();
-		Person person = new Person(null, null, null, null, null, null, null);
-		persons.add(person);
-		when(service.getPersons()).thenReturn(persons);
+		when(service.getPersons()).thenReturn(new ArrayList<Person>());
 		mockMvc.perform(get("/persons"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
-	void testAllPersons_whenNull() throws Exception {
-		when(service.getPersons()).thenReturn(null);
+	void testAllPersons_whenException() throws Exception {
+		doThrow(StorageException.class).when(service).getPersons();
 		mockMvc.perform(get("/persons"))
-        	.andExpect(status().is(204));
+        	.andExpect(status().is(507));
+	}
+	
+	@Test
+	void testPersonByFirstnameLastname_whenOk() throws Exception {
+		when(service.getPersonByFirstnameLastname(anyString(), anyString())).thenReturn(new Person(null, null, null, null, null, null, null));
+		mockMvc.perform(get("/persons?firstname=Bob&lastname=BOB"))
+        	.andExpect(status().isOk());
+	}
+	
+	@Test
+	void testPersonByFirstnameLastname_whenStorageException() throws Exception {
+		doThrow(StorageException.class).when(service).getPersonByFirstnameLastname("Bob", "BOB");
+		mockMvc.perform(get("/persons?firstname=Bob&lastname=BOB"))
+        	.andExpect(status().is(507));
+	}
+	
+	@Test
+	void testPersonByFirstnameLastname_whenServiceException() throws Exception {
+		doThrow(ServiceException.class).when(service).getPersonByFirstnameLastname("Bob", "BOB");
+		mockMvc.perform(get("/persons?firstname=Bob&lastname=BOB"))
+        	.andExpect(status().is(404));
 	}
 	
 	@Test
 	void testPersonsByAddress_whenOk() throws Exception {
-		when(service.getPersonsByAddress(anyString())).thenReturn(
-				List.of(new Person(null, null, null, null, null, null, null)));
-		mockMvc.perform(get("/persons?address=1509%20Culver%20St"))
+		when(service.getPersonsByAddress(anyString())).thenReturn(new ArrayList<Person>());
+		mockMvc.perform(get("/persons?address=route"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
-	void testPersonsByAddress_whenNull() throws Exception {
-		when(service.getPersonsByAddress(anyString())).thenReturn(null);
-		mockMvc.perform(get("/persons?address=1509%20Culver%20St"))
-        	.andExpect(status().is(204));
+	void testPersonsByAddress_whenInvalid() throws Exception {
+		mockMvc.perform(get("/persons?address="))
+        	.andExpect(status().is(406));
+	}
+	
+	@Test
+	void testPersonsByAddress_whenStorageException() throws Exception {
+		doThrow(StorageException.class).when(service).getPersonsByAddress(anyString());
+		mockMvc.perform(get("/persons?address=route"))
+        	.andExpect(status().is(507));
+	}
+	
+	@Test
+	void testPersonsByAddress_whenServiceException() throws Exception {
+		doThrow(ServiceException.class).when(service).getPersonsByAddress(anyString());
+		mockMvc.perform(get("/persons?address=route"))
+        	.andExpect(status().is(404));
 	}
 	
 	@Test
 	void testPersonsByCity_whenOk() throws Exception {
-		when(service.getPersonsByCity(anyString())).thenReturn(
-				List.of(new Person(null, null, null, null, null, null, null)));
+		when(service.getPersonsByCity(anyString())).thenReturn(new ArrayList<Person>());
 		mockMvc.perform(get("/persons?city=Paris"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
-	void testPersonsByCity_whenNull() throws Exception {
-		when(service.getPersonsByCity(anyString())).thenReturn(null);
+	void testPersonsByCity_whenInvalid() throws Exception {
+		mockMvc.perform(get("/persons?city="))
+        	.andExpect(status().is(406));
+	}
+	
+	@Test
+	void testPersonsByCity_whenStorageException() throws Exception {
+		doThrow(StorageException.class).when(service).getPersonsByCity(anyString());
 		mockMvc.perform(get("/persons?city=Paris"))
-        	.andExpect(status().is(204));
+        	.andExpect(status().is(507));
 	}
 	
 	@Test
-	void testPersonByName_whenOk() throws Exception {
-		when(service.getPersonByName(anyString(), anyString())).thenReturn(
-				new Person(null, null, null, null, null, null, null));
-		mockMvc.perform(get("/persons?firstname=Bob&lastname=BOB"))
-        	.andExpect(status().isOk());
-	}
-	
-	@Test
-	void testPersonByName_whenNull() throws Exception {
-		when(service.getPersonByName(anyString(), anyString())).thenReturn(null);
-		mockMvc.perform(get("/persons?firstname=Bob&lastname=BOB"))
-        	.andExpect(status().is(204));
-	}
-	
-	@Test
-	void testAddPerson_whenOk() throws Exception {
-		when(service.addPerson(any(Person.class))).thenReturn(
-				new Person(null, null, null, null, null, null, null));
-		mockMvc.perform(post("/persons")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
-        	.andExpect(status().isOk());
-	}
-	
-	@Test
-	void testAddPerson_whenNull() throws Exception {
-		when(service.addPerson(any(Person.class))).thenReturn(null);
-		mockMvc.perform(post("/persons")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{}"))
-        	.andExpect(status().is(204));
+	void testPersonsByCity_whenServiceException() throws Exception {
+		doThrow(ServiceException.class).when(service).getPersonsByCity(anyString());
+		mockMvc.perform(get("/persons?city=Paris"))
+        	.andExpect(status().is(404));
 	}
 	
 	@Test
 	void testUpdatePerson_whenOk() throws Exception {
-		when(service.updatePerson(anyString(), anyString(), any(Person.class))).thenReturn(true);
-		mockMvc.perform(put("/persons?firstname=John&lastname=Boyd")
+		when(service.updatePerson(anyString(), anyString(), any(Person.class))).thenReturn(new Person(null, null, null, null, null, null, null));
+		mockMvc.perform(put("/persons?firstname=Bob&lastname=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Paris\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
+				.content(BODY_REQ))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
-	void testUpdatePerson_whenNotOk() throws Exception {
-		when(service.updatePerson(anyString(), anyString(), any(Person.class))).thenReturn(false);
-		mockMvc.perform(put("/persons?firstname=John&lastname=Boyd")
+	void testUpdatePerson_whenInvalid() throws Exception {
+		when(service.updatePerson(anyString(), anyString(), any(Person.class))).thenReturn(new Person(null, null, null, null, null, null, null));
+		mockMvc.perform(put("/persons?firstname=Bob&lastname=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
-        	.andExpect(status().is(304));
+        	.andExpect(status().is(400));
 	}
 	
 	@Test
-	void testDeletePersonByName_whenOk() throws Exception {
-		when(service.deletePerson(anyString(), anyString())).thenReturn(true);
-		mockMvc.perform(delete("/persons?firstname=Bob&lastname=BOB"))
+	void testUpdatePerson_whenStorageException() throws Exception {
+		doThrow(StorageException.class).when(service).updatePerson(anyString(), anyString(), any(Person.class));
+		mockMvc.perform(put("/persons?firstname=Bob&lastname=BOB")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(BODY_REQ))
+        	.andExpect(status().is(507));
+	}
+	
+	@Test
+	void testUpdatePerson_whenServiceException() throws Exception {
+		doThrow(ServiceException.class).when(service).updatePerson(anyString(), anyString(), any(Person.class));
+		mockMvc.perform(put("/persons?firstname=Bob&lastname=BOB")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(BODY_REQ))
+        	.andExpect(status().is(404));
+	}
+	
+	@Test
+	void testDeletePerson_whenOk() throws Exception {
+		mockMvc.perform(delete("/persons?firstname=John&lastname=Boyd"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
-	void testDeletePersonByName_whenNotOk() throws Exception {
-		when(service.deletePerson(anyString(), anyString())).thenReturn(false);
+	void testDeletePerson_whenInvalid() throws Exception {
+		mockMvc.perform(delete("/persons?firstname=John&lastname="))
+        	.andExpect(status().is(400));
+	}
+	
+	@Test
+	void testDeletePerson_whenStorageException() throws Exception {
+		doThrow(StorageException.class).when(service).deletePerson("Bob", "BOB");
 		mockMvc.perform(delete("/persons?firstname=Bob&lastname=BOB"))
-        	.andExpect(status().is(304));
+        	.andExpect(status().is(507));
+	}
+	
+	@Test
+	void testDeletePerson_whenServiceException() throws Exception {
+		doThrow(ServiceException.class).when(service).deletePerson("Bob", "BOB");
+		mockMvc.perform(delete("/persons?firstname=Bob&lastname=BOB"))
+        	.andExpect(status().is(404));
 	}
 }

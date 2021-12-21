@@ -61,16 +61,26 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	}
 
 	@Override
-	public Firestation update(Firestation oldFirestation, Firestation newFirestation) throws StorageException {
+	public Firestation update(Firestation firestation) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Firestation> firestations = storage.getFirestations();
-		int i = firestations.indexOf(oldFirestation);
-		firestations.set(i, newFirestation);
+		int i = -1;
 		
-		storage.setFirestations(firestations);
-		jsonStorage.writeStorage(storage);
+		for(int j = 0; j < firestations.size(); j++) {
+			if(firestations.get(j).getAddress().equals(firestation.getAddress())) {
+				i = j;
+				break;
+			}
+		}
 		
-		return newFirestation;
+		if (i != -1) {
+			firestations.set(i, firestation);
+			storage.setFirestations(firestations);
+			jsonStorage.writeStorage(storage);
+			return firestation;
+		} else {
+			return null;
+		}
 	}
 
 	/**

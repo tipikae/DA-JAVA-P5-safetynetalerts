@@ -66,14 +66,20 @@ public class FirestationServiceImpl implements IFirestationService {
 	}
 
 	@Override
-	public Firestation updateFirestationMapping(String address, Firestation newFirestation) 
+	public Firestation updateFirestationMapping(String address, Firestation firestation) 
 			throws ServiceException, StorageException {
-		Firestation oldFirestation = firestationDao.findByAddress(address);
-		if(oldFirestation != null) {
-			return firestationDao.update(oldFirestation, newFirestation);
+		if (address.equals(firestation.getAddress())) {
+			if (firestationDao.findByAddress(address) != null) {
+				return firestationDao.update(firestation);
+			} else {
+				LOGGER.error("updateFirestationMapping: Address: " + address + " not found in Firestation.");
+				throw new ServiceException("Address: " + address + " not found in Firestation.");
+			} 
 		} else {
-			LOGGER.error("updateFirestationMapping: Address: " + address + " not found in Firestation.");
-			throw new ServiceException("Address: " + address + " not found in Firestation.");
+			LOGGER.error("updateFirestationMapping: Address parameter: " + address + 
+					" is different from Firestation address: " + firestation.getAddress());
+			throw new ServiceException("Address parameter: " + address + 
+					" is different from Firestation address: " + firestation.getAddress());
 		}
 	}
 
@@ -91,7 +97,7 @@ public class FirestationServiceImpl implements IFirestationService {
 	@Override
 	public void deleteFirestationsByStation(int station) throws ServiceException, StorageException {
 		List<Firestation> firestations = firestationDao.findByStation(station);
-		if(firestations != null) {
+		if(!firestations.isEmpty()) {
 			firestationDao.deleteFirestations(firestations);
 		} else {
 			LOGGER.error("deleteFirestationsByStation: Station: " + station + " not found in Firestation.");

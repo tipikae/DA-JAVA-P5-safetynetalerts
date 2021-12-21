@@ -54,7 +54,7 @@ class FirestationIT {
 	void testAddFirestationMapping_whenOk() throws Exception {
 		mockMvc.perform(post("/firestations")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"3\" }"))
+				.content("{ \"address\":\"3200 chemin de Pale\", \"station\":\"3\" }"))
 			.andExpect(status().isOk())
 	        .andExpect(jsonPath("$.station", is(3)));	
 	}
@@ -70,19 +70,20 @@ class FirestationIT {
 	@Test
 	@Order(4)
 	void testUpdateFirestationMapping_whenOk() throws Exception {
-		mockMvc.perform(put("/firestations/3200 chemin de Pâle")
+		mockMvc.perform(put("/firestations/3200 chemin de Pale")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"1\" }"))
-			.andExpect(status().isOk());
+				.content("{ \"address\":\"3200 chemin de Pale\", \"station\":\"1\" }"))
+			.andExpect(status().isOk())
+	        .andExpect(jsonPath("$.station", is(1)));
 	}
 	
 	@Test
 	@Order(5)
 	void testUpdateFirestationMapping_whenNull() throws Exception {
-		mockMvc.perform(put("/firestations/route de Pâle")
+		mockMvc.perform(put("/firestations/route de Pale")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"address\":\"route de Pâle\", \"station\":\"1\" }"))
-			.andExpect(status().is(304));
+				.content("{ \"address\":\"route de Pale\", \"station\":\"1\" }"))
+			.andExpect(status().is(404));
 	}
 	
 	@Test
@@ -97,13 +98,13 @@ class FirestationIT {
 	@Order(7)
 	void testFirestationsByStation_whenNull() throws Exception {
 		mockMvc.perform(get("/firestations?station=2"))
-        	.andExpect(status().is(204));
+        	.andExpect(status().is(404));
 	}
 	
 	@Test
 	@Order(8)
 	void testFirestationByAddress_whenOk() throws Exception {
-		mockMvc.perform(get("/firestations/3200 chemin de Pâle"))
+		mockMvc.perform(get("/firestations/3200 chemin de Pale"))
         	.andExpect(status().isOk())
 	        .andExpect(jsonPath("$.station", is(1)));
 	}
@@ -111,8 +112,8 @@ class FirestationIT {
 	@Test
 	@Order(9)
 	void testFirestationByAddress_whenNull() throws Exception {
-		mockMvc.perform(get("/firestations/route de Pâle"))
-        	.andExpect(status().is(204));
+		mockMvc.perform(get("/firestations/route de Pale"))
+        	.andExpect(status().is(404));
 	}
 
 	@Test
@@ -121,7 +122,7 @@ class FirestationIT {
 		mockMvc.perform(post("/firestations")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
-			.andExpect(status().is(406));	
+			.andExpect(status().is(400));	
 	}
 	
 	@Test
@@ -135,21 +136,21 @@ class FirestationIT {
 	@Order(12)
 	void testDeleteFirestationsByStation_whenNull() throws Exception {
 		mockMvc.perform(delete("/firestations?station=10"))
-			.andExpect(status().is(304));
+			.andExpect(status().is(404));
 	}
 	
 	@Test
 	@Order(13)
 	void testDeleteFirestationsByAddress_whenOk() throws Exception {
 		testAddFirestationMapping_whenOk();
-		mockMvc.perform(delete("/firestations/3200 chemin de Pâle"))
+		mockMvc.perform(delete("/firestations/3200 chemin de Pale"))
 			.andExpect(status().isOk());
 	}
 	
 	@Test
 	@Order(14)
 	void testDeleteFirestationsByAddress_whenNull() throws Exception {
-		mockMvc.perform(delete("/firestations/route de Pâle"))
-			.andExpect(status().is(304));
+		mockMvc.perform(delete("/firestations/route de Pale"))
+			.andExpect(status().is(404));
 	}
 }

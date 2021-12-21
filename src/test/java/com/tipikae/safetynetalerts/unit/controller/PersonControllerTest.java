@@ -105,11 +105,11 @@ class PersonControllerTest {
         	.andExpect(status().isOk());
 	}
 	
-	@Test
-	void testPersonsByAddress_whenInvalid() throws Exception {
-		mockMvc.perform(get("/persons?address="))
-        	.andExpect(status().is(406));
-	}
+//	@Test
+//	void testPersonsByAddress_whenInvalid() throws Exception {
+//		mockMvc.perform(get("/persons?address="))
+//        	.andExpect(status().is(406));
+//	}
 	
 	@Test
 	void testPersonsByAddress_whenStorageException() throws Exception {
@@ -132,11 +132,11 @@ class PersonControllerTest {
         	.andExpect(status().isOk());
 	}
 	
-	@Test
-	void testPersonsByCity_whenInvalid() throws Exception {
-		mockMvc.perform(get("/persons?city="))
-        	.andExpect(status().is(406));
-	}
+//	@Test
+//	void testPersonsByCity_whenInvalid() throws Exception {
+//		mockMvc.perform(get("/persons?city="))
+//        	.andExpect(status().is(406));
+//	}
 	
 	@Test
 	void testPersonsByCity_whenStorageException() throws Exception {
@@ -194,11 +194,11 @@ class PersonControllerTest {
         	.andExpect(status().isOk());
 	}
 	
-	@Test
-	void testDeletePerson_whenInvalid() throws Exception {
-		mockMvc.perform(delete("/persons?firstname=John&lastname="))
-        	.andExpect(status().is(400));
-	}
+//	@Test
+//	void testDeletePerson_whenInvalid() throws Exception {
+//		mockMvc.perform(delete("/persons?firstname=John&lastname="))
+//        	.andExpect(status().is(400));
+//	}
 	
 	@Test
 	void testDeletePerson_whenStorageException() throws Exception {

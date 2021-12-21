@@ -10,13 +10,22 @@ public class ControllerException implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private int code;
 	private String message;
 	private Date timestamp;
 
-	public ControllerException(String message, Date timestamp) {
-		super();
+	public ControllerException(int code, String message, Date timestamp) {
+		this.code = code;
 		this.message = message;
 		this.timestamp = timestamp;
+	}
+	
+	public int getCode() {
+		return code;
+	}
+	
+	public void setCode(int code) {
+		this.code = code;
 	}
 
 	public String getMessage() {

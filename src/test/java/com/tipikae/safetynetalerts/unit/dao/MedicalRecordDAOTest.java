@@ -41,8 +41,9 @@ class MedicalRecordDAOTest {
 		dao = new MedicalRecordDAOImpl();
 		medicalRecord = new MedicalRecord("Bob", "BOB", new Date(), new ArrayList<String>(), 
 				new ArrayList<String>());
-		updatedMedicalRecord = new MedicalRecord("Bob", "BOB", new Date(), List.of("Doliprane:500mg"), 
-				new ArrayList<String>());
+		List<String> medications = new ArrayList<>();
+		medications.add("Doliprane:500mg");
+		updatedMedicalRecord = new MedicalRecord("Bob", "BOB", new Date(), medications, new ArrayList<String>());
 	}
 
 	@Test

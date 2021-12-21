@@ -3,7 +3,6 @@ package com.tipikae.safetynetalerts.controller;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -40,7 +39,8 @@ public class FirestationController {
 			Firestation added = service.addFirestationMapping(firestation);
 			return new ResponseEntity<>(added, HttpStatus.OK);
 		} catch (StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -51,7 +51,8 @@ public class FirestationController {
 			List<Firestation> firestations = service.getFirestations();
 			return new ResponseEntity<>(firestations, HttpStatus.OK);
 		} catch (StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -62,10 +63,12 @@ public class FirestationController {
 			Firestation firestation = service.getFirestationByAddress(address);
 			return new ResponseEntity<>(firestation, HttpStatus.OK);
 		} catch (ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -77,14 +80,13 @@ public class FirestationController {
 			List<Firestation> firestations = service.getFirestationsByStation(station);
 			return new ResponseEntity<>(firestations, HttpStatus.OK);
 		} catch (ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
-		} catch(ConstraintViolationException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
-					HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 	
@@ -96,10 +98,12 @@ public class FirestationController {
 			Firestation updated = service.updateFirestationMapping(address, firestation);
 			return new ResponseEntity<>(updated, HttpStatus.OK);
 		} catch(StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
 		}
 	}
@@ -110,10 +114,12 @@ public class FirestationController {
 			service.deleteFirestationByAddress(address);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch(StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
 		}
 	}
@@ -125,14 +131,13 @@ public class FirestationController {
 			service.deleteFirestationsByStation(station);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch(StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
-		} catch(ConstraintViolationException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
-					HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 }

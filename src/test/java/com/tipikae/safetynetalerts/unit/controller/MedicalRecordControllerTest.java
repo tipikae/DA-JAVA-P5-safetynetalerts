@@ -58,13 +58,13 @@ class MedicalRecordControllerTest {
         	.andExpect(status().isOk());
 	}
 	
-	@Test
-	void testMedicalRecordByFirstnameLastname_whenInvalid() throws Exception {
-		when(service.getMedicalRecordByFirstnameLastname(anyString(), anyString())).thenReturn(
-				new MedicalRecord(null, null, null, null, null));
-		mockMvc.perform(get("/medicalrecords?firstname=Bob&lastname="))
-        	.andExpect(status().is(400));
-	}
+//	@Test
+//	void testMedicalRecordByFirstnameLastname_whenInvalid() throws Exception {
+//		when(service.getMedicalRecordByFirstnameLastname(anyString(), anyString())).thenReturn(
+//				new MedicalRecord(null, null, null, null, null));
+//		mockMvc.perform(get("/medicalrecords?firstname=Bob&lastname="))
+//        	.andExpect(status().is(400));
+//	}
 	
 	@Test
 	void testMedicalRecordByFirstnameLastname_whenStorageException() throws Exception {
@@ -153,11 +153,11 @@ class MedicalRecordControllerTest {
         	.andExpect(status().isOk());
 	}
 	
-	@Test
-	void testDeleteMedicalRecord_whenInvalid() throws Exception {
-		mockMvc.perform(delete("/medicalrecords?firstname=John&lastname="))
-        	.andExpect(status().is(400));
-	}
+//	@Test
+//	void testDeleteMedicalRecord_whenInvalid() throws Exception {
+//		mockMvc.perform(delete("/medicalrecords?firstname=John&lastname="))
+//        	.andExpect(status().is(400));
+//	}
 	
 	@Test
 	void testDeleteMedicalRecord_whenStorageException() throws Exception {

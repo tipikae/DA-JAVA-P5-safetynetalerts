@@ -3,7 +3,6 @@ package com.tipikae.safetynetalerts.controller;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
@@ -38,7 +37,8 @@ public class PersonController {
 			List<Person> persons = service.getPersons();
 			return new ResponseEntity<>(persons, HttpStatus.OK);
 		} catch (StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -50,15 +50,15 @@ public class PersonController {
 			List<Person> persons = service.getPersonsByAddress(address);
 			return new ResponseEntity<>(persons, HttpStatus.OK);
 		} catch (ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
-		} catch(ConstraintViolationException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
-					HttpStatus.NOT_ACCEPTABLE);
 		}
+
 	}
 	
 	// /persons?city={city}
@@ -68,14 +68,13 @@ public class PersonController {
 			List<Person> persons = service.getPersonsByCity(city);
 			return new ResponseEntity<>(persons, HttpStatus.OK);
 		} catch (ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
-		} catch(ConstraintViolationException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
-					HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 	
@@ -87,10 +86,12 @@ public class PersonController {
 			Person person = service.getPersonByFirstnameLastname(firstname, lastname);
 			return new ResponseEntity<>(person, HttpStatus.OK);
 		} catch (ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -101,7 +102,8 @@ public class PersonController {
 			Person added = service.addPerson(person);
 			return new ResponseEntity<>(added, HttpStatus.OK);
 		} catch (StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -116,10 +118,12 @@ public class PersonController {
 			Person updated = service.updatePerson(firstname, lastname, person);
 			return new ResponseEntity<>(updated, HttpStatus.OK);
 		} catch(StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
 		}
 	}
@@ -133,10 +137,12 @@ public class PersonController {
 			service.deletePerson(firstname, lastname);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch(StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
 		}
 	}

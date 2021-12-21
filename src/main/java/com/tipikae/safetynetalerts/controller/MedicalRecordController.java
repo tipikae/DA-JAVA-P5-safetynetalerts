@@ -37,7 +37,8 @@ public class MedicalRecordController {
 			List<MedicalRecord> merdicalRecords = service.getMedicalRecords();
 			return new ResponseEntity<>(merdicalRecords, HttpStatus.OK);
 		} catch (StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} 
 	}
@@ -51,10 +52,12 @@ public class MedicalRecordController {
 			MedicalRecord merdicalRecord = service.getMedicalRecordByFirstnameLastname(firstname, lastname);
 			return new ResponseEntity<>(merdicalRecord, HttpStatus.OK);
 		} catch (ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -65,7 +68,8 @@ public class MedicalRecordController {
 			MedicalRecord added = service.addMedicalRecord(medicalRecord);
 			return new ResponseEntity<>(added, HttpStatus.OK);
 		} catch (StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -81,10 +85,12 @@ public class MedicalRecordController {
 			MedicalRecord updated = service.updateMedicalRecord(firstname, lastname, medicalRecord);
 			return new ResponseEntity<>(updated, HttpStatus.OK);
 		} catch(StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
 		}
 	}
@@ -98,10 +104,12 @@ public class MedicalRecordController {
 			service.deleteMedicalRecord(firstname, lastname);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch(StorageException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
-			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
 					HttpStatus.NOT_FOUND);
 		}
 	}

@@ -5,159 +5,106 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
+import com.tipikae.safetynetalerts.storage.JsonStorage;
 
 @Repository
 public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	
 	public PersonDAOImpl() {
-		super();
+		jsonStorage = new JsonStorage();
 	}
 
 	@Override
-	public Person save(Person person) {
-//		if (!person.getFirstname().equals("") && !person.getLastname().equals("") && 
-//				!person.getAddress().equals("") && !person.getCity().equals("") && !person.getZip().equals("") && 
-//				!person.getPhone().equals("") && !person.getEmail().equals("")) {
-			
-			if (storage != null) {
-				List<Person> persons = storage.getPersons();
-				if(persons == null) {
-					persons = new ArrayList<>();
-				}
-				
-				persons.add(person);
-				storage.setPersons(persons);
-				
-				if (jsonStorage.writeStorage(storage)) {
-					return person;
-				}
-			}
-		//}
-		return null;
-	}
-	
-	@Override
-	public Person findByName(String firstname, String lastname) {
-		Person person = null;
-		if (firstname != "" && lastname != "") {
-			List<Person> persons = findAll();
-			if (persons != null && !persons.isEmpty()) {
-				for (Person item : persons) {
-					if (item.getFirstname().equals(firstname) && item.getLastname().equals(lastname)) {
-						person = item;
-						break;
-					}
-				}
-			} 
-		}
+	public Person save(Person person) throws StorageException {
+		List<Person> persons = storage.getPersons();
+		persons.add(person);
+		storage.setPersons(persons);
+		jsonStorage.writeStorage(storage);
+		
 		return person;
 	}
 
 	@Override
-	public List<Person> findByAddress(String address) {
-		List<Person> results = null;
-		if (address != "") {
-			List<Person> persons = findAll();
-			if (persons != null && !persons.isEmpty()) {
-				results = new ArrayList<>();
-				for (Person item : persons) {
-					if (item.getAddress().equals(address)) {
-						results.add(item);
-					}
-				}
-			} 
+	public List<Person> findAll() throws StorageException {
+		storage = jsonStorage.readStorage();
+		return storage.getPersons();
+	}
+	
+	@Override
+	public Person findByFirstnameLastname(String firstname, String lastname) throws StorageException {
+		storage = jsonStorage.readStorage();
+		Person person = null;
+		for (Person item : storage.getPersons()) {
+			if (item.getFirstname().equals(firstname) && item.getLastname().equals(lastname)) {
+				person = new Person(firstname, lastname, item.getAddress(), item.getCity(), item.getZip(), 
+						item.getPhone(), item.getEmail());
+				break;
+			}
 		}
+		
+		return person;
+	}
+
+	@Override
+	public List<Person> findByAddress(String address) throws StorageException {
+		storage = jsonStorage.readStorage();
+		List<Person> results = new ArrayList<>();
+		for (Person item : storage.getPersons()) {
+			if (item.getAddress().equals(address)) {
+				results.add(item);
+			}
+		}
+		
 		return results;
 	}
 
 	@Override
-	public List<Person> findByCity(String city) {
-		List<Person> results = null;
-		if (city != "") {
-			List<Person> persons = findAll();
-			if (persons != null && !persons.isEmpty()) {
-				results = new ArrayList<>();
-				for (Person item : persons) {
-					if (item.getCity().equals(city)) {
-						results.add(item);
-					}
-				}
-			} 
+	public List<Person> findByCity(String city) throws StorageException {
+		storage = jsonStorage.readStorage();
+		List<Person> results = new ArrayList<>();
+		for (Person item : storage.getPersons()) {
+			if (item.getAddress().equals(city)) {
+				results.add(item);
+			}
 		}
+		
 		return results;
 	}
 
 	@Override
-	public List<Person> findAll() {
-		List<Person> persons = null;
+	public Person update(Person person) throws StorageException {
+		storage = jsonStorage.readStorage();
+		List<Person> persons = storage.getPersons();
+		int i = -1;
 		
-		if(storage != null) {
-			persons = storage.getPersons();
+		for(int j = 0; j < persons.size(); j++) {
+			if(persons.get(j).getFirstname().equals(person.getFirstname()) && 
+					persons.get(j).getLastname().equals(person.getLastname())) {
+				i = j;
+				break;
+			}
 		}
 		
-		return persons;
+		if (i != -1) {
+			persons.set(i, person);
+			storage.setPersons(persons);
+			jsonStorage.writeStorage(storage);
+			return person;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
-	public boolean update(String firstname, String lastname, Person person) {
-		if (!person.getFirstname().equals("") && !person.getLastname().equals("") && 
-				!person.getAddress().equals("") && !person.getCity().equals("") && !person.getZip().equals("") && 
-				!person.getPhone().equals("") && !person.getEmail().equals("") && 
-				firstname.equals(person.getFirstname()) && lastname.equals(person.getLastname())) {
-			boolean found = false;
-			
-			if (storage!= null) {
-				List<Person> persons = storage.getPersons();
-				
-				if (persons != null) {
-					for (int i = 0; i < persons.size(); i++) {
-						if (persons.get(i).getFirstname().equals(person.getFirstname()) && 
-								persons.get(i).getLastname().equals(person.getLastname())) {
-							found = true;
-							persons.set(i, person);
-							break;
-						}
-					}
-					if (found) {
-						storage.setPersons(persons);
-						if (jsonStorage.writeStorage(storage)) {
-							return true;
-						}
-					} 
-				} 
-			} 
-		}
-		return false;
-	}
-
-	@Override
-	public boolean deleteByName(String firstname, String lastname) {
-		if (firstname != "" && lastname != "") {
-			boolean found = false;
-			
-			if (storage != null) {
-				List<Person> persons = storage.getPersons();
-				
-				if (persons != null) {
-					for (int i = 0; i < persons.size(); i++) {
-						if (persons.get(i).getFirstname().equals(firstname) && 
-								persons.get(i).getLastname().equals(lastname)) {
-							found = true;
-							persons.remove(i);
-							break;
-						}
-					}
-					if (found) {
-						storage.setPersons(persons);
-						if (jsonStorage.writeStorage(storage)) {
-							return true;
-						}
-					} 
-				} 
-			} 
-		}
-		return false;
+	public void delete(Person person) throws StorageException {
+		storage = jsonStorage.readStorage();
+		List<Person> persons = storage.getPersons();
+		persons.remove(person);
+		
+		storage.setPersons(persons);
+		jsonStorage.writeStorage(storage);
 	}
 
 }

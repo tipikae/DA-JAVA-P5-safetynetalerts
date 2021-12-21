@@ -2,14 +2,29 @@ package com.tipikae.safetynetalerts.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotBlank;
+
 public class Person implements Serializable {
 
+	@NotBlank(message="Firstname is mandatory")
 	private String firstName;
+	
+	@NotBlank(message="Lastname is mandatory")
 	private String lastName;
+	
+	@NotBlank(message="Address is mandatory")
 	private String address;
+	
+	@NotBlank(message="City is mandatory")
 	private String city;
+	
+	@NotBlank(message="Zip code is mandatory")
 	private String zip;
+	
+	@NotBlank(message="Phone number is mandatory")
 	private String phone;
+	
+	@NotBlank(message="Email is mandatory")
 	private String email;
 	
 	public Person(String firstName, String lastName, String address, String city, String zip, String phone,

@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
 import com.tipikae.safetynetalerts.storage.JsonStorage;
 import com.tipikae.safetynetalerts.storage.Storage;
@@ -34,10 +35,10 @@ class PersonIT {
     private MockMvc mockMvc;
 	
 	@BeforeAll
-    private static void setUp() {
+    private static void setUp() throws StorageException {
 		JsonStorage jsonStorage = new JsonStorage();
 		Storage storage = jsonStorage.readStorage();
-        storage.setPersons(new ArrayList<Person>());
+    	storage.setPersons(new ArrayList<Person>());
         jsonStorage.writeStorage(storage);
     }
 
@@ -45,7 +46,7 @@ class PersonIT {
 	@Order(1)
 	void testAllPersons_whenEmpty() throws Exception {
 		mockMvc.perform(get("/persons"))
-        	.andExpect(status().is(204));
+        	.andExpect(status().isOk());
 	}
 
 	@Test
@@ -78,7 +79,7 @@ class PersonIT {
 	@Order(5)
 	void testPersonsByAddress_whenNull() throws Exception {
 		mockMvc.perform(get("/persons?address=route de Pâle"))
-        	.andExpect(status().is(204));
+        	.andExpect(status().is(404));
 	}
 	
 	@Test
@@ -93,12 +94,12 @@ class PersonIT {
 	@Order(7)
 	void testPersonsByCity_whenNull() throws Exception {
 		mockMvc.perform(get("/persons?city=Chamonix"))
-        	.andExpect(status().is(204));
+        	.andExpect(status().is(404));
 	}
 	
 	@Test
 	@Order(8)
-	void testPersonByName_whenOk() throws Exception {
+	void testPersonByFirstnameLastname_whenOk() throws Exception {
 		mockMvc.perform(get("/persons?firstname=John&lastname=Boyd"))
         	.andExpect(status().isOk())
 	        .andExpect(jsonPath("$.firstname", is("John")));
@@ -106,9 +107,9 @@ class PersonIT {
 	
 	@Test
 	@Order(9)
-	void testPersonByName_whenNull() throws Exception {
+	void testPersonByFirstnameLastname_whenNull() throws Exception {
 		mockMvc.perform(get("/persons?firstname=Bob&lastname=BOB"))
-        	.andExpect(status().is(204));
+        	.andExpect(status().is(404));
 	}
 
 	@Test
@@ -117,7 +118,7 @@ class PersonIT {
 		mockMvc.perform(post("/persons")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
-			.andExpect(status().is(204));	
+			.andExpect(status().is(400));	
 	}
 	
 	@Test
@@ -135,7 +136,7 @@ class PersonIT {
 		mockMvc.perform(put("/persons?firstname=Bob&lastname=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
-			.andExpect(status().is(304));
+			.andExpect(status().is(404));
 	}
 	
 	@Test
@@ -149,6 +150,6 @@ class PersonIT {
 	@Order(14)
 	void testDeletePerson_whenNull() throws Exception {
 		mockMvc.perform(delete("/persons?firstname=Bob&lastname=BOB"))
-			.andExpect(status().is(304));
+			.andExpect(status().is(404));
 	}
 }

@@ -8,15 +8,15 @@ public abstract class AbstractDAOImpl {
 	protected JsonStorage jsonStorage;
 	protected Storage storage;
 	
-	public AbstractDAOImpl() {
-		this.jsonStorage = new JsonStorage();
-		this.storage = this.jsonStorage.readStorage();
+	public JsonStorage getJsonStorage() {
+		return jsonStorage;
 	}
-
 	public void setJsonStorage(JsonStorage jsonStorage) {
 		this.jsonStorage = jsonStorage;
 	}
-
+	public Storage getStorage() {
+		return storage;
+	}
 	public void setStorage(Storage storage) {
 		this.storage = storage;
 	}

@@ -2,15 +2,16 @@ package com.tipikae.safetynetalerts.dao;
 
 import java.util.List;
 
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 
 public interface IFirestationDAO {
 
-	Firestation save(Firestation firestation);
-	List<Firestation> findAll();
-	Firestation findByAddress(String address);
-	List<Firestation> findByStation(int station);
-	boolean update(String address, Firestation firestation);
-	boolean deleteByAddress(String address);
-	boolean deleteByStation(int station);
+	List<Firestation> findAll() throws StorageException;
+	Firestation findByAddress(String address) throws StorageException;
+	List<Firestation> findByStation(int station) throws StorageException;
+	Firestation save(Firestation firestation) throws StorageException;
+	Firestation update(Firestation firestation) throws StorageException;
+	void delete(Firestation firestation) throws StorageException;
+	void deleteFirestations(List<Firestation> firestationsToRemove) throws StorageException;
 }

@@ -2,9 +2,16 @@ package com.tipikae.safetynetalerts.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+
+
 public class Firestation implements Serializable {
 
+	@NotBlank(message="Address is mandatory")
 	private String address;
+	
+	@Positive(message="Station must be more than zero")
 	private int station;
 	
 	public Firestation(String address, int station) {

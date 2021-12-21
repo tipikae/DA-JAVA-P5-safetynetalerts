@@ -3,6 +3,7 @@ package com.tipikae.safetynetalerts.unit.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -11,7 +12,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.tipikae.safetynetalerts.controller.FirestationController;
+import com.tipikae.safetynetalerts.exception.ServiceException;
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 import com.tipikae.safetynetalerts.service.IFirestationService;
 
@@ -34,37 +36,44 @@ class FirestationControllerTest {
 	private IFirestationService service;
 	
 	@Test
+	void testAddFirestationMapping_whenOk() throws Exception {
+		when(service.addFirestationMapping(any(Firestation.class)))
+			.thenReturn(new Firestation("3200 chemin de Pâle", 3));
+		mockMvc.perform(post("/firestations")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"3\" }"))
+        	.andExpect(status().isOk());
+	}
+	
+	@Test
+	void testAddFirestationMapping_whenException() throws Exception {
+		doThrow(StorageException.class).when(service).addFirestationMapping(any(Firestation.class));
+		mockMvc.perform(post("/firestations")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"3\" }"))
+        	.andExpect(status().is(507));
+	}
+	
+	@Test
+	void testAddFirestationMapping_whenInvalid() throws Exception {
+		mockMvc.perform(post("/firestations")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{}"))
+        	.andExpect(status().is(400));
+	}
+	
+	@Test
 	void testAllFirestations_whenOk() throws Exception {
-		List<Firestation> firestations = new ArrayList<>();
-		Firestation firestation = new Firestation("", 0);
-		firestations.add(firestation);
-		when(service.getFirestations()).thenReturn(firestations);
+		when(service.getFirestations()).thenReturn(new ArrayList<Firestation>());
 		mockMvc.perform(get("/firestations"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
-	void testAllFirestations_whenNull() throws Exception {
-		when(service.getFirestations()).thenReturn(null);
+	void testAllFirestations_whenException() throws Exception {
+		doThrow(StorageException.class).when(service).getFirestations();
 		mockMvc.perform(get("/firestations"))
-        	.andExpect(status().is(204));
-	}
-	
-	@Test
-	void testFirestationsByStation_whenOk() throws Exception {
-		List<Firestation> firestations = new ArrayList<>();
-		Firestation firestation = new Firestation("", 0);
-		firestations.add(firestation);
-		when(service.getFirestationsByStation(1)).thenReturn(firestations);
-		mockMvc.perform(get("/firestations?station=1"))
-        	.andExpect(status().isOk());
-	}
-	
-	@Test
-	void testFirestationsByStation_whenNull() throws Exception {
-		when(service.getFirestationsByStation(anyInt())).thenReturn(null);
-		mockMvc.perform(get("/firestations?station=1"))
-        	.andExpect(status().is(204));
+        	.andExpect(status().is(507));
 	}
 	
 	@Test
@@ -75,33 +84,49 @@ class FirestationControllerTest {
 	}
 	
 	@Test
-	void testFirestationByAddress_whenNull() throws Exception {
-		when(service.getFirestationByAddress(anyString())).thenReturn(null);
-		mockMvc.perform(get("/firestations/1509%20Culver%20St"))
-        	.andExpect(status().is(204));
+	void testFirestationByAddress_whenStorageException() throws Exception {
+		doThrow(StorageException.class).when(service).getFirestationByAddress("route");
+		mockMvc.perform(get("/firestations/route"))
+        	.andExpect(status().is(507));
 	}
 	
 	@Test
-	void testAddFirestationMapping_whenOk() throws Exception {
-		when(service.addFirestationMapping(any(Firestation.class))).thenReturn(new Firestation("", 0));
-		mockMvc.perform(post("/firestations")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"3\" }"))
+	void testFirestationByAddress_whenServiceException() throws Exception {
+		doThrow(ServiceException.class).when(service).getFirestationByAddress("route");
+		mockMvc.perform(get("/firestations/route"))
+        	.andExpect(status().is(404));
+	}
+	
+	@Test
+	void testFirestationsByStation_whenOk() throws Exception {
+		when(service.getFirestationsByStation(anyInt())).thenReturn(new ArrayList<Firestation>());
+		mockMvc.perform(get("/firestations?station=1"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
-	void testAddFirestationMapping_whenNull() throws Exception {
-		when(service.addFirestationMapping(any(Firestation.class))).thenReturn(null);
-		mockMvc.perform(post("/firestations")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{}"))
-        	.andExpect(status().is(204));
+	void testFirestationsByStation_whenInvalid() throws Exception {
+		mockMvc.perform(get("/firestations?station=0"))
+        	.andExpect(status().is(406));
+	}
+	
+	@Test
+	void testFirestationsByStation_whenStorageException() throws Exception {
+		doThrow(StorageException.class).when(service).getFirestationsByStation(anyInt());
+		mockMvc.perform(get("/firestations?station=1"))
+        	.andExpect(status().is(507));
+	}
+	
+	@Test
+	void testFirestationsByStation_whenServiceException() throws Exception {
+		doThrow(ServiceException.class).when(service).getFirestationsByStation(anyInt());
+		mockMvc.perform(get("/firestations?station=1"))
+        	.andExpect(status().is(404));
 	}
 	
 	@Test
 	void testUpdateFirestationMapping_whenOk() throws Exception {
-		when(service.updateFirestationMapping(anyString(), any(Firestation.class))).thenReturn(true);
+		when(service.updateFirestationMapping(anyString(), any(Firestation.class))).thenReturn(new Firestation("", 0));
 		mockMvc.perform(put("/firestations/3200 chemin de Pâle")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"3\" }"))
@@ -109,39 +134,81 @@ class FirestationControllerTest {
 	}
 	
 	@Test
-	void testUpdateFirestationMapping_whenNotOk() throws Exception {
-		when(service.updateFirestationMapping(anyString(), any(Firestation.class))).thenReturn(false);
-		mockMvc.perform(put("/firestations/3200 chemin de Pâle")
+	void testUpdateFirestationMapping_whenInvalid() throws Exception {
+		when(service.updateFirestationMapping(anyString(), any(Firestation.class))).thenReturn(new Firestation("", 0));
+		mockMvc.perform(put("/firestations/route")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
-        	.andExpect(status().is(304));
+        	.andExpect(status().is(400));
+	}
+	
+	@Test
+	void testUpdateFirestationMapping_whenStorageException() throws Exception {
+		doThrow(StorageException.class).when(service).updateFirestationMapping(anyString(), any(Firestation.class));
+		mockMvc.perform(put("/firestations/3200 chemin de Pâle")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"1\" }"))
+        	.andExpect(status().is(507));
+	}
+	
+	@Test
+	void testUpdateFirestationMapping_whenServiceException() throws Exception {
+		doThrow(ServiceException.class).when(service).updateFirestationMapping(anyString(), any(Firestation.class));
+		mockMvc.perform(put("/firestations/3200 chemin de Pâle")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"1\" }"))
+        	.andExpect(status().is(404));
+	}
+	
+	@Test
+	void testDeleteFirestationByAddress_whenOk() throws Exception {
+		mockMvc.perform(delete("/firestations/badaboum"))
+        	.andExpect(status().isOk());
+	}
+	
+	@Test
+	void testDeleteFirestationByAddress_whenInvalid() throws Exception {
+		mockMvc.perform(delete("/firestations/"))
+        	.andExpect(status().is(400));
+	}
+	
+	@Test
+	void testDeleteFirestationByAddress_whenStorageException() throws Exception {
+		doThrow(StorageException.class).when(service).deleteFirestationByAddress(anyString());
+		mockMvc.perform(delete("/firestations/route"))
+        	.andExpect(status().is(507));
+	}
+	
+	@Test
+	void testDeleteFirestationByAddress_whenServiceException() throws Exception {
+		doThrow(ServiceException.class).when(service).deleteFirestationByAddress(anyString());
+		mockMvc.perform(delete("/firestations/route"))
+        	.andExpect(status().is(404));
 	}
 	
 	@Test
 	void testDeleteFirestationsByStation_whenOk() throws Exception {
-		when(service.deleteFirestationsByStation(anyInt())).thenReturn(true);
 		mockMvc.perform(delete("/firestations?station=1"))
 			.andExpect(status().isOk());
 	}
 	
 	@Test
-	void testDeleteFirestationsByStation_whenNotOk() throws Exception {
-		when(service.deleteFirestationsByStation(anyInt())).thenReturn(false);
+	void testDeleteFirestationsByStation_whenInvalid() throws Exception {
+		mockMvc.perform(delete("/firestations?station=0"))
+        	.andExpect(status().is(406));
+	}
+	
+	@Test
+	void testDeleteFirestationsByStation_whenStorageException() throws Exception {
+		doThrow(StorageException.class).when(service).deleteFirestationsByStation(anyInt());
 		mockMvc.perform(delete("/firestations?station=1"))
-        	.andExpect(status().is(304));
+        	.andExpect(status().is(507));
 	}
 	
 	@Test
-	void testDeleteFirestationByAddress_whenOk() throws Exception {
-		when(service.deleteFirestationByAddress(anyString())).thenReturn(true);
-		mockMvc.perform(delete("/firestations/badaboum"))
-        	.andExpect(status().isOk());
-	}
-	
-	@Test
-	void testDeleteFirestationByAddress_whenNotOk() throws Exception {
-		when(service.deleteFirestationByAddress(anyString())).thenReturn(false);
-		mockMvc.perform(delete("/firestations/badaboum"))
-        	.andExpect(status().is(304));
+	void testDeleteFirestationsByStation_whenServiceException() throws Exception {
+		doThrow(ServiceException.class).when(service).deleteFirestationsByStation(anyInt());
+		mockMvc.perform(delete("/firestations?station=1"))
+        	.andExpect(status().is(404));
 	}
 }

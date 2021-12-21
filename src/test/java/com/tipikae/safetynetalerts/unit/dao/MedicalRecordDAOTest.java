@@ -2,6 +2,8 @@ package com.tipikae.safetynetalerts.unit.dao;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -12,9 +14,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tipikae.safetynetalerts.dao.MedicalRecordDAOImpl;
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.storage.JsonStorage;
 import com.tipikae.safetynetalerts.storage.Storage;
@@ -31,8 +35,6 @@ class MedicalRecordDAOTest {
 	private static MedicalRecordDAOImpl dao;
 	private static MedicalRecord medicalRecord;
 	private static MedicalRecord updatedMedicalRecord;
-	private static MedicalRecord emptyMedicalRecord;
-	private static MedicalRecord wrongMedicalRecord;
 	
 	@BeforeAll
 	private static void setUp() {
@@ -41,65 +43,89 @@ class MedicalRecordDAOTest {
 				new ArrayList<String>());
 		updatedMedicalRecord = new MedicalRecord("Bob", "BOB", new Date(), List.of("Doliprane:500mg"), 
 				new ArrayList<String>());
-		emptyMedicalRecord = new MedicalRecord("", "", null, null, null);
-		wrongMedicalRecord = new MedicalRecord("Alice", "BOB", new Date(), new ArrayList<String>(), 
-				new ArrayList<String>());
 	}
 
 	@Test
-	void testSave_whenOk() {
-		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(true);
+	void testSave_whenOk() throws StorageException {
+		List<MedicalRecord> medicalRecords = new ArrayList<>();
+		medicalRecords.add(medicalRecord);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
 		dao.setJsonStorage(jsonStorage);
+		dao.setStorage(storage);
 		assertEquals(medicalRecord, dao.save(medicalRecord));
 	}
 
 	@Test
-	void testSave_whenNull() {
-		assertNull(dao.save(emptyMedicalRecord));
-	}
-
-	@Test
-	void testSave_whenError() {
-		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(false);
-		dao.setJsonStorage(jsonStorage);
-		assertNull(dao.save(medicalRecord));
-	}
-
-	@Test
-	void testFindAll_whenNull() {
-		when(storage.getMedicalRecords()).thenReturn(null);
+	void testSave_whenException() throws StorageException {
+		List<MedicalRecord> medicalRecords = new ArrayList<>();
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
+		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertNull(dao.findAll());
+		assertThrows(StorageException.class, () -> dao.save(medicalRecord));
 	}
 
 	@Test
-	void testFindByName_whenNull() {
-		assertNull(dao.findByName("", ""));
+	void testFindAll_whenException() throws StorageException {
+		doThrow(StorageException.class).when(jsonStorage).readStorage();
+		dao.setJsonStorage(jsonStorage);
+		assertThrows(StorageException.class, () -> dao.findAll());
+	}
+
+	@Test
+	void testFindByFirstnameLastname_whenException() throws StorageException {
+		doThrow(StorageException.class).when(jsonStorage).readStorage();
+		dao.setJsonStorage(jsonStorage);
+		assertThrows(StorageException.class, () -> dao.findByFirstnameLastname("bob", "BOB"));
 	}
 	
 	@Test
-	void testUpdate_whenOk() {
+	void testUpdate_whenOk() throws StorageException {
 		List<MedicalRecord> medicalRecords = new ArrayList<>();
 		medicalRecords.add(medicalRecord);
+		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
-		when(jsonStorage.writeStorage(any(Storage.class))).thenReturn(true);
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertEquals(true, dao.update("Bob", "BOB", updatedMedicalRecord));
+		MedicalRecord result = dao.update(updatedMedicalRecord);
+		assertEquals(updatedMedicalRecord, result);
 	}
 	
 	@Test
-	void testUpdate_whenNull() {
-		assertEquals(false, dao.update("Bob", "BOB", emptyMedicalRecord));
-	}
-	
-	@Test
-	void testUpdate_whenNotFound() {
+	void testUpdate_whenException() throws StorageException {
 		List<MedicalRecord> medicalRecords = new ArrayList<>();
 		medicalRecords.add(medicalRecord);
+		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
+		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
+		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertEquals(false, dao.update("Alice", "BOB", wrongMedicalRecord));
+		assertThrows(StorageException.class, () -> dao.update(medicalRecord));
+	}
+	
+	@Test
+	void testDelete_whenOk() throws StorageException {
+		List<MedicalRecord> medicalRecords = new ArrayList<>();
+		medicalRecords.add(medicalRecord);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
+		dao.setJsonStorage(jsonStorage);
+		dao.setStorage(storage);
+		dao.delete(medicalRecord);
+		verify(jsonStorage, Mockito.times(1)).writeStorage(storage);
+	}
+	
+	@Test
+	void testDelete_whenException() throws StorageException {
+		List<MedicalRecord> medicalRecords = new ArrayList<>();
+		medicalRecords.add(medicalRecord);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
+		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
+		dao.setJsonStorage(jsonStorage);
+		dao.setStorage(storage);
+		assertThrows(StorageException.class, () -> dao.delete(medicalRecord));
 	}
 }

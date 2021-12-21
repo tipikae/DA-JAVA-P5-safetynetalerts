@@ -15,7 +15,7 @@ import com.tipikae.safetynetalerts.model.Firestation;
 @Service
 public class FirestationServiceImpl implements IFirestationService {
 	
-	private static final Logger LOGGER = LogManager.getLogger("JsonStorage");
+	private static final Logger LOGGER = LogManager.getLogger("FirestationServiceImpl");
 
 	@Autowired
 	private IFirestationDAO firestationDao;

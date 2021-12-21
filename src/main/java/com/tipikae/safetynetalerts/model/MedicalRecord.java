@@ -4,12 +4,22 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
+
 public class MedicalRecord implements Serializable {
 
+	@NotBlank(message="Firstname is mandatory")
 	private String firstName;
+	
+	@NotBlank(message="Lastname is mandatory")
 	private String lastName;
+	
+	@Past
 	private Date birthdate;
+	
 	private List<String> medications;
+	
 	private List<String> allergies;
 	
 	public MedicalRecord(String firstName, String lastName, Date birthdate, List<String> medications,

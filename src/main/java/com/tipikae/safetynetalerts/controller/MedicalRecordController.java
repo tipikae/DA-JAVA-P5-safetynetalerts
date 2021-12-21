@@ -1,10 +1,15 @@
 package com.tipikae.safetynetalerts.controller;
 
+import java.util.Date;
 import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tipikae.safetynetalerts.exception.ControllerException;
+import com.tipikae.safetynetalerts.exception.ServiceException;
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.service.IMedicalRecordService;
 
+@Validated
 @RestController
 public class MedicalRecordController {
 	
@@ -23,68 +32,77 @@ public class MedicalRecordController {
 	private IMedicalRecordService service;
 
 	@GetMapping("/medicalrecords")
-    public ResponseEntity<List<MedicalRecord>> allMedicalRecords() {
-		List<MedicalRecord> medicalRecords = service.getMedicalRecords();
-		if(medicalRecords != null && !medicalRecords.isEmpty()) {
-			return new ResponseEntity<>(medicalRecords, HttpStatus.OK);
-		}
-		
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT); 
+    public ResponseEntity<Object> allMedicalRecords() {
+		try {
+			List<MedicalRecord> merdicalRecords = service.getMedicalRecords();
+			return new ResponseEntity<>(merdicalRecords, HttpStatus.OK);
+		} catch (StorageException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.INSUFFICIENT_STORAGE);
+		} 
 	}
 	
 	// /medicalrecords?firstname={firstname}&lastname={lastname}
 	@GetMapping(value="/medicalrecords", params={"firstname", "lastname"})
-    public ResponseEntity<MedicalRecord> medicalrecordByName(@RequestParam String firstname, @RequestParam String lastname) {
-		if (firstname != null && lastname != null) {
-			MedicalRecord medicalrecord = service.getMedicalRecordByName(firstname, lastname);
-			if (medicalrecord != null) {
-				return new ResponseEntity<>(medicalrecord, HttpStatus.OK); 
-			}
+    public ResponseEntity<Object> medicalrecordByFirstnameLastname(
+    		@RequestParam @NotBlank String firstname, 
+    		@RequestParam @NotBlank String lastname) {
+		try {
+			MedicalRecord merdicalRecord = service.getMedicalRecordByFirstnameLastname(firstname, lastname);
+			return new ResponseEntity<>(merdicalRecord, HttpStatus.OK);
+		} catch (ServiceException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.NOT_FOUND);
+		} catch (StorageException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.INSUFFICIENT_STORAGE);
 		}
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
 	@PostMapping(value="/medicalrecords", consumes={"application/json"})
-	public ResponseEntity<MedicalRecord> addMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
-		if(medicalRecord.getFirstname() != null && medicalRecord.getLastname() != null && 
-				medicalRecord.getBirthdate() != null && medicalRecord.getMedications() != null && 
-				medicalRecord.getAllergies() != null) {
+	public ResponseEntity<Object> addMedicalRecord(@Valid @RequestBody MedicalRecord medicalRecord) {
+		try {
 			MedicalRecord added = service.addMedicalRecord(medicalRecord);
-			if(added != null) {
-				return new ResponseEntity<>(medicalRecord, HttpStatus.OK);
-			}
+			return new ResponseEntity<>(added, HttpStatus.OK);
+		} catch (StorageException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.INSUFFICIENT_STORAGE);
 		}
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
 
 	// /medicalrecords?firstname={firstname}&lastname={lastname}
 	@PutMapping(value="/medicalrecords", consumes={"application/json"})
-	public ResponseEntity<MedicalRecord> updateMedicalRecord(
-			@RequestParam String firstname, 
-			@RequestParam String lastname,
-			@RequestBody MedicalRecord medicalRecord) {
-		if(medicalRecord.getFirstname() != null && medicalRecord.getLastname() != null && 
-				medicalRecord.getBirthdate() != null && medicalRecord.getMedications() != null && 
-				medicalRecord.getAllergies() != null && firstname != null && lastname != null) {
-			
-			if (service.updateMedicalRecord(firstname, lastname, medicalRecord)) {
-				return new ResponseEntity<>(HttpStatus.OK);
-			}
+	public ResponseEntity<Object> updateMedicalRecord(
+			@RequestParam @NotBlank String firstname, 
+			@RequestParam @NotBlank String lastname,
+			@Valid @RequestBody MedicalRecord medicalRecord) {
+		try {
+			MedicalRecord updated = service.updateMedicalRecord(firstname, lastname, medicalRecord);
+			return new ResponseEntity<>(updated, HttpStatus.OK);
+		} catch(StorageException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.INSUFFICIENT_STORAGE);
+		} catch(ServiceException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 
 	// /medicalrecords?firstname={firstname}&lastname={lastname}
 	@DeleteMapping("/medicalrecords")
-	public ResponseEntity<MedicalRecord> deleteMedicalRecord(
-			@RequestParam String firstname, 
-			@RequestParam String lastname) {
-		if(firstname != null && lastname != null) {
-			if (service.deleteMedicalRecord(firstname, lastname)) {
-				return new ResponseEntity<>(HttpStatus.OK);
-			}
+	public ResponseEntity<Object> deleteMedicalRecord(
+			@RequestParam @NotBlank String firstname, 
+			@RequestParam @NotBlank String lastname) {
+		try {
+			service.deleteMedicalRecord(firstname, lastname);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch(StorageException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.INSUFFICIENT_STORAGE);
+		} catch(ServiceException e) {
+			return new ResponseEntity<>(new ControllerException(e.getMessage(), new Date()), 
+					HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 }

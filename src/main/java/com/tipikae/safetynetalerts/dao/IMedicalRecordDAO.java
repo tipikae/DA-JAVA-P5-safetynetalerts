@@ -2,13 +2,14 @@ package com.tipikae.safetynetalerts.dao;
 
 import java.util.List;
 
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 
 public interface IMedicalRecordDAO {
 
-	MedicalRecord save(MedicalRecord medicalRecord);
-	List<MedicalRecord> findAll();
-	MedicalRecord findByName(String firstname, String lastname);
-	boolean update(String firstname, String lastname, MedicalRecord medicalRecord);
-	boolean delete(String firstname, String lastname);
+	MedicalRecord save(MedicalRecord medicalRecord) throws StorageException;
+	List<MedicalRecord> findAll() throws StorageException;
+	MedicalRecord findByFirstnameLastname(String firstname, String lastname) throws StorageException;
+	MedicalRecord update(MedicalRecord medicalRecord) throws StorageException;
+	void delete(MedicalRecord medicalRecord) throws StorageException;
 }

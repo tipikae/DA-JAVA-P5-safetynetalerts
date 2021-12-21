@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.storage.JsonStorage;
 import com.tipikae.safetynetalerts.storage.Storage;
@@ -34,7 +35,7 @@ class MedicalRecordIT {
     private MockMvc mockMvc;
 	
 	@BeforeAll
-    private static void setUp() {
+    private static void setUp() throws StorageException {
 		JsonStorage jsonStorage = new JsonStorage();
 		Storage storage = jsonStorage.readStorage();
 		storage.setMedicalRecords(new ArrayList<MedicalRecord>());
@@ -45,7 +46,7 @@ class MedicalRecordIT {
     @Order(1)
 	void testAllMedicalRecords_whenEmpty() throws Exception {
 		mockMvc.perform(get("/medicalrecords"))
-        	.andExpect(status().is(204));
+        	.andExpect(status().isOk());
 	}
 
 	@Test
@@ -68,7 +69,7 @@ class MedicalRecordIT {
 	
 	@Test
     @Order(4)
-	void testMedicalRecordByName_whenOk() throws Exception {
+	void testMedicalRecordByFirstnameLastname_whenOk() throws Exception {
 		mockMvc.perform(get("/medicalrecords?firstname=John&lastname=Boyd"))
         	.andExpect(status().isOk())
 	        .andExpect(jsonPath("$.firstname", is("John")));
@@ -89,14 +90,14 @@ class MedicalRecordIT {
 		mockMvc.perform(put("/medicalrecords?firstname=Bob&lastname=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
-			.andExpect(status().is(304));
+			.andExpect(status().is(404));
 	}
 	
 	@Test
     @Order(7)
-	void testMedicalRecordByName_whenNull() throws Exception {
+	void testMedicalRecordByFirstnameLastname_whenNull() throws Exception {
 		mockMvc.perform(get("/medicalrecords?firstname=Bob&lastname=BOB"))
-        	.andExpect(status().is(204));
+        	.andExpect(status().is(404));
 	}
 
 	@Test
@@ -105,7 +106,7 @@ class MedicalRecordIT {
 		mockMvc.perform(post("/medicalrecords")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
-			.andExpect(status().is(204));	
+			.andExpect(status().is(400));	
 	}
 	
 	@Test
@@ -119,6 +120,6 @@ class MedicalRecordIT {
     @Order(10)
 	void testDeleteMedicalRecord_whenNull() throws Exception {
 		mockMvc.perform(delete("/medicalrecords?firstname=Alice&lastname=BOB"))
-			.andExpect(status().is(304));
+			.andExpect(status().is(404));
 	}
 }

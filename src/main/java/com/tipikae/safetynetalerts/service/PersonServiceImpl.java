@@ -15,7 +15,7 @@ import com.tipikae.safetynetalerts.model.Person;
 @Service
 public class PersonServiceImpl implements IPersonService {
 
-	private static final Logger LOGGER = LogManager.getLogger("JsonStorage");
+	private static final Logger LOGGER = LogManager.getLogger("PersonServiceImpl");
 
 	@Autowired
 	private IPersonDAO personDao;

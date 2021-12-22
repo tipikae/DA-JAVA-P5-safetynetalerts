@@ -6,8 +6,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -39,11 +39,11 @@ class MedicalRecordDAOTest {
 	@BeforeAll
 	private static void setUp() {
 		dao = new MedicalRecordDAOImpl();
-		medicalRecord = new MedicalRecord("Bob", "BOB", new Date(), new ArrayList<String>(), 
+		medicalRecord = new MedicalRecord("Bob", "BOB", LocalDate.now(), new ArrayList<String>(), 
 				new ArrayList<String>());
 		List<String> medications = new ArrayList<>();
 		medications.add("Doliprane:500mg");
-		updatedMedicalRecord = new MedicalRecord("Bob", "BOB", new Date(), medications, new ArrayList<String>());
+		updatedMedicalRecord = new MedicalRecord("Bob", "BOB", LocalDate.now(), medications, new ArrayList<String>());
 	}
 
 	@Test

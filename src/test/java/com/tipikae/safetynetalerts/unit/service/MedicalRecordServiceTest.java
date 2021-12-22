@@ -5,8 +5,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class MedicalRecordServiceTest {
 	@BeforeAll
 	private static void setUp() {
 		service = new MedicalRecordServiceImpl();
-		medicalRecord = new MedicalRecord("Bob", "BOB", new Date(1980, 2, 23), new ArrayList<String>(), 
+		medicalRecord = new MedicalRecord("Bob", "BOB", LocalDate.of(1980, 2, 23), new ArrayList<String>(), 
 				new ArrayList<String>());
 	}
 

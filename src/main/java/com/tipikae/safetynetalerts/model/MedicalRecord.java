@@ -1,7 +1,7 @@
 package com.tipikae.safetynetalerts.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
@@ -16,13 +16,13 @@ public class MedicalRecord implements Serializable {
 	private String lastName;
 	
 	@Past
-	private Date birthdate;
+	private LocalDate birthdate;
 	
 	private List<String> medications;
 	
 	private List<String> allergies;
 	
-	public MedicalRecord(String firstName, String lastName, Date birthdate, List<String> medications,
+	public MedicalRecord(String firstName, String lastName, LocalDate birthdate, List<String> medications,
 			List<String> allergies) {
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -47,11 +47,11 @@ public class MedicalRecord implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public Date getBirthdate() {
+	public LocalDate getBirthdate() {
 		return birthdate;
 	}
 
-	public void setBirthdate(Date birthdate) {
+	public void setBirthdate(LocalDate birthdate) {
 		this.birthdate = birthdate;
 	}
 

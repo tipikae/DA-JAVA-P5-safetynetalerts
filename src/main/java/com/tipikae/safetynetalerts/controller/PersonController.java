@@ -1,6 +1,5 @@
 package com.tipikae.safetynetalerts.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -38,7 +37,7 @@ public class PersonController {
 			return new ResponseEntity<>(persons, HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -51,11 +50,11 @@ public class PersonController {
 			return new ResponseEntity<>(persons, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 
@@ -69,11 +68,11 @@ public class PersonController {
 			return new ResponseEntity<>(persons, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -87,11 +86,11 @@ public class PersonController {
 			return new ResponseEntity<>(person, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -103,7 +102,7 @@ public class PersonController {
 			return new ResponseEntity<>(added, HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -119,11 +118,11 @@ public class PersonController {
 			return new ResponseEntity<>(updated, HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		}
 	}
@@ -138,11 +137,11 @@ public class PersonController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		}
 	}

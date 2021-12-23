@@ -15,7 +15,7 @@ import com.tipikae.safetynetalerts.model.MedicalRecord;
 @Service
 public class MedicalRecordServiceImpl implements IMedicalRecordService {
 
-	private static final Logger LOGGER = LogManager.getLogger("MedicalRecordServiceImpl");
+	private static final Logger LOGGER = LogManager.getLogger("MedicalRecordService");
 
 	@Autowired
 	private IMedicalRecordDAO medicalRecordDao;

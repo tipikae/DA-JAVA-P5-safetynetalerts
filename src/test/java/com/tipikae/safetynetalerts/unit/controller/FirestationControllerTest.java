@@ -104,11 +104,11 @@ class FirestationControllerTest {
         	.andExpect(status().isOk());
 	}
 	
-//	@Test
-//	void testFirestationsByStation_whenInvalid() throws Exception {
-//		mockMvc.perform(get("/firestations?station=0"))
-//        	.andExpect(status().is(406));
-//	}
+	@Test
+	void testFirestationsByStation_whenInvalid() throws Exception {
+		mockMvc.perform(get("/firestations?station=0"))
+        	.andExpect(status().is(400));
+	}
 	
 	@Test
 	void testFirestationsByStation_whenStorageException() throws Exception {
@@ -192,11 +192,11 @@ class FirestationControllerTest {
 			.andExpect(status().isOk());
 	}
 	
-//	@Test
-//	void testDeleteFirestationsByStation_whenInvalid() throws Exception {
-//		mockMvc.perform(delete("/firestations?station=0"))
-//        	.andExpect(status().is(406));
-//	}
+	@Test
+	void testDeleteFirestationsByStation_whenInvalid() throws Exception {
+		mockMvc.perform(delete("/firestations?station=0"))
+        	.andExpect(status().is(400));
+	}
 	
 	@Test
 	void testDeleteFirestationsByStation_whenStorageException() throws Exception {

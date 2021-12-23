@@ -18,6 +18,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 
 	@Override
 	public Person save(Person person) throws StorageException {
+		storage = jsonStorage.readStorage();
 		List<Person> persons = storage.getPersons();
 		persons.add(person);
 		storage.setPersons(persons);
@@ -65,7 +66,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 		storage = jsonStorage.readStorage();
 		List<Person> results = new ArrayList<>();
 		for (Person item : storage.getPersons()) {
-			if (item.getAddress().equals(city)) {
+			if (item.getCity().equals(city)) {
 				results.add(item);
 			}
 		}

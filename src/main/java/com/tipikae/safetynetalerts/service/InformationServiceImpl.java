@@ -192,16 +192,16 @@ public class InformationServiceImpl implements IInformationService {
 										person.getLastname() + " not found in MedicalRecord.");
 							}
 						}
+						adresses.add(new FloodAddress(firestation.getAddress(), residents));
 					} else {
 						LOGGER.error("getResidentsByStations: address: " + firestation.getAddress() + 
 								" not found in Person.");
 					}
-					adresses.add(new FloodAddress(firestation.getAddress(), residents));
 				} 
+				dtos.add(new FloodDTO(station, adresses));
 			} else {
 				LOGGER.error("getResidentsByStations: station: " + station + " not found in Firestation.");
 			}
-			dtos.add(new FloodDTO(station, adresses));
 		}
 		
 		if(!dtos.isEmpty()) {
@@ -225,9 +225,10 @@ public class InformationServiceImpl implements IInformationService {
 		
 		for(Person person: persons) {
 			if (person.getLastname().equals(lastname)) {
-				MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(firstname, lastname);
+				MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
+						person.getFirstname(), lastname);
 				if(medicalRecord != null) {
-					personsInfo.add(new PersonInfo(firstname, lastname, person.getAddress(), 
+					personsInfo.add(new PersonInfo(person.getFirstname(), lastname, person.getAddress(), 
 							Util.calculateAge(medicalRecord.getBirthdate()), person.getEmail(), 
 							medicalRecord.getMedications(), medicalRecord.getAllergies()));
 				}

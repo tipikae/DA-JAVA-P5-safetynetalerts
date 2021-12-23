@@ -120,7 +120,7 @@ public class InformationController {
 		}
 	}
 	
-	// /personInfo?firstName=<firstName>&lastName=<lastName>
+	// /personInfo?firstname=<firstname>&lastname=<lastname>
 	@GetMapping(value="/personInfo", params={"firstname", "lastname"})
 	public ResponseEntity<Object> personInfoByLastname(
 			@RequestParam @NotBlank String firstname, 
@@ -140,7 +140,7 @@ public class InformationController {
 	}
 	
 	// /communityEmail?city=<city>
-	@GetMapping(value="/personInfo", params="city")
+	@GetMapping(value="/communityEmail", params="city")
 	public ResponseEntity<Object> emailsByCity(@RequestParam @NotBlank String city) {
 		try {
 			CommunityEmailDTO dto = service.getEmailsByCity(city);

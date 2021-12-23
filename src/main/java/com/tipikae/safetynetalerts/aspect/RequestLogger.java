@@ -14,14 +14,27 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * An aspect to log every request.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @Component
 @Aspect
 public class RequestLogger {
 
+	/**
+	 * A pointcut.
+	 */
 	@Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)")
 	public void getAction() {
 	}
-	
+
+	/**
+	 * Before an action.
+	 * @param joinPoint
+	 */
 	@Before("getAction()")
     public void beforeGetAction(JoinPoint joinPoint) {
 		Class<? extends Object> clazz = joinPoint.getTarget().getClass();
@@ -31,7 +44,11 @@ public class RequestLogger {
         String payload = getPayload(joinPoint);
         logger.info("GET " + url + " Payload " + payload);
 	}
-	
+
+	/**
+	 * After an action.
+	 * @param joinPoint
+	 */
 	@After("getAction()")
     public void afterGetAction(JoinPoint joinPoint) {
 		Class<? extends Object> clazz = joinPoint.getTarget().getClass();

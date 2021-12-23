@@ -26,13 +26,24 @@ import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.service.IInformationService;
 
+/**
+ * An information controller.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @Validated
 @RestController
 public class InformationController {
 
 	@Autowired
 	private IInformationService service;
-	
+
+	/**
+	 * Get residents by station number.
+	 * @param stationNumber an Integer station number.
+	 * @return ResponseEntity<Object>
+	 */
 	// /firestation?stationNumber=<station_number>
 	@GetMapping(value="/firestation", params="stationNumber")
     public ResponseEntity<Object> residentsByStation(@RequestParam @Positive int stationNumber) {
@@ -49,7 +60,12 @@ public class InformationController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
+
+	/**
+	 * Get children by address.
+	 * @param address a String address.
+	 * @return ResponseEntity<Object>
+	 */
 	// /childAlert?address=<address>
 	@GetMapping(value="/childAlert", params="address")
     public ResponseEntity<Object> childrenByAddress(@RequestParam @NotBlank String address) {
@@ -66,7 +82,12 @@ public class InformationController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
+
+	/**
+	 * Get phone numbers by station number.
+	 * @param firestation an Integer station number.
+	 * @return ResponseEntity<Object>
+	 */
 	// /phoneAlert?firestation=<firestation_number>
 	@GetMapping(value="/phoneAlert", params="firestation")
     public ResponseEntity<Object> phoneNumbersByStation(@RequestParam @Positive int firestation) {
@@ -83,7 +104,12 @@ public class InformationController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
+
+	/**
+	 * Get members by address.
+	 * @param address a String address.
+	 * @return ResponseEntity<Object>
+	 */
 	// /fire?address=<address>
 	@GetMapping(value="/fire", params="address")
     public ResponseEntity<Object> membersByAddress(@RequestParam @NotBlank String address) {
@@ -100,7 +126,12 @@ public class InformationController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
+
+	/**
+	 * Get residents by stations.
+	 * @param stations a List of Integer station number.
+	 * @return ResponseEntity<Object>
+	 */
 	// /flood/stations?stations=<a list of station_numbers>
 	@GetMapping(value="/flood/stations", params="stations")
 	public ResponseEntity<Object> residentsByStations(
@@ -118,7 +149,13 @@ public class InformationController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
+
+	/**
+	 * Get a person information by lastname.
+	 * @param firstname a String firstname.
+	 * @param lastname a String lastname.
+	 * @return ResponseEntity<Object>
+	 */
 	// /personInfo?firstname=<firstname>&lastname=<lastname>
 	@GetMapping(value="/personInfo", params={"firstname", "lastname"})
 	public ResponseEntity<Object> personInfoByLastname(
@@ -137,7 +174,12 @@ public class InformationController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
+
+	/**
+	 * Get emails by city.
+	 * @param city a String city.
+	 * @return ResponseEntity<Object>
+	 */
 	// /communityEmail?city=<city>
 	@GetMapping(value="/communityEmail", params="city")
 	public ResponseEntity<Object> emailsByCity(@RequestParam @NotBlank String city) {

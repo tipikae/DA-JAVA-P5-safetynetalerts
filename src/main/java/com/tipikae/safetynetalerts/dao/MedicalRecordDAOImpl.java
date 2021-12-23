@@ -8,9 +8,18 @@ import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.storage.JsonStorage;
 
+/**
+ * An implementation of IMedicalRecordDAO.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @Repository
 public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRecordDAO {
-	
+
+	/**
+	 * The constructor.
+	 */
 	public MedicalRecordDAOImpl() {
 		jsonStorage = new JsonStorage();
 	}

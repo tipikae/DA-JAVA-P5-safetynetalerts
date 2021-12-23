@@ -25,6 +25,12 @@ import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 import com.tipikae.safetynetalerts.service.IFirestationService;
 
+/**
+ * A Firestation controller CRUD.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @Validated
 @RestController
 public class FirestationController {
@@ -32,6 +38,11 @@ public class FirestationController {
 	@Autowired
 	private IFirestationService service;
 
+	/**
+	 * Add a firestation mapping.
+	 * @param firestation a Firestation object.
+	 * @return ResponseEntity<Object>
+	 */
 	@PostMapping(value="/firestations", consumes={"application/json"})
 	public ResponseEntity<Object> addFirestationMapping(@Valid @RequestBody Firestation firestation) {
 		try {
@@ -44,6 +55,10 @@ public class FirestationController {
 		}
 	}
 
+	/**
+	 * Get all firestations mapping.
+	 * @return ResponseEntity<Object>
+	 */
 	@GetMapping("/firestations")
     public ResponseEntity<Object> allFirestations() {
 		try {
@@ -56,6 +71,11 @@ public class FirestationController {
 		}
 	}
 
+	/**
+	 * Get firestations by address.
+	 * @param address a String address.
+	 * @return ResponseEntity<Object>
+	 */
 	@GetMapping("/firestations/{address}")
     public ResponseEntity<Object> firestationByAddress(@PathVariable @NotBlank String address) {
 		try {
@@ -72,6 +92,11 @@ public class FirestationController {
 		}
 	}
 
+	/**
+	 * Get firestations by station number.
+	 * @param station an integer station number.
+	 * @return ResponseEntity<Object>
+	 */
 	// /firestations?station={station}
 	@GetMapping(value="/firestations", params="station")
     public ResponseEntity<Object> firestationsByStation(@RequestParam @Positive int station) {
@@ -88,7 +113,13 @@ public class FirestationController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
+
+	/**
+	 * Update a firestation mapping.
+	 * @param address a String address.
+	 * @param firestation a Firestation object.
+	 * @return ResponseEntity<Object>
+	 */
 	@PutMapping(value="/firestations/{address}", consumes={"application/json"})
 	public ResponseEntity<Object> updateFirestationMapping(
 			@PathVariable @NotBlank String address, 
@@ -106,7 +137,12 @@ public class FirestationController {
 					HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
+	/**
+	 * Delete firestations by address.
+	 * @param address a String address.
+	 * @return ResponseEntity<Object>
+	 */
 	@DeleteMapping("/firestations/{address}")
 	public ResponseEntity<Object> deleteFirestationsByAddress(@PathVariable @NotBlank String address ) {
 		try {
@@ -123,6 +159,11 @@ public class FirestationController {
 		}
 	}
 
+	/**
+	 * Delete a firestation by station number.
+	 * @param station an integer station number.
+	 * @return ResponseEntity<Object>
+	 */
 	// /firestations?station={station}
 	@DeleteMapping("/firestations")
 	public ResponseEntity<Object> deleteFirestationByStation(@RequestParam @Positive int station) {

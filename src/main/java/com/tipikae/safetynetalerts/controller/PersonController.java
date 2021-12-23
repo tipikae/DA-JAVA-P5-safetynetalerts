@@ -23,6 +23,12 @@ import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
 import com.tipikae.safetynetalerts.service.IPersonService;
 
+/**
+ * A Person controller CRUD.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @Validated
 @RestController
 public class PersonController {
@@ -30,6 +36,10 @@ public class PersonController {
 	@Autowired
 	private IPersonService service;
 
+	/**
+	 * Get all persons.
+	 * @return ResponseEntity<Object>
+	 */
 	@GetMapping("/persons")
     public ResponseEntity<Object> allPersons() {
 		try {
@@ -41,7 +51,12 @@ public class PersonController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
+
+	/**
+	 * Get persons by address.
+	 * @param address a String address.
+	 * @return ResponseEntity<Object>
+	 */
 	// /persons?address={address}
 	@GetMapping(value="/persons", params="address")
     public ResponseEntity<Object> personsByAddress(@RequestParam @NotBlank String address) {
@@ -59,7 +74,12 @@ public class PersonController {
 		}
 
 	}
-	
+
+	/**
+	 * Get persons by city.
+	 * @param city a String city.
+	 * @return ResponseEntity<Object>
+	 */
 	// /persons?city={city}
 	@GetMapping(value="/persons", params="city")
     public ResponseEntity<Object> personsByCity(@RequestParam @NotBlank String city) {
@@ -76,7 +96,13 @@ public class PersonController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
+
+	/**
+	 * Get a person by firstname and lastname.
+	 * @param firstname a String firstname.
+	 * @param lastname a String lastname.
+	 * @return ResponseEntity<Object>
+	 */
 	// /persons?firstname={firstname}&lastname={lastname}
 	@GetMapping(value="/persons", params={"firstname", "lastname"})
     public ResponseEntity<Object> personByFirstnameLastname(@RequestParam @NotBlank String firstname, 
@@ -94,7 +120,12 @@ public class PersonController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
+
+	/**
+	 * Add a person.
+	 * @param person a Person object.
+	 * @return ResponseEntity<Object>
+	 */
 	@PostMapping(value="/persons", consumes={"application/json"})
 	public ResponseEntity<Object> addPerson(@Valid @RequestBody Person person) {
 		try {
@@ -106,7 +137,14 @@ public class PersonController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
+
+	/**
+	 * Update a person.
+	 * @param firstname a String firstname.
+	 * @param lastname a String lastname.
+	 * @param person a Person object.
+	 * @return ResponseEntity<Object>
+	 */
 	// /persons?firstname={firstname}&lastname={lastname}
 	@PutMapping(value="/persons", consumes={"application/json"})
 	public ResponseEntity<Object> updatePerson(
@@ -127,6 +165,12 @@ public class PersonController {
 		}
 	}
 
+	/**
+	 * Delete a person.
+	 * @param firstname a String firstname.
+	 * @param lastname a String lastname.
+	 * @return ResponseEntity<Object>
+	 */
 	// /persons?firstname={firstname}&lastname={lastname}
 	@DeleteMapping("/persons")
 	public ResponseEntity<Object> deletePerson(

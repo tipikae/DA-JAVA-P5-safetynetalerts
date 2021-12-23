@@ -9,9 +9,18 @@ import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
 import com.tipikae.safetynetalerts.storage.JsonStorage;
 
+/**
+ * An implementation of IPersonDAO.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @Repository
 public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
-	
+
+	/**
+	 * The constructor.
+	 */
 	public PersonDAOImpl() {
 		jsonStorage = new JsonStorage();
 	}

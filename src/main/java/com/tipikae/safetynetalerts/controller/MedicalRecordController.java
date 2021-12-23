@@ -23,6 +23,12 @@ import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.service.IMedicalRecordService;
 
+/**
+ * A MedicalRecord controller CRUD.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @Validated
 @RestController
 public class MedicalRecordController {
@@ -30,6 +36,10 @@ public class MedicalRecordController {
 	@Autowired
 	private IMedicalRecordService service;
 
+	/**
+	 * Get all medical records.
+	 * @return ResponseEntity<Object>
+	 */
 	@GetMapping("/medicalrecords")
     public ResponseEntity<Object> allMedicalRecords() {
 		try {
@@ -41,7 +51,13 @@ public class MedicalRecordController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} 
 	}
-	
+
+	/**
+	 * Get a medical record by firstname and lastname.
+	 * @param firstname a String firstname.
+	 * @param lastname a String lastname.
+	 * @return ResponseEntity<Object>
+	 */
 	// /medicalrecords?firstname={firstname}&lastname={lastname}
 	@GetMapping(value="/medicalrecords", params={"firstname", "lastname"})
     public ResponseEntity<Object> medicalrecordByFirstnameLastname(
@@ -60,7 +76,12 @@ public class MedicalRecordController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
+
+	/**
+	 * Add a medical record.
+	 * @param medicalRecord a MedicalRecord object.
+	 * @return ResponseEntity<Object>
+	 */
 	@PostMapping(value="/medicalrecords", consumes={"application/json"})
 	public ResponseEntity<Object> addMedicalRecord(@Valid @RequestBody MedicalRecord medicalRecord) {
 		try {
@@ -72,8 +93,14 @@ public class MedicalRecordController {
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
-	
 
+	/**
+	 * Update a medical record.
+	 * @param firstname a String firstname.
+	 * @param lastname a String lastname.
+	 * @param medicalRecord a MedicalRecord object.
+	 * @return ResponseEntity<Object>
+	 */
 	// /medicalrecords?firstname={firstname}&lastname={lastname}
 	@PutMapping(value="/medicalrecords", consumes={"application/json"})
 	public ResponseEntity<Object> updateMedicalRecord(
@@ -94,6 +121,12 @@ public class MedicalRecordController {
 		}
 	}
 
+	/**
+	 * Delete a medical record.
+	 * @param firstname a String firstname.
+	 * @param lastname a String lastname.
+	 * @return ResponseEntity<Object>
+	 */
 	// /medicalrecords?firstname={firstname}&lastname={lastname}
 	@DeleteMapping("/medicalrecords")
 	public ResponseEntity<Object> deleteMedicalRecord(

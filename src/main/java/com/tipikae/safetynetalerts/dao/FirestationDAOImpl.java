@@ -9,9 +9,18 @@ import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 import com.tipikae.safetynetalerts.storage.JsonStorage;
 
+/**
+ * An IFirestationDAO implementation.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @Repository
 public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationDAO {
-	
+
+	/**
+	 * The constructor.
+	 */
 	public FirestationDAOImpl() {
 		jsonStorage = new JsonStorage();
 	}

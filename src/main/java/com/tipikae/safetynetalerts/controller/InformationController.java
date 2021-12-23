@@ -1,6 +1,5 @@
 package com.tipikae.safetynetalerts.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
@@ -42,11 +41,11 @@ public class InformationController {
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -59,11 +58,11 @@ public class InformationController {
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -76,11 +75,11 @@ public class InformationController {
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -93,11 +92,11 @@ public class InformationController {
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -111,11 +110,11 @@ public class InformationController {
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -130,11 +129,11 @@ public class InformationController {
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -147,11 +146,11 @@ public class InformationController {
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}

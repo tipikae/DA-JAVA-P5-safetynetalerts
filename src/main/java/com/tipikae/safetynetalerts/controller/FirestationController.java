@@ -1,6 +1,5 @@
 package com.tipikae.safetynetalerts.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -40,7 +39,7 @@ public class FirestationController {
 			return new ResponseEntity<>(added, HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -52,7 +51,7 @@ public class FirestationController {
 			return new ResponseEntity<>(firestations, HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -64,11 +63,11 @@ public class FirestationController {
 			return new ResponseEntity<>(firestation, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -81,11 +80,11 @@ public class FirestationController {
 			return new ResponseEntity<>(firestations, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		}
 	}
@@ -99,11 +98,11 @@ public class FirestationController {
 			return new ResponseEntity<>(updated, HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		}
 	}
@@ -115,11 +114,11 @@ public class FirestationController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		}
 	}
@@ -132,11 +131,11 @@ public class FirestationController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
 			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date()), 
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
 		}
 	}

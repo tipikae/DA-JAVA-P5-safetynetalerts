@@ -90,10 +90,20 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	public void delete(Firestation firestation) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Firestation> firestations = storage.getFirestations();
-		firestations.remove(firestation);
+		int i = -1;
 		
-		storage.setFirestations(firestations);
-		jsonStorage.writeStorage(storage);
+		for(int j = 0; j < firestations.size(); j++) {
+			if(firestations.get(j).getAddress().equals(firestation.getAddress())) {
+				i = j;
+				break;
+			}
+		}
+		
+		if (i != -1) {
+			firestations.remove(i);
+			storage.setFirestations(firestations);
+			jsonStorage.writeStorage(storage);
+		}
 	}
 
 	/**
@@ -104,11 +114,20 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	public void deleteFirestations(List<Firestation> firestationsToRemove) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Firestation> firestations = storage.getFirestations();
+		boolean found = false;
+		
 		for(Firestation firestationToRemove: firestationsToRemove) {
-			firestations.remove(firestationToRemove);
+			for(int i = 0; i < firestations.size(); i++) {
+				if(firestations.get(i).getAddress().equals(firestationToRemove.getAddress())) {
+					found = true;
+					firestations.remove(i);
+				}
+			}
 		}
 		
-		storage.setFirestations(firestations);
-		jsonStorage.writeStorage(storage);
+		if (found) {
+			storage.setFirestations(firestations);
+			jsonStorage.writeStorage(storage);
+		}
 	}
 }

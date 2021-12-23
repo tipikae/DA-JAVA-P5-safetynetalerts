@@ -102,10 +102,21 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	public void delete(Person person) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> persons = storage.getPersons();
-		persons.remove(person);
+		int i = -1;
 		
-		storage.setPersons(persons);
-		jsonStorage.writeStorage(storage);
+		for(int j = 0; j < persons.size(); j++) {
+			if(persons.get(j).getFirstname().equals(person.getFirstname()) && 
+					persons.get(j).getLastname().equals(person.getLastname())) {
+				i = j;
+				break;
+			}
+		}
+		
+		if (i != -1) {
+			persons.remove(i);
+			storage.setPersons(persons);
+			jsonStorage.writeStorage(storage);
+		}
 	}
 
 }

@@ -14,10 +14,10 @@ public class ControllerException implements Serializable {
 	private String message;
 	private Date timestamp;
 
-	public ControllerException(int code, String message, Date timestamp) {
+	public ControllerException(int code, String message) {
 		this.code = code;
 		this.message = message;
-		this.timestamp = timestamp;
+		this.timestamp = new Date();
 	}
 	
 	public int getCode() {

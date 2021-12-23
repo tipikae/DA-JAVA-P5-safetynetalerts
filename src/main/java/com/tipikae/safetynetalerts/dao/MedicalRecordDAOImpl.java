@@ -75,10 +75,21 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 	public void delete(MedicalRecord medicalRecord) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<MedicalRecord> medicalRecords = storage.getMedicalRecords();
-		medicalRecords.remove(medicalRecord);
+		int i = -1;
 		
-		storage.setMedicalRecords(medicalRecords);
-		jsonStorage.writeStorage(storage);
+		for(int j = 0; j < medicalRecords.size(); j++) {
+			if(medicalRecords.get(j).getFirstname().equals(medicalRecord.getFirstname()) && 
+					medicalRecords.get(j).getLastname().equals(medicalRecord.getLastname())) {
+				i = j;
+				break;
+			}
+		}
+		
+		if (i != -1) {
+			medicalRecords.remove(i);
+			storage.setMedicalRecords(medicalRecords);
+			jsonStorage.writeStorage(storage);
+		}
 	}
 
 }

@@ -46,7 +46,7 @@ class PersonDAOTest {
 	void testSave_whenOk() throws StorageException {
 		List<Person> persons = new ArrayList<>();
 		persons.add(person);
-		//when(jsonStorage.readStorage()).thenReturn(storage);
+		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getPersons()).thenReturn(persons);
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
@@ -56,7 +56,7 @@ class PersonDAOTest {
 	@Test
 	void testSave_whenException() throws StorageException {
 		List<Person> persons = new ArrayList<>();
-		//when(jsonStorage.readStorage()).thenReturn(storage);
+		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getPersons()).thenReturn(persons);
 		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
 		dao.setJsonStorage(jsonStorage);

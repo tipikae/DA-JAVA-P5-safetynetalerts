@@ -12,28 +12,56 @@ import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
 
+/**
+ * An implementation of IPersonService.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @Service
 public class PersonServiceImpl implements IPersonService {
 
 	private static final Logger LOGGER = LogManager.getLogger("PersonService");
 
+	/**
+	 * The DAO.
+	 */
 	@Autowired
 	private IPersonDAO personDao;
 
+	/**
+	 * Set personDao.
+	 * @param personDao a IPersonDAO interface.
+	 */
 	public void setPersonDao(IPersonDAO personDao) {
 		this.personDao = personDao;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param person {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Person addPerson(Person person) throws StorageException {
 		return personDao.save(person);
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<Person> getPersons() throws StorageException {
 		return personDao.findAll();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param firstname {@inheritDoc}
+	 * @param lastname {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Person getPersonByFirstnameLastname(String firstname, String lastname) 
 			throws ServiceException, StorageException {
@@ -48,6 +76,11 @@ public class PersonServiceImpl implements IPersonService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param address {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<Person> getPersonsByAddress(String address) throws ServiceException, StorageException {
 		List<Person> persons = personDao.findAll();
@@ -68,6 +101,11 @@ public class PersonServiceImpl implements IPersonService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param city {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<Person> getPersonsByCity(String city) throws ServiceException, StorageException {
 		List<Person> persons = personDao.findAll();
@@ -88,6 +126,13 @@ public class PersonServiceImpl implements IPersonService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param firstname {@inheritDoc}
+	 * @param lastname {@inheritDoc}
+	 * @param firestation {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Person updatePerson(String firstname, String lastname, Person person) 
 			throws ServiceException, StorageException {
@@ -110,6 +155,11 @@ public class PersonServiceImpl implements IPersonService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param firstname {@inheritDoc}
+	 * @param lastname {@inheritDoc}
+	 */
 	@Override
 	public void deletePerson(String firstname, String lastname) throws StorageException, ServiceException {
 		Person person = personDao.findByFirstnameLastname(firstname, lastname);

@@ -12,28 +12,55 @@ import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 
+/**
+ * An implementation of IFirestationService.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @Service
 public class FirestationServiceImpl implements IFirestationService {
 	
 	private static final Logger LOGGER = LogManager.getLogger("FirestationService");
 
+	/**
+	 * The DAO.
+	 */
 	@Autowired
 	private IFirestationDAO firestationDao;
 
+	/**
+	 * Set the DAO.
+	 * @param firestationDao a IFirestationDAO.
+	 */
 	public void setFirestationDao(IFirestationDAO firestationDao) {
 		this.firestationDao = firestationDao;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param firestation {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Firestation addFirestationMapping(Firestation firestation) throws StorageException {
 		return firestationDao.save(firestation);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<Firestation> getFirestations() throws StorageException {
 		return firestationDao.findAll();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param station {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Firestation getFirestationByAddress(String address) throws ServiceException, StorageException {
 		Firestation firestation = firestationDao.findByAddress(address);
@@ -45,6 +72,11 @@ public class FirestationServiceImpl implements IFirestationService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param station {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<Firestation> getFirestationsByStation(int station) throws ServiceException, StorageException {
 		List<Firestation> firestations = firestationDao.findAll();
@@ -65,6 +97,12 @@ public class FirestationServiceImpl implements IFirestationService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param address {@inheritDoc}
+	 * @param firestation {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Firestation updateFirestationMapping(String address, Firestation firestation) 
 			throws ServiceException, StorageException {
@@ -83,6 +121,10 @@ public class FirestationServiceImpl implements IFirestationService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param address {@inheritDoc}
+	 */
 	@Override
 	public void deleteFirestationByAddress(String address) throws StorageException, ServiceException {
 		Firestation firestation = firestationDao.findByAddress(address);
@@ -94,6 +136,10 @@ public class FirestationServiceImpl implements IFirestationService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param station {@inheritDoc}
+	 */
 	@Override
 	public void deleteFirestationsByStation(int station) throws ServiceException, StorageException {
 		List<Firestation> firestations = firestationDao.findByStation(station);

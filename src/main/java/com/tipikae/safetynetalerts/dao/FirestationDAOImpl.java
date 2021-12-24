@@ -25,6 +25,11 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 		jsonStorage = new JsonStorage();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param firestation {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Firestation save(Firestation firestation) throws StorageException {
 		storage = jsonStorage.readStorage();
@@ -36,12 +41,21 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 		return firestation;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<Firestation> findAll() throws StorageException {
 		storage = jsonStorage.readStorage();
 		return storage.getFirestations();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param address {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Firestation findByAddress(String address) throws StorageException {
 		storage = jsonStorage.readStorage();
@@ -56,6 +70,11 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 		return firestation;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param station {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<Firestation> findByStation(int station) throws StorageException {
 		storage = jsonStorage.readStorage();
@@ -69,6 +88,11 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 		return results;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param firestation {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Firestation update(Firestation firestation) throws StorageException {
 		storage = jsonStorage.readStorage();
@@ -93,7 +117,8 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	}
 
 	/**
-	 * Delete one map address-station
+	 * {@inheritDoc}
+	 * @param firestation {@inheritDoc}
 	 */
 	@Override
 	public void delete(Firestation firestation) throws StorageException {
@@ -116,8 +141,8 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	}
 
 	/**
-	 * Delete all maps with station number
-	 * @throws StorageException 
+	 * {@inheritDoc}
+	 * @param firestationsToRemove {@inheritDoc}
 	 */
 	@Override
 	public void deleteFirestations(List<Firestation> firestationsToRemove) throws StorageException {

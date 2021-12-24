@@ -24,6 +24,11 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 		jsonStorage = new JsonStorage();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param medicalRecord {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public MedicalRecord save(MedicalRecord medicalRecord) throws StorageException {
 		storage = jsonStorage.readStorage();
@@ -35,12 +40,22 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 		return medicalRecord;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<MedicalRecord> findAll() throws StorageException {
 		storage = jsonStorage.readStorage();
 		return storage.getMedicalRecords();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param firstname {@inheritDoc}
+	 * @param lastname {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public MedicalRecord findByFirstnameLastname(String firstname, String lastname) throws StorageException {
 		storage = jsonStorage.readStorage();
@@ -56,6 +71,11 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 		return medicalRecord;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param medicalRecord {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public MedicalRecord update(MedicalRecord medicalRecord) throws StorageException {
 		storage = jsonStorage.readStorage();
@@ -80,6 +100,10 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param medicalRecord {@inheritDoc}
+	 */
 	@Override
 	public void delete(MedicalRecord medicalRecord) throws StorageException {
 		storage = jsonStorage.readStorage();

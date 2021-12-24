@@ -33,32 +33,62 @@ import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.model.Person;
 import com.tipikae.safetynetalerts.util.Util;
 
+/**
+ * An implementation of IInformationService.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @Service
 public class InformationServiceImpl implements IInformationService {
 	
 	private static final Logger LOGGER = LogManager.getLogger("InformationService");
 
+	/**
+	 * The IFirestationDAO.
+	 */
 	@Autowired
 	private IFirestationDAO firestationDao;
-	
+	/**
+	 * The IPersonDAO.
+	 */
 	@Autowired
 	private IPersonDAO personDao;
-	
+	/**
+	 * The IMedicalRecordDAO.
+	 */
 	@Autowired
 	private IMedicalRecordDAO medicalRecordDao;
 
+	/**
+	 * Set firestationDAO.
+	 * @param firestationDao a IFirestationDAO interface.
+	 */
 	public void setFirestationDao(IFirestationDAO firestationDao) {
 		this.firestationDao = firestationDao;
 	}
 
+	/**
+	 * Set personDAO.
+	 * @param personDao a IPersonDAO interface.
+	 */
 	public void setPersonDao(IPersonDAO personDao) {
 		this.personDao = personDao;
 	}
 
+	/**
+	 * Set medicalRecordDAO.
+	 * @param medicalRecordDao a IMedicalRecordDAO interface.
+	 */
 	public void setMedicalRecordDao(IMedicalRecordDAO medicalRecordDao) {
 		this.medicalRecordDao = medicalRecordDao;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param station {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public FirestationDTO getResidentsByStation(int stationNumber) throws ServiceException, StorageException {
 		List<Firestation> firestations = firestationDao.findByStation(stationNumber);
@@ -91,6 +121,11 @@ public class InformationServiceImpl implements IInformationService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param address {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public ChildAlertDTO getChildrenByAddress(String address) throws ServiceException, StorageException {
 		List<Person> persons = personDao.findByAddress(address);
@@ -120,6 +155,11 @@ public class InformationServiceImpl implements IInformationService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param station {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public PhoneAlertDTO getPhoneNumbersByStation(int station) throws ServiceException, StorageException {
 		List<Firestation> firestations = firestationDao.findByStation(station);
@@ -139,6 +179,11 @@ public class InformationServiceImpl implements IInformationService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param address {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public FireDTO getMembersByAddress(String address) throws ServiceException, StorageException {
 		List<Person> persons = personDao.findByAddress(address);
@@ -169,6 +214,11 @@ public class InformationServiceImpl implements IInformationService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param stations {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<FloodDTO> getResidentsByStations(List<Integer> stations) throws ServiceException, StorageException {
 		List<FloodDTO> dtos = new ArrayList<>();
@@ -217,6 +267,12 @@ public class InformationServiceImpl implements IInformationService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param firstname {@inheritDoc}
+	 * @param lastname {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public PersonInfoDTO getPersonInfoByLastname(String firstname, String lastname)
 			throws ServiceException, StorageException {
@@ -243,6 +299,11 @@ public class InformationServiceImpl implements IInformationService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param city {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public CommunityEmailDTO getEmailsByCity(String city) throws ServiceException, StorageException {
 		List<Person> persons = personDao.findByCity(city);

@@ -12,28 +12,56 @@ import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 
+/**
+ * An implementation of IMedicalRecordService.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @Service
 public class MedicalRecordServiceImpl implements IMedicalRecordService {
 
 	private static final Logger LOGGER = LogManager.getLogger("MedicalRecordService");
 
+	/**
+	 * The DAO.
+	 */
 	@Autowired
 	private IMedicalRecordDAO medicalRecordDao;
 
+	/**
+	 * Set medicalRecordDao.
+	 * @param medicalRecordDao a IMedicalRecordDAO interface.
+	 */
 	public void setMedicalRecordDao(IMedicalRecordDAO medicalRecordDao) {
 		this.medicalRecordDao = medicalRecordDao;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param medicalRecord {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) throws StorageException {
 		return medicalRecordDao.save(medicalRecord);
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<MedicalRecord> getMedicalRecords() throws StorageException {
 		return medicalRecordDao.findAll();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param firstname {@inheritDoc}
+	 * @param lastname {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public MedicalRecord getMedicalRecordByFirstnameLastname(String firstname, String lastname) 
 			throws StorageException, ServiceException {
@@ -48,6 +76,13 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param firstname {@inheritDoc}
+	 * @param lastname {@inheritDoc}
+	 * @param medicalRecord {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public MedicalRecord updateMedicalRecord(String firstname, String lastname, MedicalRecord medicalRecord) 
 			throws ServiceException, StorageException {
@@ -70,6 +105,11 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param firstname {@inheritDoc}
+	 * @param lastname {@inheritDoc}
+	 */
 	@Override
 	public void deleteMedicalRecord(String firstname, String lastname) throws ServiceException, StorageException {
 		MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(firstname, lastname);

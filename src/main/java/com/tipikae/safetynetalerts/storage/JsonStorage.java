@@ -29,23 +29,44 @@ import com.tipikae.safetynetalerts.model.Firestation;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.model.Person;
 
+/**
+ * A class accessing data stored in a json file.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 public class JsonStorage {
 	
 	private static final String PROPERTIES_FILE = "/application.properties";
 	private static final String PROPERTY_KEY_FILE = "storage.file";
 	
 	private static final Logger LOGGER = LogManager.getLogger("JsonStorage");
-	
+
+	/**
+	 * Properties.
+	 */
 	private Properties prop;
-	
+
+	/**
+	 * The constructor
+	 */
 	public JsonStorage() {
 		this.prop = new Properties();
 	}
 
+	/**
+	 * Set properties.
+	 * @param prop a Properties object.
+	 */
 	public void setProp(Properties prop) {
 		this.prop = prop;
 	}
 
+	/**
+	 * Read the json file.
+	 * @return Storage
+	 * @throws StorageException
+	 */
 	public Storage readStorage() throws StorageException {
 		Gson gson = new GsonBuilder()
 				.setPrettyPrinting()
@@ -70,7 +91,12 @@ public class JsonStorage {
 			throw new StorageException("An error occured when reading storage file.", e);
 		}
 	}
-	
+
+	/**
+	 * Write the json file.
+	 * @param storage a Storage object.
+	 * @throws StorageException
+	 */
 	public void writeStorage(Storage storage) throws StorageException {
 		Gson gson = new GsonBuilder()
 				.setPrettyPrinting()
@@ -90,16 +116,37 @@ public class JsonStorage {
 	}
 }
 
+/**
+ * An implementation of JsonSerializer<T> and JsonDeserializer<T>
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
 	
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
 
+	/**
+	 * {@inheritDoc}
+	 * @param date {@inheritDoc}
+	 * @param typeOfSrc {@inheritDoc}
+	 * @param context {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
     public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
     	DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
     	return new JsonPrimitive(date.format(formatter));
     }
 
+	/**
+	 * {@inheritDoc}
+	 * @param json {@inheritDoc}
+	 * @param typeOfT {@inheritDoc}
+	 * @param context {@inheritDoc}
+	 * @return {@inheritDoc}
+	 * @throws JsonParseException
+	 */
 	@Override
 	public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {

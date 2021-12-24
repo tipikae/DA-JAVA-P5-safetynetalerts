@@ -25,6 +25,11 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 		jsonStorage = new JsonStorage();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param person {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Person save(Person person) throws StorageException {
 		storage = jsonStorage.readStorage();
@@ -36,12 +41,22 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 		return person;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<Person> findAll() throws StorageException {
 		storage = jsonStorage.readStorage();
 		return storage.getPersons();
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 * @param firstname {@inheritDoc}
+	 * @param lastname {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Person findByFirstnameLastname(String firstname, String lastname) throws StorageException {
 		storage = jsonStorage.readStorage();
@@ -57,6 +72,11 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 		return person;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param address {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<Person> findByAddress(String address) throws StorageException {
 		storage = jsonStorage.readStorage();
@@ -70,6 +90,11 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 		return results;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param city {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public List<Person> findByCity(String city) throws StorageException {
 		storage = jsonStorage.readStorage();
@@ -83,6 +108,11 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 		return results;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param person {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Person update(Person person) throws StorageException {
 		storage = jsonStorage.readStorage();
@@ -107,6 +137,10 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param person {@inheritDoc}
+	 */
 	@Override
 	public void delete(Person person) throws StorageException {
 		storage = jsonStorage.readStorage();

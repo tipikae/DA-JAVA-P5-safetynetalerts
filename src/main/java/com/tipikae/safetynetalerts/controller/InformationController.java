@@ -42,7 +42,7 @@ public class InformationController {
 	/**
 	 * Get residents by station number.
 	 * @param stationNumber an Integer station number.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	// /firestation?stationNumber=<station_number>
 	@GetMapping(value="/firestation", params="stationNumber")
@@ -64,7 +64,7 @@ public class InformationController {
 	/**
 	 * Get children by address.
 	 * @param address a String address.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	// /childAlert?address=<address>
 	@GetMapping(value="/childAlert", params="address")
@@ -86,7 +86,7 @@ public class InformationController {
 	/**
 	 * Get phone numbers by station number.
 	 * @param firestation an Integer station number.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	// /phoneAlert?firestation=<firestation_number>
 	@GetMapping(value="/phoneAlert", params="firestation")
@@ -108,7 +108,7 @@ public class InformationController {
 	/**
 	 * Get members by address.
 	 * @param address a String address.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	// /fire?address=<address>
 	@GetMapping(value="/fire", params="address")
@@ -130,7 +130,7 @@ public class InformationController {
 	/**
 	 * Get residents by stations.
 	 * @param stations a List of Integer station number.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	// /flood/stations?stations=<a list of station_numbers>
 	@GetMapping(value="/flood/stations", params="stations")
@@ -154,7 +154,7 @@ public class InformationController {
 	 * Get a person information by lastname.
 	 * @param firstname a String firstname.
 	 * @param lastname a String lastname.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	// /personInfo?firstname=<firstname>&lastname=<lastname>
 	@GetMapping(value="/personInfo", params={"firstname", "lastname"})
@@ -178,7 +178,7 @@ public class InformationController {
 	/**
 	 * Get emails by city.
 	 * @param city a String city.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	// /communityEmail?city=<city>
 	@GetMapping(value="/communityEmail", params="city")

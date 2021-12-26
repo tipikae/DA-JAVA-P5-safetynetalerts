@@ -19,12 +19,12 @@ public class MedicalRecord implements Serializable {
 	 * Firstname.
 	 */
 	@NotBlank(message="Firstname is mandatory")
-	private String firstName;
+	private String firstname;
 	/**
 	 * Lastname.
 	 */
 	@NotBlank(message="Lastname is mandatory")
-	private String lastName;
+	private String lastname;
 	/**
 	 * Birthdate.
 	 */
@@ -38,19 +38,26 @@ public class MedicalRecord implements Serializable {
 	 * Allergies.
 	 */
 	private List<String> allergies;
+	
+	/**
+	 * The default constructor. 
+	 */
+	public MedicalRecord() {
+		super();
+	}
 
 	/**
 	 * The constructor.
-	 * @param firstName a String.
-	 * @param lastName a String.
+	 * @param firstname a String.
+	 * @param lastname a String.
 	 * @param birthdate a LocalDate.
 	 * @param medications a List of String.
 	 * @param allergies a List of String.
 	 */
-	public MedicalRecord(String firstName, String lastName, LocalDate birthdate, List<String> medications,
+	public MedicalRecord(String firstname, String lastname, LocalDate birthdate, List<String> medications,
 			List<String> allergies) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.firstname = firstname;
+		this.lastname = lastname;
 		this.birthdate = birthdate;
 		this.medications = medications;
 		this.allergies = allergies;
@@ -61,15 +68,15 @@ public class MedicalRecord implements Serializable {
 	 * @return String
 	 */
 	public String getFirstname() {
-		return firstName;
+		return firstname;
 	}
 
 	/**
 	 * Set firstname.
 	 * @param firstName a String.
 	 */
-	public void setFirstname(String firstName) {
-		this.firstName = firstName;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
 	/**
@@ -77,15 +84,15 @@ public class MedicalRecord implements Serializable {
 	 * @return String
 	 */
 	public String getLastname() {
-		return lastName;
+		return lastname;
 	}
 
 	/**
 	 * Set lastname.
 	 * @param lastName a String.
 	 */
-	public void setLastname(String lastName) {
-		this.lastName = lastName;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	/**

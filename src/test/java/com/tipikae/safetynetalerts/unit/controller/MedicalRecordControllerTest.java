@@ -28,7 +28,7 @@ import com.tipikae.safetynetalerts.service.IMedicalRecordService;
 @WebMvcTest(controllers = MedicalRecordController.class)
 class MedicalRecordControllerTest {
 	
-	private static final String BODY_REQ = "{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }";
+	private static final String BODY_REQ = "{ \"firstname\":\"John\", \"lastname\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }";
 
 	@Autowired
     private MockMvc mockMvc;

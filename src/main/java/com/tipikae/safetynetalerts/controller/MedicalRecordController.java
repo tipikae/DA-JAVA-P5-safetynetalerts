@@ -38,7 +38,7 @@ public class MedicalRecordController {
 
 	/**
 	 * Get all medical records.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	@GetMapping("/medicalrecords")
     public ResponseEntity<Object> allMedicalRecords() {
@@ -56,7 +56,7 @@ public class MedicalRecordController {
 	 * Get a medical record by firstname and lastname.
 	 * @param firstname a String firstname.
 	 * @param lastname a String lastname.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	// /medicalrecords?firstname={firstname}&lastname={lastname}
 	@GetMapping(value="/medicalrecords", params={"firstname", "lastname"})
@@ -80,7 +80,7 @@ public class MedicalRecordController {
 	/**
 	 * Add a medical record.
 	 * @param medicalRecord a MedicalRecord object.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	@PostMapping(value="/medicalrecords", consumes={"application/json"})
 	public ResponseEntity<Object> addMedicalRecord(@Valid @RequestBody MedicalRecord medicalRecord) {
@@ -99,7 +99,7 @@ public class MedicalRecordController {
 	 * @param firstname a String firstname.
 	 * @param lastname a String lastname.
 	 * @param medicalRecord a MedicalRecord object.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	// /medicalrecords?firstname={firstname}&lastname={lastname}
 	@PutMapping(value="/medicalrecords", consumes={"application/json"})
@@ -125,7 +125,7 @@ public class MedicalRecordController {
 	 * Delete a medical record.
 	 * @param firstname a String firstname.
 	 * @param lastname a String lastname.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	// /medicalrecords?firstname={firstname}&lastname={lastname}
 	@DeleteMapping("/medicalrecords")

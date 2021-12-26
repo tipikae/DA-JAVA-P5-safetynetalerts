@@ -67,7 +67,7 @@ public class InformationIT {
 	void testAddPerson1() throws Exception {
 		mockMvc.perform(post("/persons")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"address\":\"route\", \"city\":\"Paris\", \"zip\":\"75000\", \"phone\":\"123456\", \"email\":\"bob@bob.com\" }"))
+				.content("{ \"firstname\":\"Bob\", \"lastname\":\"BOB\", \"address\":\"route\", \"city\":\"Paris\", \"zip\":\"75000\", \"phone\":\"123456\", \"email\":\"bob@bob.com\" }"))
 			.andExpect(status().isOk());	
 	}
 
@@ -76,7 +76,7 @@ public class InformationIT {
 	void testAddPerson2() throws Exception {
 		mockMvc.perform(post("/persons")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"Alice\", \"lastName\":\"BOB\", \"address\":\"route\", \"city\":\"Paris\", \"zip\":\"75000\", \"phone\":\"123456\", \"email\":\"bob@bob.com\" }"))
+				.content("{ \"firstname\":\"Alice\", \"lastname\":\"BOB\", \"address\":\"route\", \"city\":\"Paris\", \"zip\":\"75000\", \"phone\":\"123456\", \"email\":\"bob@bob.com\" }"))
 			.andExpect(status().isOk());	
 	}
 
@@ -85,7 +85,7 @@ public class InformationIT {
 	void testAddPerson3() throws Exception {
 		mockMvc.perform(post("/persons")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"Prout\", \"lastName\":\"Pouet\", \"address\":\"chemin\", \"city\":\"Paris\", \"zip\":\"75000\", \"phone\":\"123456\", \"email\":\"bob@bob.com\" }"))
+				.content("{ \"firstname\":\"Prout\", \"lastname\":\"Pouet\", \"address\":\"chemin\", \"city\":\"Paris\", \"zip\":\"75000\", \"phone\":\"123456\", \"email\":\"bob@bob.com\" }"))
 			.andExpect(status().isOk());	
 	}
 
@@ -94,7 +94,7 @@ public class InformationIT {
 	void testAddMedicalRecord1() throws Exception {
 		mockMvc.perform(post("/medicalrecords")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"birthdate\":\"1973-09-05\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
+				.content("{ \"firstname\":\"Bob\", \"lastname\":\"BOB\", \"birthdate\":\"1973-09-05\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
 			.andExpect(status().isOk());	
 	}
 
@@ -103,7 +103,7 @@ public class InformationIT {
 	void testAddMedicalRecord2() throws Exception {
 		mockMvc.perform(post("/medicalrecords")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"Alice\", \"lastName\":\"BOB\", \"birthdate\":\"2005-09-05\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[] }"))
+				.content("{ \"firstname\":\"Alice\", \"lastname\":\"BOB\", \"birthdate\":\"2005-09-05\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[] }"))
 			.andExpect(status().isOk());	
 	}
 
@@ -112,7 +112,7 @@ public class InformationIT {
 	void testAddMedicalRecord3() throws Exception {
 		mockMvc.perform(post("/medicalrecords")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"Prout\", \"lastName\":\"Pouet\", \"birthdate\":\"1985-09-05\", \"medications\":[], \"allergies\":[] }"))
+				.content("{ \"firstname\":\"Prout\", \"lastname\":\"Pouet\", \"birthdate\":\"1985-09-05\", \"medications\":[], \"allergies\":[] }"))
 			.andExpect(status().isOk());	
 	}
 

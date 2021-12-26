@@ -54,7 +54,7 @@ class PersonIT {
 	void testAddPerson_whenOk() throws Exception {
 		mockMvc.perform(post("/persons")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
+				.content("{ \"firstname\":\"John\", \"lastname\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
 			.andExpect(status().isOk())
 	        .andExpect(jsonPath("$.firstname", is("John")));	
 	}
@@ -126,7 +126,7 @@ class PersonIT {
 	void testUpdatePerson_whenOk() throws Exception {
 		mockMvc.perform(put("/persons?firstname=John&lastname=Boyd")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Paris\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
+				.content("{ \"firstname\":\"John\", \"lastname\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Paris\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
 			.andExpect(status().isOk());
 	}
 	
@@ -135,7 +135,7 @@ class PersonIT {
 	void testUpdatePerson_whenNull() throws Exception {
 		mockMvc.perform(put("/persons?firstname=Bob&lastname=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
+				.content("{ \"firstname\":\"Bob\", \"lastname\":\"BOB\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
 			.andExpect(status().is(404));
 	}
 	

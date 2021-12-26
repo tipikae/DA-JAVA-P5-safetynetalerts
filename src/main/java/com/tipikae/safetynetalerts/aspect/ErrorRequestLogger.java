@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,13 +16,16 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Aspect
-public class RequestLogger {
+public class ErrorRequestLogger {
 
 	private static final Logger LOGGER = LogManager.getLogger("RequestLogger");
 	
-	@Before("com.tipikae.safetynetalerts.exception.ControllerException(*))")
-	public void loggingException(JoinPoint joinPoint){
-		String[] args = (String[]) joinPoint.getArgs();
+	@Pointcut("execution(com.tipikae.safetynetalerts.exception.ControllerException.new(int, String))")
+	public void logErrorsRequests() {}
+	
+	@Before("logErrorsRequests()")
+	public void logErrors(JoinPoint jp){
+		String[] args = (String[]) jp.getArgs();
 		LOGGER.error("Error code: " + args[0] + ": " + args[1]);
 	}
 }

@@ -16,12 +16,12 @@ public class Person implements Serializable {
 	 * Firstname.
 	 */
 	@NotBlank(message="Firstname is mandatory")
-	private String firstName;
+	private String firstname;
 	/**
 	 * Lastname.
 	 */
 	@NotBlank(message="Lastname is mandatory")
-	private String lastName;
+	private String lastname;
 	/**
 	 * Address.
 	 */
@@ -49,19 +49,26 @@ public class Person implements Serializable {
 	private String email;
 
 	/**
+	 * The default constructor.
+	 */
+	public Person() {
+		super();
+	}
+
+	/**
 	 * The constructor.
-	 * @param firstName a String.
-	 * @param lastName a String.
+	 * @param firstname a String.
+	 * @param lastname a String.
 	 * @param address a String.
 	 * @param city a String.
 	 * @param zip a String.
 	 * @param phone a String.
 	 * @param email a String.
 	 */
-	public Person(String firstName, String lastName, String address, String city, String zip, String phone,
+	public Person(String firstname, String lastname, String address, String city, String zip, String phone,
 			String email) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.firstname = firstname;
+		this.lastname = lastname;
 		this.address = address;
 		this.city = city;
 		this.zip = zip;
@@ -74,15 +81,15 @@ public class Person implements Serializable {
 	 * @return String
 	 */
 	public String getFirstname() {
-		return firstName;
+		return firstname;
 	}
 
 	/**
 	 * Set firstname.
 	 * @param firstName a String.
 	 */
-	public void setFirstname(String firstName) {
-		this.firstName = firstName;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
 	/**
@@ -90,15 +97,15 @@ public class Person implements Serializable {
 	 * @return String
 	 */
 	public String getLastname() {
-		return lastName;
+		return lastname;
 	}
 
 	/**
 	 * Set lastname.
 	 * @param lastName a String.
 	 */
-	public void setLastname(String lastName) {
-		this.lastName = lastName;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	/**

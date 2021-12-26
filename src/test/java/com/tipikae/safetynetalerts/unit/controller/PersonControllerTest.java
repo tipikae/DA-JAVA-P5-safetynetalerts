@@ -28,7 +28,7 @@ import com.tipikae.safetynetalerts.service.IPersonService;
 @WebMvcTest(controllers = PersonController.class)
 class PersonControllerTest {
 	
-	private static final String BODY_REQ = "{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }";
+	private static final String BODY_REQ = "{ \"firstname\":\"John\", \"lastname\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }";
 
 	@Autowired
     private MockMvc mockMvc;

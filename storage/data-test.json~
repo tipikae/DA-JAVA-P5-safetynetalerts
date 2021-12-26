@@ -1,8 +1,8 @@
 {
   "persons": [
     {
-      "firstname": "Bob",
-      "lastname": "BOB",
+      "firstName": "Bob",
+      "lastName": "BOB",
       "address": "route",
       "city": "Paris",
       "zip": "75000",
@@ -10,8 +10,8 @@
       "email": "bob@bob.com"
     },
     {
-      "firstname": "Alice",
-      "lastname": "BOB",
+      "firstName": "Alice",
+      "lastName": "BOB",
       "address": "route",
       "city": "Paris",
       "zip": "75000",
@@ -19,8 +19,8 @@
       "email": "bob@bob.com"
     },
     {
-      "firstname": "Prout",
-      "lastname": "Pouet",
+      "firstName": "Prout",
+      "lastName": "Pouet",
       "address": "chemin",
       "city": "Paris",
       "zip": "75000",
@@ -31,8 +31,8 @@
   "firestations": [],
   "medicalrecords": [
     {
-      "firstname": "Bob",
-      "lastname": "BOB",
+      "firstName": "Bob",
+      "lastName": "BOB",
       "birthdate": "09/05/1973",
       "medications": [
         "aznol:350mg",
@@ -43,8 +43,8 @@
       ]
     },
     {
-      "firstname": "Alice",
-      "lastname": "BOB",
+      "firstName": "Alice",
+      "lastName": "BOB",
       "birthdate": "09/05/2005",
       "medications": [
         "aznol:350mg",
@@ -53,8 +53,8 @@
       "allergies": []
     },
     {
-      "firstname": "Prout",
-      "lastname": "Pouet",
+      "firstName": "Prout",
+      "lastName": "Pouet",
       "birthdate": "09/05/1985",
       "medications": [],
       "allergies": []

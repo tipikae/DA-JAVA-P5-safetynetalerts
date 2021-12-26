@@ -54,7 +54,7 @@ class MedicalRecordIT {
 	void testAddMedicalRecord_whenOk() throws Exception {
 		mockMvc.perform(post("/medicalrecords")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
+				.content("{ \"firstname\":\"John\", \"lastname\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
 			.andExpect(status().isOk())
 	        .andExpect(jsonPath("$.firstname", is("John")));	
 	}
@@ -80,7 +80,7 @@ class MedicalRecordIT {
 	void testUpdateMedicalRecord_whenOk() throws Exception {
 		mockMvc.perform(put("/medicalrecords?firstname=John&lastname=Boyd")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:400mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
+				.content("{ \"firstname\":\"John\", \"lastname\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:400mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
 			.andExpect(status().isOk());
 	}
 	
@@ -89,7 +89,7 @@ class MedicalRecordIT {
 	void testUpdateMedicalRecord_whenNull() throws Exception {
 		mockMvc.perform(put("/medicalrecords?firstname=Bob&lastname=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
+				.content("{ \"firstname\":\"Bob\", \"lastname\":\"BOB\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
 			.andExpect(status().is(404));
 	}
 	

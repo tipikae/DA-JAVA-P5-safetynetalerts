@@ -12,16 +12,38 @@ import java.util.List;
 public class CommunityEmailDTO implements Serializable {
 
 	/**
-	 * Emails
+	 * City.
+	 */
+	private String city;
+	/**
+	 * Emails.
 	 */
 	private List<CommunityEmail> emails;
 
 	/**
 	 * The constructor.
+	 * @param city a String.
 	 * @param emails an emails List.
 	 */
-	public CommunityEmailDTO(List<CommunityEmail> emails) {
+	public CommunityEmailDTO(String city, List<CommunityEmail> emails) {
+		this.city = city;
 		this.emails = emails;
+	}
+
+	/**
+	 * Get city.
+	 * @return String
+	 */
+	public String getCity() {
+		return city;
+	}
+
+	/**
+	 * Set city.
+	 * @param city a String.
+	 */
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	/**

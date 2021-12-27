@@ -5,7 +5,7 @@ import java.util.List;
 import com.tipikae.safetynetalerts.dto.ChildAlertDTO;
 import com.tipikae.safetynetalerts.dto.CommunityEmailDTO;
 import com.tipikae.safetynetalerts.dto.FireDTO;
-import com.tipikae.safetynetalerts.dto.FirestationDTO;
+import com.tipikae.safetynetalerts.dto.FirestationInfoDTO;
 import com.tipikae.safetynetalerts.dto.FloodDTO;
 import com.tipikae.safetynetalerts.dto.PersonInfoDTO;
 import com.tipikae.safetynetalerts.dto.PhoneAlertDTO;
@@ -23,11 +23,11 @@ public interface IInformationService {
 	/**
 	 * Get residents by station number.
 	 * @param stationNumber an int station number.
-	 * @return FirestationDTO
+	 * @return FirestationInfoDTO
 	 * @throws ServiceException
 	 * @throws StorageException
 	 */
-	FirestationDTO getResidentsByStation(int stationNumber) throws ServiceException, StorageException;
+	FirestationInfoDTO getResidentsByStation(int stationNumber) throws ServiceException, StorageException;
 	/**
 	 * Get children by address.
 	 * @param address a String.

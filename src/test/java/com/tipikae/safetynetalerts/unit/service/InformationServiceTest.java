@@ -22,7 +22,7 @@ import com.tipikae.safetynetalerts.dao.PersonDAOImpl;
 import com.tipikae.safetynetalerts.dto.ChildAlertDTO;
 import com.tipikae.safetynetalerts.dto.CommunityEmailDTO;
 import com.tipikae.safetynetalerts.dto.FireDTO;
-import com.tipikae.safetynetalerts.dto.FirestationDTO;
+import com.tipikae.safetynetalerts.dto.FirestationInfoDTO;
 import com.tipikae.safetynetalerts.dto.FloodDTO;
 import com.tipikae.safetynetalerts.dto.PersonInfoDTO;
 import com.tipikae.safetynetalerts.dto.PhoneAlertDTO;
@@ -100,7 +100,7 @@ class InformationServiceTest {
 		service.setMedicalRecordDao(medicalRecordDao);
 		service.setPersonDao(personDao);
 		
-		FirestationDTO dto = service.getResidentsByStation(1);
+		FirestationInfoDTO dto = service.getResidentsByStation(1);
 		assertEquals(2, dto.getAdults());
 		assertEquals(1, dto.getChildren());
 		assertEquals(1, dto.getStation());
@@ -114,7 +114,7 @@ class InformationServiceTest {
 		service.setFirestationDao(firestationDao);
 		service.setPersonDao(personDao);
 		
-		FirestationDTO dto = service.getResidentsByStation(1);
+		FirestationInfoDTO dto = service.getResidentsByStation(1);
 		assertEquals(0, dto.getAdults());
 		assertEquals(0, dto.getChildren());
 		assertEquals(1, dto.getStation());

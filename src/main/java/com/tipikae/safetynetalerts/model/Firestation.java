@@ -16,12 +16,10 @@ public class Firestation implements Serializable {
 	/**
 	 * Address.
 	 */
-	@NotBlank(message="Address is mandatory")
 	private String address;
 	/**
 	 * Station number.
 	 */
-	@Positive(message="Station must be more than zero")
 	private int station;
 
 	/**

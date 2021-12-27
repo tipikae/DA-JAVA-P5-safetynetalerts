@@ -1,4 +1,4 @@
-package com.tipikae.safetynetalerts.model;
+package com.tipikae.safetynetalerts.dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -8,24 +8,27 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 
 /**
- * An object for MedicalRecord entity.
+ * A DTO for MedicalRecord model object.
  * @author tipikae
  * @version 1.0
  *
  */
-public class MedicalRecord implements Serializable {
+public class MedicalRecordDTO implements Serializable {
 
 	/**
 	 * FirstName.
 	 */
+	@NotBlank(message="FirstName is mandatory")
 	private String firstName;
 	/**
 	 * LastName.
 	 */
+	@NotBlank(message="LastName is mandatory")
 	private String lastName;
 	/**
 	 * Birthdate.
 	 */
+	@Past
 	private LocalDate birthdate;
 	/**
 	 * Medications.
@@ -39,7 +42,7 @@ public class MedicalRecord implements Serializable {
 	/**
 	 * The default constructor. 
 	 */
-	public MedicalRecord() {
+	public MedicalRecordDTO() {
 		super();
 	}
 
@@ -51,7 +54,7 @@ public class MedicalRecord implements Serializable {
 	 * @param medications a List of String.
 	 * @param allergies a List of String.
 	 */
-	public MedicalRecord(String firstName, String lastName, LocalDate birthdate, List<String> medications,
+	public MedicalRecordDTO(String firstName, String lastName, LocalDate birthdate, List<String> medications,
 			List<String> allergies) {
 		this.firstName = firstName;
 		this.lastName = lastName;

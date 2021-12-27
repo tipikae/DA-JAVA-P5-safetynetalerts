@@ -39,7 +39,6 @@ public class ControllerException implements Serializable {
 		this.code = code;
 		this.message = message;
 		this.timestamp = new Date();
-		//LOGGER.error("Error code: " + code + ": " + message);
 	}
 
 	/**

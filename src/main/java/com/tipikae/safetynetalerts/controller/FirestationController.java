@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tipikae.safetynetalerts.converter.FirestationConverter;
+import com.tipikae.safetynetalerts.dto.FirestationDTO;
 import com.tipikae.safetynetalerts.exception.ControllerException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
@@ -40,14 +42,14 @@ public class FirestationController {
 
 	/**
 	 * Add a firestation mapping.
-	 * @param firestation a Firestation object.
+	 * @param firestation a FirestationDTO object.
 	 * @return ResponseEntity
 	 */
 	@PostMapping(value="/firestations", consumes={"application/json"})
-	public ResponseEntity<Object> addFirestationMapping(@Valid @RequestBody Firestation firestation) {
+	public ResponseEntity<Object> addFirestationMapping(@Valid @RequestBody FirestationDTO firestation) {
 		try {
-			Firestation added = service.addFirestationMapping(firestation);
-			return new ResponseEntity<>(added, HttpStatus.OK);
+			Firestation added = service.addFirestationMapping(FirestationConverter.toEntity(firestation));
+			return new ResponseEntity<>(FirestationConverter.toDTO(added), HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -63,7 +65,7 @@ public class FirestationController {
     public ResponseEntity<Object> allFirestations() {
 		try {
 			List<Firestation> firestations = service.getFirestations();
-			return new ResponseEntity<>(firestations, HttpStatus.OK);
+			return new ResponseEntity<>(FirestationConverter.toDTOs(firestations), HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -80,7 +82,7 @@ public class FirestationController {
     public ResponseEntity<Object> firestationByAddress(@PathVariable @NotBlank String address) {
 		try {
 			Firestation firestation = service.getFirestationByAddress(address);
-			return new ResponseEntity<>(firestation, HttpStatus.OK);
+			return new ResponseEntity<>(FirestationConverter.toDTO(firestation), HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
@@ -102,7 +104,7 @@ public class FirestationController {
     public ResponseEntity<Object> firestationsByStation(@RequestParam @Positive int station) {
 		try {
 			List<Firestation> firestations = service.getFirestationsByStation(station);
-			return new ResponseEntity<>(firestations, HttpStatus.OK);
+			return new ResponseEntity<>(FirestationConverter.toDTOs(firestations), HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
@@ -117,16 +119,17 @@ public class FirestationController {
 	/**
 	 * Update a firestation mapping.
 	 * @param address a String address.
-	 * @param firestation a Firestation object.
+	 * @param firestation a FirestationDTO object.
 	 * @return ResponseEntity
 	 */
 	@PutMapping(value="/firestations/{address}", consumes={"application/json"})
 	public ResponseEntity<Object> updateFirestationMapping(
 			@PathVariable @NotBlank String address, 
-			@Valid @RequestBody Firestation firestation) {
+			@Valid @RequestBody FirestationDTO firestation) {
 		try {
-			Firestation updated = service.updateFirestationMapping(address, firestation);
-			return new ResponseEntity<>(updated, HttpStatus.OK);
+			Firestation updated = service.updateFirestationMapping(address, 
+					FirestationConverter.toEntity(firestation));
+			return new ResponseEntity<>(FirestationConverter.toDTO(updated), HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 

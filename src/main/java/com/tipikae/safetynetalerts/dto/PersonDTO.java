@@ -1,50 +1,57 @@
-package com.tipikae.safetynetalerts.model;
+package com.tipikae.safetynetalerts.dto;
 
 import java.io.Serializable;
 
 import javax.validation.constraints.NotBlank;
 
 /**
- * An object for Person entity.
+ * A DTO for Person model object.
  * @author tipikae
  * @version 1.0
  *
  */
-public class Person implements Serializable {
+public class PersonDTO implements Serializable {
 
 	/**
 	 * FirstName.
 	 */
+	@NotBlank(message="FirstName is mandatory")
 	private String firstName;
 	/**
 	 * LastName.
 	 */
+	@NotBlank(message="LastName is mandatory")
 	private String lastName;
 	/**
 	 * Address.
 	 */
+	@NotBlank(message="Address is mandatory")
 	private String address;
 	/**
 	 * City.
 	 */
+	@NotBlank(message="City is mandatory")
 	private String city;
 	/**
 	 * Zip code.
 	 */
+	@NotBlank(message="Zip code is mandatory")
 	private String zip;
 	/**
 	 * Phone number.
 	 */
+	@NotBlank(message="Phone number is mandatory")
 	private String phone;
 	/**
 	 * Email.
 	 */
+	@NotBlank(message="Email is mandatory")
 	private String email;
 
 	/**
 	 * The default constructor.
 	 */
-	public Person() {
+	public PersonDTO() {
 		super();
 	}
 
@@ -58,7 +65,7 @@ public class Person implements Serializable {
 	 * @param phone a String.
 	 * @param email a String.
 	 */
-	public Person(String firstName, String lastName, String address, String city, String zip, String phone,
+	public PersonDTO(String firstName, String lastName, String address, String city, String zip, String phone,
 			String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;

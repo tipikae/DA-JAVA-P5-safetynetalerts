@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tipikae.safetynetalerts.dto.ChildAlertDTO;
 import com.tipikae.safetynetalerts.dto.CommunityEmailDTO;
 import com.tipikae.safetynetalerts.dto.FireDTO;
-import com.tipikae.safetynetalerts.dto.FirestationDTO;
+import com.tipikae.safetynetalerts.dto.FirestationInfoDTO;
 import com.tipikae.safetynetalerts.dto.FloodDTO;
 import com.tipikae.safetynetalerts.dto.PersonInfoDTO;
 import com.tipikae.safetynetalerts.dto.PhoneAlertDTO;
@@ -48,7 +48,7 @@ public class InformationController {
 	@GetMapping(value="/firestation", params="stationNumber")
     public ResponseEntity<Object> residentsByStation(@RequestParam @Positive int stationNumber) {
 		try {
-			FirestationDTO dto = service.getResidentsByStation(stationNumber);
+			FirestationInfoDTO dto = service.getResidentsByStation(stationNumber);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(

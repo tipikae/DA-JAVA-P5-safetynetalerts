@@ -150,5 +150,4 @@ public class FirestationServiceImpl implements IFirestationService {
 			throw new ServiceException("Station: " + station + " not found in Firestation.");
 		}
 	}
-
 }

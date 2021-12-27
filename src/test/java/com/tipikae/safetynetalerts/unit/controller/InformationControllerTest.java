@@ -20,7 +20,7 @@ import com.tipikae.safetynetalerts.controller.InformationController;
 import com.tipikae.safetynetalerts.dto.ChildAlertDTO;
 import com.tipikae.safetynetalerts.dto.CommunityEmailDTO;
 import com.tipikae.safetynetalerts.dto.FireDTO;
-import com.tipikae.safetynetalerts.dto.FirestationDTO;
+import com.tipikae.safetynetalerts.dto.FirestationInfoDTO;
 import com.tipikae.safetynetalerts.dto.FloodDTO;
 import com.tipikae.safetynetalerts.dto.PersonInfoDTO;
 import com.tipikae.safetynetalerts.dto.PhoneAlertDTO;
@@ -39,7 +39,7 @@ class InformationControllerTest {
 	
 	@Test
 	void testResidentsByStation_whenOk() throws Exception {
-		when(service.getResidentsByStation(anyInt())).thenReturn(new FirestationDTO(0, 0, 0, null));
+		when(service.getResidentsByStation(anyInt())).thenReturn(new FirestationInfoDTO(0, 0, 0, null));
 		mockMvc.perform(get("/firestation?stationNumber=1"))
         	.andExpect(status().isOk());
 	}

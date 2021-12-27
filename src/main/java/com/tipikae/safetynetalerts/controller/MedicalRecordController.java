@@ -38,7 +38,7 @@ public class MedicalRecordController {
 
 	/**
 	 * Get all medical records.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	@GetMapping("/medicalrecords")
     public ResponseEntity<Object> allMedicalRecords() {
@@ -54,17 +54,17 @@ public class MedicalRecordController {
 
 	/**
 	 * Get a medical record by firstname and lastname.
-	 * @param firstname a String firstname.
-	 * @param lastname a String lastname.
-	 * @return ResponseEntity<Object>
+	 * @param firstName a String firstname.
+	 * @param lastName a String lastname.
+	 * @return ResponseEntity
 	 */
-	// /medicalrecords?firstname={firstname}&lastname={lastname}
-	@GetMapping(value="/medicalrecords", params={"firstname", "lastname"})
+	// /medicalrecords?firstName={firstname}&lastName={lastname}
+	@GetMapping(value="/medicalrecords", params={"firstName", "lastName"})
     public ResponseEntity<Object> medicalrecordByFirstnameLastname(
-    		@RequestParam @NotBlank String firstname, 
-    		@RequestParam @NotBlank String lastname) {
+    		@RequestParam @NotBlank String firstName, 
+    		@RequestParam @NotBlank String lastName) {
 		try {
-			MedicalRecord merdicalRecord = service.getMedicalRecordByFirstnameLastname(firstname, lastname);
+			MedicalRecord merdicalRecord = service.getMedicalRecordByFirstnameLastname(firstName, lastName);
 			return new ResponseEntity<>(merdicalRecord, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
@@ -80,7 +80,7 @@ public class MedicalRecordController {
 	/**
 	 * Add a medical record.
 	 * @param medicalRecord a MedicalRecord object.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	@PostMapping(value="/medicalrecords", consumes={"application/json"})
 	public ResponseEntity<Object> addMedicalRecord(@Valid @RequestBody MedicalRecord medicalRecord) {
@@ -96,19 +96,19 @@ public class MedicalRecordController {
 
 	/**
 	 * Update a medical record.
-	 * @param firstname a String firstname.
-	 * @param lastname a String lastname.
+	 * @param firstName a String firstname.
+	 * @param lastName a String lastname.
 	 * @param medicalRecord a MedicalRecord object.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
-	// /medicalrecords?firstname={firstname}&lastname={lastname}
+	// /medicalrecords?firstName={firstname}&lastName={lastname}
 	@PutMapping(value="/medicalrecords", consumes={"application/json"})
 	public ResponseEntity<Object> updateMedicalRecord(
-			@RequestParam @NotBlank String firstname, 
-			@RequestParam @NotBlank String lastname,
+			@RequestParam @NotBlank String firstName, 
+			@RequestParam @NotBlank String lastName,
 			@Valid @RequestBody MedicalRecord medicalRecord) {
 		try {
-			MedicalRecord updated = service.updateMedicalRecord(firstname, lastname, medicalRecord);
+			MedicalRecord updated = service.updateMedicalRecord(firstName, lastName, medicalRecord);
 			return new ResponseEntity<>(updated, HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(
@@ -123,17 +123,17 @@ public class MedicalRecordController {
 
 	/**
 	 * Delete a medical record.
-	 * @param firstname a String firstname.
-	 * @param lastname a String lastname.
-	 * @return ResponseEntity<Object>
+	 * @param firstName a String firstname.
+	 * @param lastName a String lastname.
+	 * @return ResponseEntity
 	 */
-	// /medicalrecords?firstname={firstname}&lastname={lastname}
+	// /medicalrecords?firstName={firstname}&lastName={lastname}
 	@DeleteMapping("/medicalrecords")
 	public ResponseEntity<Object> deleteMedicalRecord(
-			@RequestParam @NotBlank String firstname, 
-			@RequestParam @NotBlank String lastname) {
+			@RequestParam @NotBlank String firstName, 
+			@RequestParam @NotBlank String lastName) {
 		try {
-			service.deleteMedicalRecord(firstname, lastname);
+			service.deleteMedicalRecord(firstName, lastName);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(

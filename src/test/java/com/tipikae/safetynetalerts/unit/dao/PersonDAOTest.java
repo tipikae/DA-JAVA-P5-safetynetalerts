@@ -101,8 +101,8 @@ class PersonDAOTest {
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
 		Person result = dao.update(updatedPerson);
-		assertEquals(updatedPerson.getFirstname(),result.getFirstname());
-		assertEquals(updatedPerson.getLastname(),result.getLastname());
+		assertEquals(updatedPerson.getFirstName(),result.getFirstName());
+		assertEquals(updatedPerson.getLastName(),result.getLastName());
 	}
 	
 	@Test

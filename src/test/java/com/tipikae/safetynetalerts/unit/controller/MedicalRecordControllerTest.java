@@ -54,7 +54,7 @@ class MedicalRecordControllerTest {
 	void testMedicalRecordByFirstnameLastname_whenOk() throws Exception {
 		when(service.getMedicalRecordByFirstnameLastname(anyString(), anyString())).thenReturn(
 				new MedicalRecord(null, null, null, null, null));
-		mockMvc.perform(get("/medicalrecords?firstname=Bob&lastname=BOB"))
+		mockMvc.perform(get("/medicalrecords?firstName=Bob&lastName=BOB"))
         	.andExpect(status().isOk());
 	}
 	
@@ -62,21 +62,21 @@ class MedicalRecordControllerTest {
 	void testMedicalRecordByFirstnameLastname_whenInvalid() throws Exception {
 		when(service.getMedicalRecordByFirstnameLastname(anyString(), anyString())).thenReturn(
 				new MedicalRecord(null, null, null, null, null));
-		mockMvc.perform(get("/medicalrecords?firstname=Bob&lastname="))
+		mockMvc.perform(get("/medicalrecords?firstName=Bob&lastName="))
         	.andExpect(status().is(400));
 	}
 	
 	@Test
 	void testMedicalRecordByFirstnameLastname_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getMedicalRecordByFirstnameLastname(anyString(), anyString());
-		mockMvc.perform(get("/medicalrecords?firstname=Bob&lastname=BOB"))
+		mockMvc.perform(get("/medicalrecords?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(507));
 	}
 	
 	@Test
 	void testMedicalRecordByFirstnameLastname_whenServiceException() throws Exception {
 		doThrow(ServiceException.class).when(service).getMedicalRecordByFirstnameLastname(anyString(), anyString());
-		mockMvc.perform(get("/medicalrecords?firstname=Bob&lastname=BOB"))
+		mockMvc.perform(get("/medicalrecords?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(404));
 	}
 	
@@ -111,7 +111,7 @@ class MedicalRecordControllerTest {
 	void testUpdateMedicalRecord_whenOk() throws Exception {
 		when(service.updateMedicalRecord(anyString(), anyString(), any(MedicalRecord.class))).thenReturn(
 				new MedicalRecord(null, null, null, null, null));
-		mockMvc.perform(put("/medicalrecords?firstname=John&lastname=Boyd")
+		mockMvc.perform(put("/medicalrecords?firstName=John&lastName=Boyd")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
         	.andExpect(status().isOk());
@@ -121,7 +121,7 @@ class MedicalRecordControllerTest {
 	void testUpdateMedicalRecord_whenInvalid() throws Exception {
 		when(service.updateMedicalRecord(anyString(), anyString(), any(MedicalRecord.class))).thenReturn(
 				new MedicalRecord(null, null, null, null, null));
-		mockMvc.perform(put("/medicalrecords?firstname=Bob&lastname=BOB")
+		mockMvc.perform(put("/medicalrecords?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
         	.andExpect(status().is(400));
@@ -131,7 +131,7 @@ class MedicalRecordControllerTest {
 	void testUpdateMedicalRecord_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).updateMedicalRecord(anyString(), anyString(), 
 				any(MedicalRecord.class));
-		mockMvc.perform(put("/medicalrecords?firstname=Bob&lastname=BOB")
+		mockMvc.perform(put("/medicalrecords?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
         	.andExpect(status().is(507));
@@ -141,7 +141,7 @@ class MedicalRecordControllerTest {
 	void testUpdateMedicalRecord_whenServiceException() throws Exception {
 		doThrow(ServiceException.class).when(service).updateMedicalRecord(anyString(), anyString(), 
 				any(MedicalRecord.class));
-		mockMvc.perform(put("/medicalrecords?firstname=Bob&lastname=BOB")
+		mockMvc.perform(put("/medicalrecords?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
         	.andExpect(status().is(404));
@@ -149,27 +149,27 @@ class MedicalRecordControllerTest {
 	
 	@Test
 	void testDeleteMedicalRecord_whenOk() throws Exception {
-		mockMvc.perform(delete("/medicalrecords?firstname=John&lastname=Boyd"))
+		mockMvc.perform(delete("/medicalrecords?firstName=John&lastName=Boyd"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testDeleteMedicalRecord_whenInvalid() throws Exception {
-		mockMvc.perform(delete("/medicalrecords?firstname=John&lastname="))
+		mockMvc.perform(delete("/medicalrecords?firstName=John&lastName="))
         	.andExpect(status().is(400));
 	}
 	
 	@Test
 	void testDeleteMedicalRecord_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).deleteMedicalRecord("Bob", "BOB");
-		mockMvc.perform(delete("/medicalrecords?firstname=Bob&lastname=BOB"))
+		mockMvc.perform(delete("/medicalrecords?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(507));
 	}
 	
 	@Test
 	void testDeleteMedicalRecord_whenServiceException() throws Exception {
 		doThrow(ServiceException.class).when(service).deleteMedicalRecord("Bob", "BOB");
-		mockMvc.perform(delete("/medicalrecords?firstname=Bob&lastname=BOB"))
+		mockMvc.perform(delete("/medicalrecords?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(404));
 	}
 }

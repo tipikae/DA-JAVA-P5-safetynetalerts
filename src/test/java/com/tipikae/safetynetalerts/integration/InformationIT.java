@@ -26,7 +26,7 @@ import com.tipikae.safetynetalerts.model.Person;
 import com.tipikae.safetynetalerts.storage.JsonStorage;
 import com.tipikae.safetynetalerts.storage.Storage;
 
-@SpringBootTest(properties= {"storage.file=storage/data-test.json"})
+@SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(OrderAnnotation.class)
 public class InformationIT {
@@ -160,7 +160,7 @@ public class InformationIT {
 	@Test
     @Order(14)
 	void testPersonInfoByLastname() throws Exception {
-		mockMvc.perform(get("/personInfo?firstname=Bob&lastname=BOB"))
+		mockMvc.perform(get("/personInfo?firstName=Bob&lastName=BOB"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.persons[1].firstname", is("Alice")));	
 	}

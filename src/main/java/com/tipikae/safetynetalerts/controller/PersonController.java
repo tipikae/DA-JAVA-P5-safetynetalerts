@@ -99,16 +99,16 @@ public class PersonController {
 
 	/**
 	 * Get a person by firstname and lastname.
-	 * @param firstname a String firstname.
-	 * @param lastname a String lastname.
+	 * @param firstName a String firstname.
+	 * @param lastName a String lastname.
 	 * @return ResponseEntity<Object>
 	 */
-	// /persons?firstname={firstname}&lastname={lastname}
-	@GetMapping(value="/persons", params={"firstname", "lastname"})
-    public ResponseEntity<Object> personByFirstnameLastname(@RequestParam @NotBlank String firstname, 
-    		@RequestParam @NotBlank String lastname) {
+	// /persons?firstName={firstname}&lastName={lastname}
+	@GetMapping(value="/persons", params={"firstName", "lastName"})
+    public ResponseEntity<Object> personByFirstnameLastname(@RequestParam @NotBlank String firstName, 
+    		@RequestParam @NotBlank String lastName) {
 		try {
-			Person person = service.getPersonByFirstnameLastname(firstname, lastname);
+			Person person = service.getPersonByFirstnameLastname(firstName, lastName);
 			return new ResponseEntity<>(person, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
@@ -140,19 +140,19 @@ public class PersonController {
 
 	/**
 	 * Update a person.
-	 * @param firstname a String firstname.
-	 * @param lastname a String lastname.
+	 * @param firstName a String firstname.
+	 * @param lastName a String lastname.
 	 * @param person a Person object.
 	 * @return ResponseEntity<Object>
 	 */
-	// /persons?firstname={firstname}&lastname={lastname}
+	// /persons?firstName={firstname}&lastName={lastname}
 	@PutMapping(value="/persons", consumes={"application/json"})
 	public ResponseEntity<Object> updatePerson(
-			@RequestParam @NotBlank String firstname, 
-			@RequestParam @NotBlank String lastname, 
+			@RequestParam @NotBlank String firstName, 
+			@RequestParam @NotBlank String lastName, 
 			@Valid @RequestBody Person person) {
 		try {
-			Person updated = service.updatePerson(firstname, lastname, person);
+			Person updated = service.updatePerson(firstName, lastName, person);
 			return new ResponseEntity<>(updated, HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(
@@ -167,17 +167,17 @@ public class PersonController {
 
 	/**
 	 * Delete a person.
-	 * @param firstname a String firstname.
-	 * @param lastname a String lastname.
+	 * @param firstName a String firstname.
+	 * @param lastName a String lastname.
 	 * @return ResponseEntity<Object>
 	 */
-	// /persons?firstname={firstname}&lastname={lastname}
+	// /persons?firstName={firstname}&lastName={lastname}
 	@DeleteMapping("/persons")
 	public ResponseEntity<Object> deletePerson(
-			@RequestParam @NotBlank String firstname, 
-			@RequestParam @NotBlank String lastname) {
+			@RequestParam @NotBlank String firstName, 
+			@RequestParam @NotBlank String lastName) {
 		try {
-			service.deletePerson(firstname, lastname);
+			service.deletePerson(firstName, lastName);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(

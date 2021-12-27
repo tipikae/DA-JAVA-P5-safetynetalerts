@@ -86,7 +86,7 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	@Override
 	public MedicalRecord updateMedicalRecord(String firstname, String lastname, MedicalRecord medicalRecord) 
 			throws ServiceException, StorageException {
-		if (firstname.equals(medicalRecord.getFirstname()) && lastname.equals(medicalRecord.getLastname())) {
+		if (firstname.equals(medicalRecord.getFirstName()) && lastname.equals(medicalRecord.getLastName())) {
 			if (medicalRecordDao.findByFirstnameLastname(firstname, lastname) != null) {
 				return medicalRecordDao.update(medicalRecord);
 			} else {
@@ -97,11 +97,11 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 			} 
 		} else {
 			LOGGER.error("updateMedicalRecord: Firstname: " + firstname + " and lastname:"
-					+ lastname + " are different from Person firstname: " + medicalRecord.getFirstname() 
-					+ " lastname: " + medicalRecord.getLastname());
+					+ lastname + " are different from Person firstname: " + medicalRecord.getFirstName() 
+					+ " lastname: " + medicalRecord.getLastName());
 			throw new ServiceException("Firstname: " + firstname + " and lastname:"
-					+ lastname + " are different from Person firstname: " + medicalRecord.getFirstname()
-					+ "	lastname: " + medicalRecord.getLastname());
+					+ lastname + " are different from Person firstname: " + medicalRecord.getFirstName()
+					+ "	lastname: " + medicalRecord.getLastName());
 		}
 	}
 

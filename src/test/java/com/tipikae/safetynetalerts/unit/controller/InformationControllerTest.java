@@ -44,11 +44,11 @@ class InformationControllerTest {
         	.andExpect(status().isOk());
 	}
 	
-//	@Test
-//	void testResidentsByStation_whenInvalid() throws Exception {
-//		mockMvc.perform(get("/firestation?stationNumber=0"))
-//        	.andExpect(status().is(400));
-//	}
+	@Test
+	void testResidentsByStation_whenInvalid() throws Exception {
+		mockMvc.perform(get("/firestation?stationNumber=0"))
+        	.andExpect(status().is(400));
+	}
 	
 	@Test
 	void testResidentsByStation_whenStorageException() throws Exception {
@@ -64,11 +64,11 @@ class InformationControllerTest {
         	.andExpect(status().isOk());
 	}
 	
-//	@Test
-//	void testChildrenByAddress_whenInvalid() throws Exception {
-//		mockMvc.perform(get("/childAlert?address="))
-//        	.andExpect(status().is(400));
-//	}
+	@Test
+	void testChildrenByAddress_whenInvalid() throws Exception {
+		mockMvc.perform(get("/childAlert?address="))
+        	.andExpect(status().is(400));
+	}
 	
 	@Test
 	void testChildrenByAddress_whenStorageException() throws Exception {
@@ -84,11 +84,11 @@ class InformationControllerTest {
         	.andExpect(status().isOk());
 	}
 	
-//	@Test
-//	void testPhoneNumbersByStation_whenInvalid() throws Exception {
-//		mockMvc.perform(get("/phoneAlert?firestation="))
-//        	.andExpect(status().is(400));
-//	}
+	@Test
+	void testPhoneNumbersByStation_whenInvalid() throws Exception {
+		mockMvc.perform(get("/phoneAlert?firestation="))
+        	.andExpect(status().is(400));
+	}
 	
 	@Test
 	void testPhoneNumbersByStation_whenStorageException() throws Exception {
@@ -104,11 +104,11 @@ class InformationControllerTest {
         	.andExpect(status().isOk());
 	}
 	
-//	@Test
-//	void testMembersByAddress_whenInvalid() throws Exception {
-//		mockMvc.perform(get("/fire?address="))
-//        	.andExpect(status().is(400));
-//	}
+	@Test
+	void testMembersByAddress_whenInvalid() throws Exception {
+		mockMvc.perform(get("/fire?address="))
+        	.andExpect(status().is(400));
+	}
 	
 	@Test
 	void testMembersByAddress_whenStorageException() throws Exception {
@@ -124,11 +124,11 @@ class InformationControllerTest {
         	.andExpect(status().isOk());
 	}
 	
-//	@Test
-//	void testResidentsByStations_whenInvalid() throws Exception {
-//		mockMvc.perform(get("/flood/stations?stations="))
-//        	.andExpect(status().is(400));
-//	}
+	@Test
+	void testResidentsByStations_whenInvalid() throws Exception {
+		mockMvc.perform(get("/flood/stations?stations="))
+        	.andExpect(status().is(400));
+	}
 	
 	@Test
 	void testResidentsByStations_whenStorageException() throws Exception {
@@ -140,20 +140,20 @@ class InformationControllerTest {
 	@Test
 	void testPersonInfoByLastname_whenOk() throws Exception {
 		when(service.getPersonInfoByLastname(anyString(), anyString())).thenReturn(new PersonInfoDTO(null, null));
-		mockMvc.perform(get("/personInfo?firstname=bob&lastname=BOB"))
+		mockMvc.perform(get("/personInfo?firstName=bob&lastName=BOB"))
         	.andExpect(status().isOk());
 	}
 	
-//	@Test
-//	void testPersonInfoByLastname_whenInvalid() throws Exception {
-//		mockMvc.perform(get("/personInfo?firstname=bob&lastname="))
-//        	.andExpect(status().is(400));
-//	}
+	@Test
+	void testPersonInfoByLastname_whenInvalid() throws Exception {
+		mockMvc.perform(get("/personInfo?firstName=bob&lastName="))
+        	.andExpect(status().is(400));
+	}
 	
 	@Test
 	void testPersonInfoByLastname_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getPersonInfoByLastname(anyString(), anyString());
-		mockMvc.perform(get("/personInfo?firstname=bob&lastname=BOB"))
+		mockMvc.perform(get("/personInfo?firstName=bob&lastName=BOB"))
         	.andExpect(status().is(507));
 	}
 	
@@ -164,11 +164,11 @@ class InformationControllerTest {
         	.andExpect(status().isOk());
 	}
 	
-//	@Test
-//	void testEmailsByCity_whenInvalid() throws Exception {
-//		mockMvc.perform(get("/communityEmail?city="))
-//        	.andExpect(status().is(400));
-//	}
+	@Test
+	void testEmailsByCity_whenInvalid() throws Exception {
+		mockMvc.perform(get("/communityEmail?city="))
+        	.andExpect(status().is(400));
+	}
 	
 	@Test
 	void testEmailsByCity_whenStorageException() throws Exception {

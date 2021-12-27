@@ -62,7 +62,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 		storage = jsonStorage.readStorage();
 		Person person = null;
 		for (Person item : storage.getPersons()) {
-			if (item.getFirstname().equals(firstname) && item.getLastname().equals(lastname)) {
+			if (item.getFirstName().equals(firstname) && item.getLastName().equals(lastname)) {
 				person = new Person(firstname, lastname, item.getAddress(), item.getCity(), item.getZip(), 
 						item.getPhone(), item.getEmail());
 				break;
@@ -120,8 +120,8 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 		int i = -1;
 		
 		for(int j = 0; j < persons.size(); j++) {
-			if(persons.get(j).getFirstname().equals(person.getFirstname()) && 
-					persons.get(j).getLastname().equals(person.getLastname())) {
+			if(persons.get(j).getFirstName().equals(person.getFirstName()) && 
+					persons.get(j).getLastName().equals(person.getLastName())) {
 				i = j;
 				break;
 			}
@@ -148,8 +148,8 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 		int i = -1;
 		
 		for(int j = 0; j < persons.size(); j++) {
-			if(persons.get(j).getFirstname().equals(person.getFirstname()) && 
-					persons.get(j).getLastname().equals(person.getLastname())) {
+			if(persons.get(j).getFirstName().equals(person.getFirstName()) && 
+					persons.get(j).getLastName().equals(person.getLastName())) {
 				i = j;
 				break;
 			}

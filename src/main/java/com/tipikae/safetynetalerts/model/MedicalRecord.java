@@ -16,14 +16,14 @@ import javax.validation.constraints.Past;
 public class MedicalRecord implements Serializable {
 
 	/**
-	 * Firstname.
+	 * FirstName.
 	 */
-	@NotBlank(message="Firstname is mandatory")
+	@NotBlank(message="FirstName is mandatory")
 	private String firstName;
 	/**
-	 * Lastname.
+	 * LastName.
 	 */
-	@NotBlank(message="Lastname is mandatory")
+	@NotBlank(message="LastName is mandatory")
 	private String lastName;
 	/**
 	 * Birthdate.
@@ -38,6 +38,13 @@ public class MedicalRecord implements Serializable {
 	 * Allergies.
 	 */
 	private List<String> allergies;
+	
+	/**
+	 * The default constructor. 
+	 */
+	public MedicalRecord() {
+		super();
+	}
 
 	/**
 	 * The constructor.
@@ -57,34 +64,34 @@ public class MedicalRecord implements Serializable {
 	}
 
 	/**
-	 * Get firstname.
+	 * Get firstName.
 	 * @return String
 	 */
-	public String getFirstname() {
+	public String getFirstName() {
 		return firstName;
 	}
 
 	/**
-	 * Set firstname.
+	 * Set firstName.
 	 * @param firstName a String.
 	 */
-	public void setFirstname(String firstName) {
+	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
 	/**
-	 * Get lastname.
+	 * Get lastName.
 	 * @return String
 	 */
-	public String getLastname() {
+	public String getLastName() {
 		return lastName;
 	}
 
 	/**
-	 * Set lastname.
+	 * Set lastName.
 	 * @param lastName a String.
 	 */
-	public void setLastname(String lastName) {
+	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 

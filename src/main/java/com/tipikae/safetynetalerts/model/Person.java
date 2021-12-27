@@ -13,14 +13,14 @@ import javax.validation.constraints.NotBlank;
 public class Person implements Serializable {
 
 	/**
-	 * Firstname.
+	 * FirstName.
 	 */
-	@NotBlank(message="Firstname is mandatory")
+	@NotBlank(message="FirstName is mandatory")
 	private String firstName;
 	/**
-	 * Lastname.
+	 * LastName.
 	 */
-	@NotBlank(message="Lastname is mandatory")
+	@NotBlank(message="LastName is mandatory")
 	private String lastName;
 	/**
 	 * Address.
@@ -49,6 +49,13 @@ public class Person implements Serializable {
 	private String email;
 
 	/**
+	 * The default constructor.
+	 */
+	public Person() {
+		super();
+	}
+
+	/**
 	 * The constructor.
 	 * @param firstName a String.
 	 * @param lastName a String.
@@ -70,15 +77,15 @@ public class Person implements Serializable {
 	}
 
 	/**
-	 * Get firstname.
+	 * Get firstName.
 	 * @return String
 	 */
-	public String getFirstname() {
+	public String getFirstName() {
 		return firstName;
 	}
 
 	/**
-	 * Set firstname.
+	 * Set firstName.
 	 * @param firstName a String.
 	 */
 	public void setFirstname(String firstName) {
@@ -86,18 +93,18 @@ public class Person implements Serializable {
 	}
 
 	/**
-	 * Get lastname.
+	 * Get lastName.
 	 * @return String
 	 */
-	public String getLastname() {
+	public String getLastName() {
 		return lastName;
 	}
 
 	/**
-	 * Set lastname.
+	 * Set lastName.
 	 * @param lastName a String.
 	 */
-	public void setLastname(String lastName) {
+	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 

@@ -1,12 +1,11 @@
 package com.tipikae.safetynetalerts.storage;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -76,7 +75,7 @@ public class JsonStorage {
 			
 			prop.load(fis);
 			
-			Reader reader = Files.newBufferedReader(Paths.get(prop.getProperty(PROPERTY_KEY_FILE)));
+			Reader reader = new FileReader(prop.getProperty(PROPERTY_KEY_FILE));
 			Storage storage = gson.fromJson(reader, Storage.class);
 			reader.close();
 			

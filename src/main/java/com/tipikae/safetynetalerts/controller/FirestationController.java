@@ -41,7 +41,7 @@ public class FirestationController {
 	/**
 	 * Add a firestation mapping.
 	 * @param firestation a Firestation object.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	@PostMapping(value="/firestations", consumes={"application/json"})
 	public ResponseEntity<Object> addFirestationMapping(@Valid @RequestBody Firestation firestation) {
@@ -57,7 +57,7 @@ public class FirestationController {
 
 	/**
 	 * Get all firestations mapping.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	@GetMapping("/firestations")
     public ResponseEntity<Object> allFirestations() {
@@ -74,7 +74,7 @@ public class FirestationController {
 	/**
 	 * Get firestations by address.
 	 * @param address a String address.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	@GetMapping("/firestations/{address}")
     public ResponseEntity<Object> firestationByAddress(@PathVariable @NotBlank String address) {
@@ -95,7 +95,7 @@ public class FirestationController {
 	/**
 	 * Get firestations by station number.
 	 * @param station an integer station number.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	// /firestations?station={station}
 	@GetMapping(value="/firestations", params="station")
@@ -118,7 +118,7 @@ public class FirestationController {
 	 * Update a firestation mapping.
 	 * @param address a String address.
 	 * @param firestation a Firestation object.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	@PutMapping(value="/firestations/{address}", consumes={"application/json"})
 	public ResponseEntity<Object> updateFirestationMapping(
@@ -141,7 +141,7 @@ public class FirestationController {
 	/**
 	 * Delete firestations by address.
 	 * @param address a String address.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	@DeleteMapping("/firestations/{address}")
 	public ResponseEntity<Object> deleteFirestationsByAddress(@PathVariable @NotBlank String address ) {
@@ -162,7 +162,7 @@ public class FirestationController {
 	/**
 	 * Delete a firestation by station number.
 	 * @param station an integer station number.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	// /firestations?station={station}
 	@DeleteMapping("/firestations")

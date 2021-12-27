@@ -25,6 +25,13 @@ public class Firestation implements Serializable {
 	private int station;
 
 	/**
+	 * The default constructor. 
+	 */
+	public Firestation() {
+		super();
+	}
+
+	/**
 	 * The constructor.
 	 * @param address a String.
 	 * @param station an Integer station number.
@@ -59,7 +66,7 @@ public class Firestation implements Serializable {
 	}
 
 	/**
-	 * Set statin number.
+	 * Set station number.
 	 * @param station an int station number.
 	 */
 	public void setStation(int station) {

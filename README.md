@@ -30,7 +30,7 @@ Reports and documentation's link is: `http://localhost:9000/YOUR/ROOT/PROJECT/Sa
 Execute `mvn package` to generate an executable.
 
 ### Running App
-Go to the `target` repository and execute:
+Go to the `target` repository and run the executable:
 
 `java -jar SafetyNet-Alerts-0.0.1-SNAPSHOT.jar`.
 

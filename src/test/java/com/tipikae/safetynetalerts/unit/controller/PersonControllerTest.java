@@ -80,75 +80,75 @@ class PersonControllerTest {
 	@Test
 	void testPersonByFirstnameLastname_whenOk() throws Exception {
 		when(service.getPersonByFirstnameLastname(anyString(), anyString())).thenReturn(new Person(null, null, null, null, null, null, null));
-		mockMvc.perform(get("/persons?firstName=Bob&lastName=BOB"))
+		mockMvc.perform(get("/persons/search?firstName=Bob&lastName=BOB"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testPersonByFirstnameLastname_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getPersonByFirstnameLastname("Bob", "BOB");
-		mockMvc.perform(get("/persons?firstName=Bob&lastName=BOB"))
+		mockMvc.perform(get("/persons/search?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(507));
 	}
 	
 	@Test
 	void testPersonByFirstnameLastname_whenServiceException() throws Exception {
 		doThrow(ServiceException.class).when(service).getPersonByFirstnameLastname("Bob", "BOB");
-		mockMvc.perform(get("/persons?firstName=Bob&lastName=BOB"))
+		mockMvc.perform(get("/persons/search?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(404));
 	}
 	
 	@Test
 	void testPersonsByAddress_whenOk() throws Exception {
 		when(service.getPersonsByAddress(anyString())).thenReturn(new ArrayList<Person>());
-		mockMvc.perform(get("/persons?address=route"))
+		mockMvc.perform(get("/persons/search?address=route"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testPersonsByAddress_whenInvalid() throws Exception {
-		mockMvc.perform(get("/persons?address="))
+		mockMvc.perform(get("/persons/search?address="))
         	.andExpect(status().is(400));
 	}
 	
 	@Test
 	void testPersonsByAddress_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getPersonsByAddress(anyString());
-		mockMvc.perform(get("/persons?address=route"))
+		mockMvc.perform(get("/persons/search?address=route"))
         	.andExpect(status().is(507));
 	}
 	
 	@Test
 	void testPersonsByAddress_whenServiceException() throws Exception {
 		doThrow(ServiceException.class).when(service).getPersonsByAddress(anyString());
-		mockMvc.perform(get("/persons?address=route"))
+		mockMvc.perform(get("/persons/search?address=route"))
         	.andExpect(status().is(404));
 	}
 	
 	@Test
 	void testPersonsByCity_whenOk() throws Exception {
 		when(service.getPersonsByCity(anyString())).thenReturn(new ArrayList<Person>());
-		mockMvc.perform(get("/persons?city=Paris"))
+		mockMvc.perform(get("/persons/search?city=Paris"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testPersonsByCity_whenInvalid() throws Exception {
-		mockMvc.perform(get("/persons?city="))
+		mockMvc.perform(get("/persons/search?city="))
         	.andExpect(status().is(400));
 	}
 	
 	@Test
 	void testPersonsByCity_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getPersonsByCity(anyString());
-		mockMvc.perform(get("/persons?city=Paris"))
+		mockMvc.perform(get("/persons/search?city=Paris"))
         	.andExpect(status().is(507));
 	}
 	
 	@Test
 	void testPersonsByCity_whenServiceException() throws Exception {
 		doThrow(ServiceException.class).when(service).getPersonsByCity(anyString());
-		mockMvc.perform(get("/persons?city=Paris"))
+		mockMvc.perform(get("/persons/search?city=Paris"))
         	.andExpect(status().is(404));
 	}
 	

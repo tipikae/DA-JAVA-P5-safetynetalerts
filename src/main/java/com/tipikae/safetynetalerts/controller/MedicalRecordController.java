@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tipikae.safetynetalerts.converter.MedicalRecordConverter;
 import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
+import com.tipikae.safetynetalerts.dtoconverter.MedicalRecordConverter;
 import com.tipikae.safetynetalerts.exception.ControllerException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
@@ -60,8 +60,8 @@ public class MedicalRecordController {
 	 * @param lastName a String lastname.
 	 * @return ResponseEntity
 	 */
-	// /medicalrecords?firstName={firstname}&lastName={lastname}
-	@GetMapping(value="/medicalrecords", params={"firstName", "lastName"})
+	// /medicalrecords/search?firstName={firstname}&lastName={lastname}
+	@GetMapping(value="/medicalrecords/search", params={"firstName", "lastName"})
     public ResponseEntity<Object> medicalrecordByFirstnameLastname(
     		@RequestParam @NotBlank String firstName, 
     		@RequestParam @NotBlank String lastName) {

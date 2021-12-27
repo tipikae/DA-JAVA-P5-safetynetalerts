@@ -70,7 +70,7 @@ class MedicalRecordIT {
 	@Test
     @Order(4)
 	void testMedicalRecordByFirstnameLastname_whenOk() throws Exception {
-		mockMvc.perform(get("/medicalrecords?firstName=John&lastName=Boyd"))
+		mockMvc.perform(get("/medicalrecords/search?firstName=John&lastName=Boyd"))
         	.andExpect(status().isOk())
 	        .andExpect(jsonPath("$.firstName", is("John")));
 	}
@@ -96,7 +96,7 @@ class MedicalRecordIT {
 	@Test
     @Order(7)
 	void testMedicalRecordByFirstnameLastname_whenNull() throws Exception {
-		mockMvc.perform(get("/medicalrecords?firstName=Bob&lastName=BOB"))
+		mockMvc.perform(get("/medicalrecords/search?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(404));
 	}
 

@@ -93,7 +93,7 @@ class FirestationIT {
 	@Test
 	@Order(6)
 	void testFirestationsByStation_whenOk() throws Exception {
-		mockMvc.perform(get("/firestations?station=1"))
+		mockMvc.perform(get("/firestations/search?station=1"))
         	.andExpect(status().isOk())
 	        .andExpect(jsonPath("$[0].station", is(1)));
 	}
@@ -101,14 +101,14 @@ class FirestationIT {
 	@Test
 	@Order(7)
 	void testFirestationsByStation_whenNull() throws Exception {
-		mockMvc.perform(get("/firestations?station=2"))
+		mockMvc.perform(get("/firestations/search?station=2"))
         	.andExpect(status().is(404));
 	}
 	
 	@Test
 	@Order(8)
 	void testFirestationByAddress_whenOk() throws Exception {
-		mockMvc.perform(get("/firestations/3200 chemin de Pale"))
+		mockMvc.perform(get("/firestations/search?address=3200 chemin de Pale"))
         	.andExpect(status().isOk())
 	        .andExpect(jsonPath("$.station", is(1)));
 	}
@@ -116,7 +116,7 @@ class FirestationIT {
 	@Test
 	@Order(9)
 	void testFirestationByAddress_whenNull() throws Exception {
-		mockMvc.perform(get("/firestations/route de Pale"))
+		mockMvc.perform(get("/firestations/search?address=route de Pale"))
         	.andExpect(status().is(404));
 	}
 

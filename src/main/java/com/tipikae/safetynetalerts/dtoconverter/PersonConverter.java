@@ -1,4 +1,4 @@
-package com.tipikae.safetynetalerts.converter;
+package com.tipikae.safetynetalerts.dtoconverter;
 
 import java.util.ArrayList;
 import java.util.List;

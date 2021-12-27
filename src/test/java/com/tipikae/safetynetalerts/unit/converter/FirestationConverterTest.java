@@ -8,8 +8,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.tipikae.safetynetalerts.converter.FirestationConverter;
 import com.tipikae.safetynetalerts.dto.FirestationDTO;
+import com.tipikae.safetynetalerts.dtoconverter.FirestationConverter;
 import com.tipikae.safetynetalerts.model.Firestation;
 
 class FirestationConverterTest {

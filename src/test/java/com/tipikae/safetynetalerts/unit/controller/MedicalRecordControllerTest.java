@@ -54,7 +54,7 @@ class MedicalRecordControllerTest {
 	void testMedicalRecordByFirstnameLastname_whenOk() throws Exception {
 		when(service.getMedicalRecordByFirstnameLastname(anyString(), anyString())).thenReturn(
 				new MedicalRecord(null, null, null, null, null));
-		mockMvc.perform(get("/medicalrecords?firstName=Bob&lastName=BOB"))
+		mockMvc.perform(get("/medicalrecords/search?firstName=Bob&lastName=BOB"))
         	.andExpect(status().isOk());
 	}
 	
@@ -62,21 +62,21 @@ class MedicalRecordControllerTest {
 	void testMedicalRecordByFirstnameLastname_whenInvalid() throws Exception {
 		when(service.getMedicalRecordByFirstnameLastname(anyString(), anyString())).thenReturn(
 				new MedicalRecord(null, null, null, null, null));
-		mockMvc.perform(get("/medicalrecords?firstName=Bob&lastName="))
+		mockMvc.perform(get("/medicalrecords/search?firstName=Bob&lastName="))
         	.andExpect(status().is(400));
 	}
 	
 	@Test
 	void testMedicalRecordByFirstnameLastname_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getMedicalRecordByFirstnameLastname(anyString(), anyString());
-		mockMvc.perform(get("/medicalrecords?firstName=Bob&lastName=BOB"))
+		mockMvc.perform(get("/medicalrecords/search?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(507));
 	}
 	
 	@Test
 	void testMedicalRecordByFirstnameLastname_whenServiceException() throws Exception {
 		doThrow(ServiceException.class).when(service).getMedicalRecordByFirstnameLastname(anyString(), anyString());
-		mockMvc.perform(get("/medicalrecords?firstName=Bob&lastName=BOB"))
+		mockMvc.perform(get("/medicalrecords/search?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(404));
 	}
 	

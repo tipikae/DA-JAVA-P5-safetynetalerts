@@ -8,8 +8,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.tipikae.safetynetalerts.converter.PersonConverter;
 import com.tipikae.safetynetalerts.dto.PersonDTO;
+import com.tipikae.safetynetalerts.dtoconverter.PersonConverter;
 import com.tipikae.safetynetalerts.model.Person;
 
 public class PersonConverterTest {

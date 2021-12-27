@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tipikae.safetynetalerts.converter.FirestationConverter;
 import com.tipikae.safetynetalerts.dto.FirestationDTO;
+import com.tipikae.safetynetalerts.dtoconverter.FirestationConverter;
 import com.tipikae.safetynetalerts.exception.ControllerException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
@@ -78,8 +78,9 @@ public class FirestationController {
 	 * @param address a String address.
 	 * @return ResponseEntity
 	 */
-	@GetMapping("/firestations/{address}")
-    public ResponseEntity<Object> firestationByAddress(@PathVariable @NotBlank String address) {
+	// /firestations/serach?address={address}
+	@GetMapping(value="/firestations/search", params="address")
+    public ResponseEntity<Object> firestationByAddress(@RequestParam @NotBlank String address) {
 		try {
 			Firestation firestation = service.getFirestationByAddress(address);
 			return new ResponseEntity<>(FirestationConverter.toDTO(firestation), HttpStatus.OK);
@@ -99,8 +100,8 @@ public class FirestationController {
 	 * @param station an integer station number.
 	 * @return ResponseEntity
 	 */
-	// /firestations?station={station}
-	@GetMapping(value="/firestations", params="station")
+	// /firestations/search?station={station}
+	@GetMapping(value="/firestations/search", params="station")
     public ResponseEntity<Object> firestationsByStation(@RequestParam @Positive int station) {
 		try {
 			List<Firestation> firestations = service.getFirestationsByStation(station);

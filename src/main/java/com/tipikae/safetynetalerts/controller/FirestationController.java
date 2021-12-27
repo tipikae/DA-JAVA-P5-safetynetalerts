@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +103,7 @@ public class FirestationController {
 	 */
 	// /firestations/search?station={station}
 	@GetMapping(value="/firestations/search", params="station")
-    public ResponseEntity<Object> firestationsByStation(@RequestParam @Positive int station) {
+    public ResponseEntity<Object> firestationsByStation(@RequestParam @Positive @NotNull int station) {
 		try {
 			List<Firestation> firestations = service.getFirestationsByStation(station);
 			return new ResponseEntity<>(FirestationConverter.toDTOs(firestations), HttpStatus.OK);
@@ -170,7 +171,7 @@ public class FirestationController {
 	 */
 	// /firestations?station={station}
 	@DeleteMapping("/firestations")
-	public ResponseEntity<Object> deleteFirestationByStation(@RequestParam @Positive int station) {
+	public ResponseEntity<Object> deleteFirestationByStation(@RequestParam @Positive @NotNull int station) {
 		try {
 			service.deleteFirestationsByStation(station);
 			return new ResponseEntity<>(HttpStatus.OK);

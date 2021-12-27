@@ -8,11 +8,15 @@ An application which send informations about people to emergency services.
 ### Installing
 Import the project in your favorite IDE.
 
-Data are stored in a JSON file `data.json` located in `/storage` repository.
+Create 2 files: `data.json` and `data-test.json` in a location of your choice (outside the classpath's application).
 
-Update the data with your data.
+Fill `data.json` with your data. You have an example in `resources/data.json`.
+
+Then in the 2 `application.properties` files located in `src/main/resources` and `src/test/resources`, update the key `storage.file` with the path of your JSON files.
 
 ### Testing
+Go to the root repository of the application:
+
 Execute `mvn clean test` to run unit tests.
 
 Execute `mvn verify` to run unit and integration tests.
@@ -26,5 +30,9 @@ Reports and documentation's link is: `http://localhost:9000/YOUR/ROOT/PROJECT/Sa
 Execute `mvn package` to generate an executable.
 
 ### Running App
-Launch the app and access the informations with a tool like Postman.
+Go to the `target` repository and execute:
+
+`java -jar SafetyNet-Alerts-0.0.1-SNAPSHOT.jar`.
+
+You can test the API with a tool like Postman. 
 

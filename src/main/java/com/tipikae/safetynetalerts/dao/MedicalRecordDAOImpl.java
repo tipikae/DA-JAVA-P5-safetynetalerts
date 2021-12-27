@@ -61,7 +61,7 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 		storage = jsonStorage.readStorage();
 		MedicalRecord medicalRecord = null;
 		for (MedicalRecord item : storage.getMedicalRecords()) {
-			if (item.getFirstname().equals(firstname) && item.getLastname().equals(lastname)) {
+			if (item.getFirstName().equals(firstname) && item.getLastName().equals(lastname)) {
 				medicalRecord = new MedicalRecord(firstname, lastname, item.getBirthdate(), item.getMedications(),
 						item.getAllergies());
 				break;
@@ -83,8 +83,8 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 		int i = -1;
 		
 		for(int j = 0; j < medicalRecords.size(); j++) {
-			if(medicalRecords.get(j).getFirstname().equals(medicalRecord.getFirstname()) && 
-					medicalRecords.get(j).getLastname().equals(medicalRecord.getLastname())) {
+			if(medicalRecords.get(j).getFirstName().equals(medicalRecord.getFirstName()) && 
+					medicalRecords.get(j).getLastName().equals(medicalRecord.getLastName())) {
 				i = j;
 				break;
 			}
@@ -111,8 +111,8 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 		int i = -1;
 		
 		for(int j = 0; j < medicalRecords.size(); j++) {
-			if(medicalRecords.get(j).getFirstname().equals(medicalRecord.getFirstname()) && 
-					medicalRecords.get(j).getLastname().equals(medicalRecord.getLastname())) {
+			if(medicalRecords.get(j).getFirstName().equals(medicalRecord.getFirstName()) && 
+					medicalRecords.get(j).getLastName().equals(medicalRecord.getLastName())) {
 				i = j;
 				break;
 			}

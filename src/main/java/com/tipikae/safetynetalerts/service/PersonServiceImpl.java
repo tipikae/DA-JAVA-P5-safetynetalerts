@@ -136,7 +136,7 @@ public class PersonServiceImpl implements IPersonService {
 	@Override
 	public Person updatePerson(String firstname, String lastname, Person person) 
 			throws ServiceException, StorageException {
-		if (firstname.equals(person.getFirstname()) && lastname.equals(person.getLastname())) {
+		if (firstname.equals(person.getFirstName()) && lastname.equals(person.getLastName())) {
 			if (personDao.findByFirstnameLastname(firstname, lastname) != null) {
 				return personDao.update(person);
 			} else {
@@ -147,11 +147,11 @@ public class PersonServiceImpl implements IPersonService {
 			} 
 		} else {
 			LOGGER.error("updatePerson: Firstname: " + firstname + " and lastname:"
-					+ lastname + " are different from Person firstname: " + person.getFirstname() 
-					+ " lastname: " + person.getLastname());
+					+ lastname + " are different from Person firstname: " + person.getFirstName() 
+					+ " lastname: " + person.getLastName());
 			throw new ServiceException("Firstname: " + firstname + " and lastname:"
-					+ lastname + " are different from Person firstname: " + person.getFirstname()
-					+ "	lastname: " + person.getLastname());
+					+ lastname + " are different from Person firstname: " + person.getFirstName()
+					+ "	lastname: " + person.getLastName());
 		}
 	}
 

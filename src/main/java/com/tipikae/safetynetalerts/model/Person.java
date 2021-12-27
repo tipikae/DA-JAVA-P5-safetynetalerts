@@ -13,15 +13,15 @@ import javax.validation.constraints.NotBlank;
 public class Person implements Serializable {
 
 	/**
-	 * Firstname.
+	 * FirstName.
 	 */
-	@NotBlank(message="Firstname is mandatory")
-	private String firstname;
+	@NotBlank(message="FirstName is mandatory")
+	private String firstName;
 	/**
-	 * Lastname.
+	 * LastName.
 	 */
-	@NotBlank(message="Lastname is mandatory")
-	private String lastname;
+	@NotBlank(message="LastName is mandatory")
+	private String lastName;
 	/**
 	 * Address.
 	 */
@@ -57,18 +57,18 @@ public class Person implements Serializable {
 
 	/**
 	 * The constructor.
-	 * @param firstname a String.
-	 * @param lastname a String.
+	 * @param firstName a String.
+	 * @param lastName a String.
 	 * @param address a String.
 	 * @param city a String.
 	 * @param zip a String.
 	 * @param phone a String.
 	 * @param email a String.
 	 */
-	public Person(String firstname, String lastname, String address, String city, String zip, String phone,
+	public Person(String firstName, String lastName, String address, String city, String zip, String phone,
 			String email) {
-		this.firstname = firstname;
-		this.lastname = lastname;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.address = address;
 		this.city = city;
 		this.zip = zip;
@@ -77,35 +77,35 @@ public class Person implements Serializable {
 	}
 
 	/**
-	 * Get firstname.
+	 * Get firstName.
 	 * @return String
 	 */
-	public String getFirstname() {
-		return firstname;
+	public String getFirstName() {
+		return firstName;
 	}
 
 	/**
-	 * Set firstname.
+	 * Set firstName.
 	 * @param firstName a String.
 	 */
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setFirstname(String firstName) {
+		this.firstName = firstName;
 	}
 
 	/**
-	 * Get lastname.
+	 * Get lastName.
 	 * @return String
 	 */
-	public String getLastname() {
-		return lastname;
+	public String getLastName() {
+		return lastName;
 	}
 
 	/**
-	 * Set lastname.
+	 * Set lastName.
 	 * @param lastName a String.
 	 */
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	/**

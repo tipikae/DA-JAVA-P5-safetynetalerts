@@ -26,7 +26,7 @@ import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.storage.JsonStorage;
 import com.tipikae.safetynetalerts.storage.Storage;
 
-@SpringBootTest(properties= {"storage.file=storage/data-test.json"})
+@SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(OrderAnnotation.class)
 class MedicalRecordIT {
@@ -54,9 +54,9 @@ class MedicalRecordIT {
 	void testAddMedicalRecord_whenOk() throws Exception {
 		mockMvc.perform(post("/medicalrecords")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstname\":\"John\", \"lastname\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
+				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
 			.andExpect(status().isOk())
-	        .andExpect(jsonPath("$.firstname", is("John")));	
+	        .andExpect(jsonPath("$.firstName", is("John")));	
 	}
 	
 	@Test
@@ -64,39 +64,39 @@ class MedicalRecordIT {
 	void testAllMedicalRecords_whenOk() throws Exception {
 		mockMvc.perform(get("/medicalrecords"))
         	.andExpect(status().isOk())
-	        .andExpect(jsonPath("$[0].firstname", is("John")));
+	        .andExpect(jsonPath("$[0].firstName", is("John")));
 	}
 	
 	@Test
     @Order(4)
 	void testMedicalRecordByFirstnameLastname_whenOk() throws Exception {
-		mockMvc.perform(get("/medicalrecords?firstname=John&lastname=Boyd"))
+		mockMvc.perform(get("/medicalrecords?firstName=John&lastName=Boyd"))
         	.andExpect(status().isOk())
-	        .andExpect(jsonPath("$.firstname", is("John")));
+	        .andExpect(jsonPath("$.firstName", is("John")));
 	}
 	
 	@Test
     @Order(5)
 	void testUpdateMedicalRecord_whenOk() throws Exception {
-		mockMvc.perform(put("/medicalrecords?firstname=John&lastname=Boyd")
+		mockMvc.perform(put("/medicalrecords?firstName=John&lastName=Boyd")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstname\":\"John\", \"lastname\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:400mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
+				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:400mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
 			.andExpect(status().isOk());
 	}
 	
 	@Test
     @Order(6)
 	void testUpdateMedicalRecord_whenNull() throws Exception {
-		mockMvc.perform(put("/medicalrecords?firstname=Bob&lastname=BOB")
+		mockMvc.perform(put("/medicalrecords?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstname\":\"Bob\", \"lastname\":\"BOB\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
+				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
 			.andExpect(status().is(404));
 	}
 	
 	@Test
     @Order(7)
 	void testMedicalRecordByFirstnameLastname_whenNull() throws Exception {
-		mockMvc.perform(get("/medicalrecords?firstname=Bob&lastname=BOB"))
+		mockMvc.perform(get("/medicalrecords?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(404));
 	}
 
@@ -112,14 +112,14 @@ class MedicalRecordIT {
 	@Test
     @Order(9)
 	void testDeleteMedicalRecord_whenOk() throws Exception {
-		mockMvc.perform(delete("/medicalrecords?firstname=John&lastname=Boyd"))
+		mockMvc.perform(delete("/medicalrecords?firstName=John&lastName=Boyd"))
 			.andExpect(status().isOk());
 	}
 	
 	@Test
     @Order(10)
 	void testDeleteMedicalRecord_whenNull() throws Exception {
-		mockMvc.perform(delete("/medicalrecords?firstname=Alice&lastname=BOB"))
+		mockMvc.perform(delete("/medicalrecords?firstName=Alice&lastName=BOB"))
 			.andExpect(status().is(404));
 	}
 }

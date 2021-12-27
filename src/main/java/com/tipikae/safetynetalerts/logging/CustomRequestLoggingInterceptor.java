@@ -15,11 +15,10 @@ public class CustomRequestLoggingInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    	StringBuffer requestURL = request.getRequestURL();
-    	StringBuffer params = new StringBuffer();
-    	request.getParameterMap().forEach((k, v) -> params.append(k + ": " + v + ", "));
     	String method = request.getMethod();
-        LOGGER.info("preHandle => Method: {}, Request URL: {}, Parameters: {}", method, requestURL, params);
+    	StringBuffer requestURL = request.getRequestURL();
+    	String query = request.getQueryString();
+        LOGGER.info("preHandle => Method: {}, Request URL: {}, Parameters: {}", method, requestURL, query);
         return true;
     }
 

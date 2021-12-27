@@ -100,7 +100,7 @@ public class InformationServiceImpl implements IInformationService {
 				List<Person> persons = personDao.findByAddress(firestation.getAddress());
 				for(Person person: persons) {
 					MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
-							person.getFirstname(), person.getLastname());
+							person.getFirstName(), person.getLastName());
 					if(medicalRecord != null) {
 						if(Util.isAdult(medicalRecord.getBirthdate())) {
 							nbAdults++;
@@ -108,7 +108,7 @@ public class InformationServiceImpl implements IInformationService {
 							nbChildren++;
 						}
 					}
-					FirestationInfo resident = new FirestationInfo(person.getFirstname(), person.getLastname(), 
+					FirestationInfo resident = new FirestationInfo(person.getFirstName(), person.getLastName(), 
 							person.getAddress(), person.getPhone());
 					residents.add(resident);
 				}
@@ -134,12 +134,12 @@ public class InformationServiceImpl implements IInformationService {
 			List<ChildAlert> adults = new ArrayList<>();
 			for(Person person: persons) {
 				MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
-						person.getFirstname(), person.getLastname());
+						person.getFirstName(), person.getLastName());
 				if(Util.isAdult(medicalRecord.getBirthdate())) {
-					adults.add(new ChildAlert(person.getFirstname(), person.getLastname(), 
+					adults.add(new ChildAlert(person.getFirstName(), person.getLastName(), 
 							Util.calculateAge(medicalRecord.getBirthdate())));
 				} else {
-					children.add(new ChildAlert(person.getFirstname(), person.getLastname(), 
+					children.add(new ChildAlert(person.getFirstName(), person.getLastName(), 
 							Util.calculateAge(medicalRecord.getBirthdate())));
 				}
 			}
@@ -194,14 +194,14 @@ public class InformationServiceImpl implements IInformationService {
 			
 			for(Person person: persons) {
 				MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
-						person.getFirstname(), person.getLastname());
+						person.getFirstName(), person.getLastName());
 				Fire member;
 				if(medicalRecord != null) {
 					int age = Util.calculateAge(medicalRecord.getBirthdate());
-					member = new Fire(person.getFirstname(), person.getLastname(), person.getPhone(), 
+					member = new Fire(person.getFirstName(), person.getLastName(), person.getPhone(), 
 							age, medicalRecord.getMedications(), medicalRecord.getAllergies());
 				} else {
-					member = new Fire(person.getFirstname(), person.getLastname(), person.getPhone(), 
+					member = new Fire(person.getFirstName(), person.getLastName(), person.getPhone(), 
 							0, null, null);
 				}
 				members.add(member);
@@ -232,14 +232,14 @@ public class InformationServiceImpl implements IInformationService {
 					if(!persons.isEmpty()) {
 						for(Person person: persons) {
 							MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
-									person.getFirstname(), person.getLastname());
+									person.getFirstName(), person.getLastName());
 							if(medicalRecord != null) {
-								residents.add(new Flood(person.getFirstname(), person.getLastname(), 
+								residents.add(new Flood(person.getFirstName(), person.getLastName(), 
 										person.getPhone(), Util.calculateAge(medicalRecord.getBirthdate()), 
 										medicalRecord.getMedications(), medicalRecord.getAllergies()));
 							} else {
-								LOGGER.error("getResidentsByStations: name: " + person.getFirstname() + " " + 
-										person.getLastname() + " not found in MedicalRecord.");
+								LOGGER.error("getResidentsByStations: name: " + person.getFirstName() + " " + 
+										person.getLastName() + " not found in MedicalRecord.");
 							}
 						}
 						adresses.add(new FloodAddress(firestation.getAddress(), residents));
@@ -280,11 +280,11 @@ public class InformationServiceImpl implements IInformationService {
 		List<PersonInfo> personsInfo = new ArrayList<>();
 		
 		for(Person person: persons) {
-			if (person.getLastname().equals(lastname)) {
+			if (person.getLastName().equals(lastname)) {
 				MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
-						person.getFirstname(), lastname);
+						person.getFirstName(), lastname);
 				if(medicalRecord != null) {
-					personsInfo.add(new PersonInfo(person.getFirstname(), lastname, person.getAddress(), 
+					personsInfo.add(new PersonInfo(person.getFirstName(), lastname, person.getAddress(), 
 							Util.calculateAge(medicalRecord.getBirthdate()), person.getEmail(), 
 							medicalRecord.getMedications(), medicalRecord.getAllergies()));
 				}

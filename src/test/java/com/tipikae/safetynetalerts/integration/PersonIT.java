@@ -26,7 +26,7 @@ import com.tipikae.safetynetalerts.model.Person;
 import com.tipikae.safetynetalerts.storage.JsonStorage;
 import com.tipikae.safetynetalerts.storage.Storage;
 
-@SpringBootTest(properties= {"storage.file=storage/data-test.json"})
+@SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(OrderAnnotation.class)
 class PersonIT {
@@ -54,9 +54,9 @@ class PersonIT {
 	void testAddPerson_whenOk() throws Exception {
 		mockMvc.perform(post("/persons")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstname\":\"John\", \"lastname\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
+				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
 			.andExpect(status().isOk())
-	        .andExpect(jsonPath("$.firstname", is("John")));	
+	        .andExpect(jsonPath("$.firstName", is("John")));	
 	}
 	
 	@Test
@@ -64,7 +64,7 @@ class PersonIT {
 	void testAllPersons_whenOk() throws Exception {
 		mockMvc.perform(get("/persons"))
         	.andExpect(status().isOk())
-	        .andExpect(jsonPath("$[0].firstname", is("John")));
+	        .andExpect(jsonPath("$[0].firstName", is("John")));
 	}
 	
 	@Test
@@ -72,7 +72,7 @@ class PersonIT {
 	void testPersonsByAddress_whenOk() throws Exception {
 		mockMvc.perform(get("/persons?address=1509 Culver St"))
         	.andExpect(status().isOk())
-	        .andExpect(jsonPath("$[0].firstname", is("John")));
+	        .andExpect(jsonPath("$[0].firstName", is("John")));
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ class PersonIT {
 	void testPersonsByCity_whenOk() throws Exception {
 		mockMvc.perform(get("/persons?city=Culver"))
         	.andExpect(status().isOk())
-	        .andExpect(jsonPath("$[0].firstname", is("John")));
+	        .andExpect(jsonPath("$[0].firstName", is("John")));
 	}
 	
 	@Test
@@ -100,15 +100,15 @@ class PersonIT {
 	@Test
 	@Order(8)
 	void testPersonByFirstnameLastname_whenOk() throws Exception {
-		mockMvc.perform(get("/persons?firstname=John&lastname=Boyd"))
+		mockMvc.perform(get("/persons?firstName=John&lastName=Boyd"))
         	.andExpect(status().isOk())
-	        .andExpect(jsonPath("$.firstname", is("John")));
+	        .andExpect(jsonPath("$.firstName", is("John")));
 	}
 	
 	@Test
 	@Order(9)
 	void testPersonByFirstnameLastname_whenNull() throws Exception {
-		mockMvc.perform(get("/persons?firstname=Bob&lastname=BOB"))
+		mockMvc.perform(get("/persons?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(404));
 	}
 
@@ -124,32 +124,32 @@ class PersonIT {
 	@Test
 	@Order(11)
 	void testUpdatePerson_whenOk() throws Exception {
-		mockMvc.perform(put("/persons?firstname=John&lastname=Boyd")
+		mockMvc.perform(put("/persons?firstName=John&lastName=Boyd")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstname\":\"John\", \"lastname\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Paris\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
+				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Paris\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
 			.andExpect(status().isOk());
 	}
 	
 	@Test
 	@Order(12)
 	void testUpdatePerson_whenNull() throws Exception {
-		mockMvc.perform(put("/persons?firstname=Bob&lastname=BOB")
+		mockMvc.perform(put("/persons?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"firstname\":\"Bob\", \"lastname\":\"BOB\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
+				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }"))
 			.andExpect(status().is(404));
 	}
 	
 	@Test
 	@Order(13)
 	void testDeletePerson_whenOk() throws Exception {
-		mockMvc.perform(delete("/persons?firstname=John&lastname=Boyd"))
+		mockMvc.perform(delete("/persons?firstName=John&lastName=Boyd"))
 			.andExpect(status().isOk());
 	}
 	
 	@Test
 	@Order(14)
 	void testDeletePerson_whenNull() throws Exception {
-		mockMvc.perform(delete("/persons?firstname=Bob&lastname=BOB"))
+		mockMvc.perform(delete("/persons?firstName=Bob&lastName=BOB"))
 			.andExpect(status().is(404));
 	}
 }

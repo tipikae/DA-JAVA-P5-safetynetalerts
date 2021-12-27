@@ -152,17 +152,17 @@ public class InformationController {
 
 	/**
 	 * Get a person information by lastname.
-	 * @param firstname a String firstname.
-	 * @param lastname a String lastname.
+	 * @param firstName a String firstname.
+	 * @param lastName a String lastname.
 	 * @return ResponseEntity
 	 */
-	// /personInfo?firstname=<firstname>&lastname=<lastname>
-	@GetMapping(value="/personInfo", params={"firstname", "lastname"})
+	// /personInfo?firstName=<firstname>&lastName=<lastname>
+	@GetMapping(value="/personInfo", params={"firstName", "lastName"})
 	public ResponseEntity<Object> personInfoByLastname(
-			@RequestParam @NotBlank String firstname, 
-    		@RequestParam @NotBlank String lastname) {
+			@RequestParam @NotBlank String firstName, 
+    		@RequestParam @NotBlank String lastName) {
 		try {
-			PersonInfoDTO dto = service.getPersonInfoByLastname(firstname, lastname);
+			PersonInfoDTO dto = service.getPersonInfoByLastname(firstName, lastName);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(

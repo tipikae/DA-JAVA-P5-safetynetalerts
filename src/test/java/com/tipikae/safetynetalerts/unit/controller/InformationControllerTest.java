@@ -24,7 +24,6 @@ import com.tipikae.safetynetalerts.dto.FirestationInfoDTO;
 import com.tipikae.safetynetalerts.dto.FloodDTO;
 import com.tipikae.safetynetalerts.dto.PersonInfoDTO;
 import com.tipikae.safetynetalerts.dto.PhoneAlertDTO;
-import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.service.IInformationService;
 
@@ -79,7 +78,7 @@ class InformationControllerTest {
 	
 	@Test
 	void testPhoneNumbersByStation_whenOk() throws Exception {
-		when(service.getPhoneNumbersByStation(anyInt())).thenReturn(new PhoneAlertDTO(null));
+		when(service.getPhoneNumbersByStation(anyInt())).thenReturn(new PhoneAlertDTO(0, null));
 		mockMvc.perform(get("/phoneAlert?firestation=1"))
         	.andExpect(status().isOk());
 	}
@@ -159,7 +158,7 @@ class InformationControllerTest {
 	
 	@Test
 	void testEmailsByCity_whenOk() throws Exception {
-		when(service.getEmailsByCity(anyString())).thenReturn(new CommunityEmailDTO(null));
+		when(service.getEmailsByCity(anyString())).thenReturn(new CommunityEmailDTO(null, null));
 		mockMvc.perform(get("/communityEmail?city=Paris"))
         	.andExpect(status().isOk());
 	}

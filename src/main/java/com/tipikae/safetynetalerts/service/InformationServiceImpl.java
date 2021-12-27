@@ -172,7 +172,7 @@ public class InformationServiceImpl implements IInformationService {
 				}
 			}
 			
-			return new PhoneAlertDTO(phones);
+			return new PhoneAlertDTO(station, phones);
 		} else {
 			LOGGER.error("getPhoneNumbersByStation: station: " + station + " not found.");
 			throw new ServiceException("station: " + station + " not found.");
@@ -313,7 +313,7 @@ public class InformationServiceImpl implements IInformationService {
 				emails.add(new CommunityEmail(person.getEmail()));
 			}
 			
-			return new CommunityEmailDTO(emails);
+			return new CommunityEmailDTO(city, emails);
 		} else {
 			LOGGER.error("getEmailsByCity: city: " + city + " not found.");
 			throw new ServiceException("city: " + city + " not found.");

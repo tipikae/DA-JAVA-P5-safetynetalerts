@@ -20,6 +20,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.tipikae.safetynetalerts.controller.MedicalRecordController;
+import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
+import com.tipikae.safetynetalerts.dtoconverter.ImedicalRecordConverter;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
@@ -32,6 +34,9 @@ class MedicalRecordControllerTest {
 
 	@Autowired
     private MockMvc mockMvc;
+	
+	@MockBean
+	private ImedicalRecordConverter converter;
 	
 	@MockBean
 	private IMedicalRecordService service;
@@ -82,6 +87,7 @@ class MedicalRecordControllerTest {
 	
 	@Test
 	void testAddMedicalRecord_whenOk() throws Exception {
+		when(converter.toEntity(any(MedicalRecordDTO.class))).thenReturn(new MedicalRecord());
 		when(service.addMedicalRecord(any(MedicalRecord.class))).thenReturn(
 				new MedicalRecord(null, null, null, null, null));
 		mockMvc.perform(post("/medicalrecords")
@@ -92,6 +98,7 @@ class MedicalRecordControllerTest {
 	
 	@Test
 	void testAddMedicalRecord_whenException() throws Exception {
+		when(converter.toEntity(any(MedicalRecordDTO.class))).thenReturn(new MedicalRecord());
 		doThrow(StorageException.class).when(service).addMedicalRecord(any(MedicalRecord.class));
 		mockMvc.perform(post("/medicalrecords")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -109,6 +116,7 @@ class MedicalRecordControllerTest {
 	
 	@Test
 	void testUpdateMedicalRecord_whenOk() throws Exception {
+		when(converter.toEntity(any(MedicalRecordDTO.class))).thenReturn(new MedicalRecord());
 		when(service.updateMedicalRecord(anyString(), anyString(), any(MedicalRecord.class))).thenReturn(
 				new MedicalRecord(null, null, null, null, null));
 		mockMvc.perform(put("/medicalrecords?firstName=John&lastName=Boyd")
@@ -129,6 +137,7 @@ class MedicalRecordControllerTest {
 	
 	@Test
 	void testUpdateMedicalRecord_whenStorageException() throws Exception {
+		when(converter.toEntity(any(MedicalRecordDTO.class))).thenReturn(new MedicalRecord());
 		doThrow(StorageException.class).when(service).updateMedicalRecord(anyString(), anyString(), 
 				any(MedicalRecord.class));
 		mockMvc.perform(put("/medicalrecords?firstName=Bob&lastName=BOB")
@@ -139,6 +148,7 @@ class MedicalRecordControllerTest {
 	
 	@Test
 	void testUpdateMedicalRecord_whenServiceException() throws Exception {
+		when(converter.toEntity(any(MedicalRecordDTO.class))).thenReturn(new MedicalRecord());
 		doThrow(ServiceException.class).when(service).updateMedicalRecord(anyString(), anyString(), 
 				any(MedicalRecord.class));
 		mockMvc.perform(put("/medicalrecords?firstName=Bob&lastName=BOB")

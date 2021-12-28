@@ -3,43 +3,43 @@ package com.tipikae.safetynetalerts.dtoconverter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 
-/**
- * A class for converting DTO MedicalRecord to entity and vice-versa.
- * @author tipikae
- * @version 1.0
- *
- */
-public class MedicalRecordConverter {
-	
+@Component
+public class MedicalRecordConverterImpl implements ImedicalRecordConverter {
+
 	/**
-	 * Convert DTO to entity.
-	 * @param dto a MedicalRecordDTO object.
-	 * @return MedicalRecord
+	 * {@inheritDoc}
+	 * @param dto {@inheritDoc}
+	 * @return {@inheritDoc}
 	 */
-	public static MedicalRecord toEntity(MedicalRecordDTO dto) {
+	@Override
+	public MedicalRecord toEntity(MedicalRecordDTO dto) {
 		return new MedicalRecord(dto.getFirstName(), dto.getLastName(), dto.getBirthdate(), 
 				dto.getMedications(), dto.getAllergies());
 	}
 
 	/**
-	 * Convert entity to DTO
-	 * @param entity a MedicalRecord object.
-	 * @return MedicalRecordDTO
+	 * {@inheritDoc}
+	 * @param entity {@inheritDoc}
+	 * @return {@inheritDoc}
 	 */
-	public static MedicalRecordDTO toDTO(MedicalRecord entity) {
+	@Override
+	public MedicalRecordDTO toDTO(MedicalRecord entity) {
 		return new MedicalRecordDTO(entity.getFirstName(), entity.getLastName(), entity.getBirthdate(), 
 				entity.getMedications(), entity.getAllergies());
 	}
 
 	/**
-	 * Convert a List<MedicalRecord> to a List<MedicalRecordDTO>
-	 * @param entities a List of MedicalRecord
-	 * @return List<MedicalRecordDTO>
+	 * {@inheritDoc}
+	 * @param entities {@inheritDoc}
+	 * @return {@inheritDoc}
 	 */
-	public static List<MedicalRecordDTO> toDTOs(List<MedicalRecord> entities) {
+	@Override
+	public List<MedicalRecordDTO> toDTOs(List<MedicalRecord> entities) {
 		if(entities == null)
 			return null;
 		
@@ -50,4 +50,5 @@ public class MedicalRecordConverter {
 		}
 		return dtos;
 	}
+
 }

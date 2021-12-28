@@ -9,11 +9,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.tipikae.safetynetalerts.dto.PersonDTO;
-import com.tipikae.safetynetalerts.dtoconverter.PersonConverter;
+import com.tipikae.safetynetalerts.dtoconverter.PersonConverterImpl;
 import com.tipikae.safetynetalerts.model.Person;
 
 public class PersonConverterTest {
 
+	private static PersonConverterImpl converter;
 	private static Person entity;
 	private static PersonDTO dto;
 	private static List<Person> entities;
@@ -21,7 +22,7 @@ public class PersonConverterTest {
 	
 	@BeforeAll
 	private static void setUp() {
-		
+		converter = new PersonConverterImpl();
 		entity = new Person("Bob", "BOB", "route", "Paris", "75000", "123456", "bob@bob.com");
 		dto = new PersonDTO("Bob", "BOB", "route", "Paris", "75000", "123456", "bob@bob.com");
 		entities = new ArrayList<>();
@@ -32,16 +33,16 @@ public class PersonConverterTest {
 
 	@Test
 	void testToDTO() {
-		assertEquals(dto.getFirstName(), PersonConverter.toDTO(entity).getFirstName());
+		assertEquals(dto.getFirstName(), converter.toDTO(entity).getFirstName());
 	}
 	
 	@Test
 	void testToEntity() {
-		assertEquals(entity.getCity(), PersonConverter.toEntity(dto).getCity());
+		assertEquals(entity.getCity(), converter.toEntity(dto).getCity());
 	}
 	
 	@Test
 	void testToDTOs() {
-		assertEquals(dtos.get(0).getEmail(), PersonConverter.toDTOs(entities).get(0).getEmail());
+		assertEquals(dtos.get(0).getEmail(), converter.toDTOs(entities).get(0).getEmail());
 	}
 }

@@ -9,11 +9,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.tipikae.safetynetalerts.dto.FirestationDTO;
-import com.tipikae.safetynetalerts.dtoconverter.FirestationConverter;
+import com.tipikae.safetynetalerts.dtoconverter.FirestationConverterImpl;
 import com.tipikae.safetynetalerts.model.Firestation;
 
 class FirestationConverterTest {
-	
+
+	private static FirestationConverterImpl converter;
 	private static Firestation entity;
 	private static FirestationDTO dto;
 	private static List<Firestation> entities;
@@ -21,6 +22,7 @@ class FirestationConverterTest {
 	
 	@BeforeAll
 	private static void setUp() {
+		converter = new FirestationConverterImpl();
 		entity = new Firestation("route", 1);
 		dto = new FirestationDTO("route", 1);
 		entities = new ArrayList<>();
@@ -31,17 +33,17 @@ class FirestationConverterTest {
 
 	@Test
 	void testToDTO() {
-		assertEquals(dto.getAddress(), FirestationConverter.toDTO(entity).getAddress());
+		assertEquals(dto.getAddress(), converter.toDTO(entity).getAddress());
 	}
 	
 	@Test
 	void testToEntity() {
-		assertEquals(entity.getStation(), FirestationConverter.toEntity(dto).getStation());
+		assertEquals(entity.getStation(), converter.toEntity(dto).getStation());
 	}
 	
 	@Test
 	void testToDTOs() {
-		assertEquals(dtos.get(0).getStation(), FirestationConverter.toDTOs(entities).get(0).getStation());
+		assertEquals(dtos.get(0).getStation(), converter.toDTOs(entities).get(0).getStation());
 	}
 
 }

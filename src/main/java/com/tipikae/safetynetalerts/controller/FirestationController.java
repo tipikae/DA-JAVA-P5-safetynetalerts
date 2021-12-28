@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tipikae.safetynetalerts.dto.FirestationDTO;
-import com.tipikae.safetynetalerts.dtoconverter.FirestationConverter;
+import com.tipikae.safetynetalerts.dtoconverter.IFirestationConverter;
 import com.tipikae.safetynetalerts.exception.ControllerException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
@@ -39,6 +39,9 @@ import com.tipikae.safetynetalerts.service.IFirestationService;
 public class FirestationController {
 	
 	@Autowired
+	private IFirestationConverter converter;
+	
+	@Autowired
 	private IFirestationService service;
 
 	/**
@@ -49,8 +52,8 @@ public class FirestationController {
 	@PostMapping(value="/firestations", consumes={"application/json"})
 	public ResponseEntity<Object> addFirestationMapping(@Valid @RequestBody FirestationDTO firestation) {
 		try {
-			Firestation added = service.addFirestationMapping(FirestationConverter.toEntity(firestation));
-			return new ResponseEntity<>(FirestationConverter.toDTO(added), HttpStatus.OK);
+			Firestation added = service.addFirestationMapping(converter.toEntity(firestation));
+			return new ResponseEntity<>(converter.toDTO(added), HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -66,7 +69,7 @@ public class FirestationController {
     public ResponseEntity<Object> allFirestations() {
 		try {
 			List<Firestation> firestations = service.getFirestations();
-			return new ResponseEntity<>(FirestationConverter.toDTOs(firestations), HttpStatus.OK);
+			return new ResponseEntity<>(converter.toDTOs(firestations), HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -84,7 +87,7 @@ public class FirestationController {
     public ResponseEntity<Object> firestationByAddress(@RequestParam @NotBlank String address) {
 		try {
 			Firestation firestation = service.getFirestationByAddress(address);
-			return new ResponseEntity<>(FirestationConverter.toDTO(firestation), HttpStatus.OK);
+			return new ResponseEntity<>(converter.toDTO(firestation), HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
@@ -106,7 +109,7 @@ public class FirestationController {
     public ResponseEntity<Object> firestationsByStation(@RequestParam @Positive @NotNull int station) {
 		try {
 			List<Firestation> firestations = service.getFirestationsByStation(station);
-			return new ResponseEntity<>(FirestationConverter.toDTOs(firestations), HttpStatus.OK);
+			return new ResponseEntity<>(converter.toDTOs(firestations), HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
@@ -130,8 +133,8 @@ public class FirestationController {
 			@Valid @RequestBody FirestationDTO firestation) {
 		try {
 			Firestation updated = service.updateFirestationMapping(address, 
-					FirestationConverter.toEntity(firestation));
-			return new ResponseEntity<>(FirestationConverter.toDTO(updated), HttpStatus.OK);
+					converter.toEntity(firestation));
+			return new ResponseEntity<>(converter.toDTO(updated), HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 

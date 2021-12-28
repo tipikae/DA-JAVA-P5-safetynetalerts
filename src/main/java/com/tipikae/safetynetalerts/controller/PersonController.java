@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tipikae.safetynetalerts.dto.PersonDTO;
-import com.tipikae.safetynetalerts.dtoconverter.PersonConverter;
+import com.tipikae.safetynetalerts.dtoconverter.IpersonConverter;
 import com.tipikae.safetynetalerts.exception.ControllerException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
@@ -36,6 +36,9 @@ import com.tipikae.safetynetalerts.service.IPersonService;
 public class PersonController {
 	
 	@Autowired
+	private IpersonConverter converter;
+	
+	@Autowired
 	private IPersonService service;
 
 	/**
@@ -46,7 +49,7 @@ public class PersonController {
     public ResponseEntity<Object> allPersons() {
 		try {
 			List<Person> persons = service.getPersons();
-			return new ResponseEntity<>(PersonConverter.toDTOs(persons), HttpStatus.OK);
+			return new ResponseEntity<>(converter.toDTOs(persons), HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -64,7 +67,7 @@ public class PersonController {
     public ResponseEntity<Object> personsByAddress(@RequestParam @NotBlank String address) {
 		try {
 			List<Person> persons = service.getPersonsByAddress(address);
-			return new ResponseEntity<>(PersonConverter.toDTOs(persons), HttpStatus.OK);
+			return new ResponseEntity<>(converter.toDTOs(persons), HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
@@ -87,7 +90,7 @@ public class PersonController {
     public ResponseEntity<Object> personsByCity(@RequestParam @NotBlank String city) {
 		try {
 			List<Person> persons = service.getPersonsByCity(city);
-			return new ResponseEntity<>(PersonConverter.toDTOs(persons), HttpStatus.OK);
+			return new ResponseEntity<>(converter.toDTOs(persons), HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
@@ -111,7 +114,7 @@ public class PersonController {
     		@RequestParam @NotBlank String lastName) {
 		try {
 			Person person = service.getPersonByFirstnameLastname(firstName, lastName);
-			return new ResponseEntity<>(PersonConverter.toDTO(person), HttpStatus.OK);
+			return new ResponseEntity<>(converter.toDTO(person), HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
@@ -131,8 +134,8 @@ public class PersonController {
 	@PostMapping(value="/persons", consumes={"application/json"})
 	public ResponseEntity<Object> addPerson(@Valid @RequestBody PersonDTO person) {
 		try {
-			Person added = service.addPerson(PersonConverter.toEntity(person));
-			return new ResponseEntity<>(PersonConverter.toDTO(added), HttpStatus.OK);
+			Person added = service.addPerson(converter.toEntity(person));
+			return new ResponseEntity<>(converter.toDTO(added), HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -154,8 +157,8 @@ public class PersonController {
 			@RequestParam @NotBlank String lastName, 
 			@Valid @RequestBody PersonDTO person) {
 		try {
-			Person updated = service.updatePerson(firstName, lastName, PersonConverter.toEntity(person));
-			return new ResponseEntity<>(PersonConverter.toDTO(updated), HttpStatus.OK);
+			Person updated = service.updatePerson(firstName, lastName, converter.toEntity(person));
+			return new ResponseEntity<>(converter.toDTO(updated), HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 

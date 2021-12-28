@@ -36,3 +36,6 @@ Go to the `target` repository and run the executable:
 
 You can test the API with a tool like Postman. 
 
+### Monitoring
+Info, trace, metrics and more are available on `http://localhost:9001/actuator`
+

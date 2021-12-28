@@ -1,5 +1,10 @@
 package com.tipikae.safetynetalerts.constant;
 
+/**
+ * A class for constant values.
+ * @author tipikae
+ *
+ */
 public class Constant {
 
 	/**

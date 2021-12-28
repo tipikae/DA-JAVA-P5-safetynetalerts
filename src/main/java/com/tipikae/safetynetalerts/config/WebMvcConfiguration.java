@@ -8,13 +8,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.tipikae.safetynetalerts.logging.CustomRequestLoggingInterceptor;
 
+/**
+ * An implementation of WebMvcConfigurer.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
 @EnableWebMvc
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
 	@Autowired
 	private CustomRequestLoggingInterceptor interceptor;
-	
+
+	/**
+	 * Add custom interceptors.
+	 */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(interceptor);

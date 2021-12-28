@@ -37,5 +37,8 @@ Go to the `target` repository and run the executable:
 You can test the API with a tool like Postman. 
 
 ### Monitoring
-Info, trace, metrics and more are available on `http://localhost:9001/actuator`
+Info, trace, metrics and more are available at `http://localhost:9001/actuator`.
+
+### API documentation
+Swagger2 provides an API documentation at `http://localhost:9000/swagger-ui/index.html`.
 

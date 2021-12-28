@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import com.tipikae.safetynetalerts.util.Util;
 
 class UtilTest {
-
+	
 	@Test
 	void testCalculateAge_whenOk() {
 		LocalDate birthday = LocalDate.of(1973, 9, 5);

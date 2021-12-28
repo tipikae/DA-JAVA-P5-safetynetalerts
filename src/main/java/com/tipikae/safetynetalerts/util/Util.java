@@ -3,6 +3,8 @@ package com.tipikae.safetynetalerts.util;
 import java.time.LocalDate;
 import java.time.Period;
 
+import com.tipikae.safetynetalerts.constant.Constant;
+
 /**
  * An utility class.
  * @author tipikae
@@ -11,8 +13,6 @@ import java.time.Period;
  */
 public class Util {
 	
-	private static final int ADULT_AGE = 18;
-
 	/**
 	 * Calculate an age.
 	 * @param birthDate a LocalDate object.
@@ -32,6 +32,6 @@ public class Util {
 	 * @return boolean
 	 */
 	public static boolean isAdult(LocalDate birthDate) {
-		return calculateAge(birthDate) > ADULT_AGE;
+		return calculateAge(birthDate) > Constant.ADULT_AGE;
 	}
 }

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
+import com.tipikae.safetynetalerts.dtoconverter.ImedicalRecordConverter;
 import com.tipikae.safetynetalerts.exception.ControllerException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
@@ -34,6 +36,9 @@ import com.tipikae.safetynetalerts.service.IMedicalRecordService;
 public class MedicalRecordController {
 	
 	@Autowired
+	private ImedicalRecordConverter converter;
+	
+	@Autowired
 	private IMedicalRecordService service;
 
 	/**
@@ -43,8 +48,8 @@ public class MedicalRecordController {
 	@GetMapping("/medicalrecords")
     public ResponseEntity<Object> allMedicalRecords() {
 		try {
-			List<MedicalRecord> merdicalRecords = service.getMedicalRecords();
-			return new ResponseEntity<>(merdicalRecords, HttpStatus.OK);
+			List<MedicalRecord> medicalRecords = service.getMedicalRecords();
+			return new ResponseEntity<>(converter.toDTOs(medicalRecords), HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -58,14 +63,14 @@ public class MedicalRecordController {
 	 * @param lastName a String lastname.
 	 * @return ResponseEntity
 	 */
-	// /medicalrecords?firstName={firstname}&lastName={lastname}
-	@GetMapping(value="/medicalrecords", params={"firstName", "lastName"})
+	// /medicalrecords/search?firstName={firstname}&lastName={lastname}
+	@GetMapping(value="/medicalrecords/search", params={"firstName", "lastName"})
     public ResponseEntity<Object> medicalrecordByFirstnameLastname(
     		@RequestParam @NotBlank String firstName, 
     		@RequestParam @NotBlank String lastName) {
 		try {
-			MedicalRecord merdicalRecord = service.getMedicalRecordByFirstnameLastname(firstName, lastName);
-			return new ResponseEntity<>(merdicalRecord, HttpStatus.OK);
+			MedicalRecord medicalRecord = service.getMedicalRecordByFirstnameLastname(firstName, lastName);
+			return new ResponseEntity<>(converter.toDTO(medicalRecord), HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
@@ -79,14 +84,14 @@ public class MedicalRecordController {
 
 	/**
 	 * Add a medical record.
-	 * @param medicalRecord a MedicalRecord object.
+	 * @param medicalRecord a MedicalRecordDTO object.
 	 * @return ResponseEntity
 	 */
 	@PostMapping(value="/medicalrecords", consumes={"application/json"})
-	public ResponseEntity<Object> addMedicalRecord(@Valid @RequestBody MedicalRecord medicalRecord) {
+	public ResponseEntity<Object> addMedicalRecord(@Valid @RequestBody MedicalRecordDTO medicalRecord) {
 		try {
-			MedicalRecord added = service.addMedicalRecord(medicalRecord);
-			return new ResponseEntity<>(added, HttpStatus.OK);
+			MedicalRecord added = service.addMedicalRecord(converter.toEntity(medicalRecord));
+			return new ResponseEntity<>(converter.toDTO(added), HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -98,7 +103,7 @@ public class MedicalRecordController {
 	 * Update a medical record.
 	 * @param firstName a String firstname.
 	 * @param lastName a String lastname.
-	 * @param medicalRecord a MedicalRecord object.
+	 * @param medicalRecord a MedicalRecordDTO object.
 	 * @return ResponseEntity
 	 */
 	// /medicalrecords?firstName={firstname}&lastName={lastname}
@@ -106,10 +111,11 @@ public class MedicalRecordController {
 	public ResponseEntity<Object> updateMedicalRecord(
 			@RequestParam @NotBlank String firstName, 
 			@RequestParam @NotBlank String lastName,
-			@Valid @RequestBody MedicalRecord medicalRecord) {
+			@Valid @RequestBody MedicalRecordDTO medicalRecord) {
 		try {
-			MedicalRecord updated = service.updateMedicalRecord(firstName, lastName, medicalRecord);
-			return new ResponseEntity<>(updated, HttpStatus.OK);
+			MedicalRecord updated = service.updateMedicalRecord(firstName, lastName, 
+					converter.toEntity(medicalRecord));
+			return new ResponseEntity<>(converter.toDTO(updated), HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 

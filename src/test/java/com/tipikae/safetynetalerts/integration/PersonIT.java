@@ -70,7 +70,7 @@ class PersonIT {
 	@Test
 	@Order(4)
 	void testPersonsByAddress_whenOk() throws Exception {
-		mockMvc.perform(get("/persons?address=1509 Culver St"))
+		mockMvc.perform(get("/persons/search?address=1509 Culver St"))
         	.andExpect(status().isOk())
 	        .andExpect(jsonPath("$[0].firstName", is("John")));
 	}
@@ -78,14 +78,14 @@ class PersonIT {
 	@Test
 	@Order(5)
 	void testPersonsByAddress_whenNull() throws Exception {
-		mockMvc.perform(get("/persons?address=route de Pâle"))
+		mockMvc.perform(get("/persons/search?address=route de Pâle"))
         	.andExpect(status().is(404));
 	}
 	
 	@Test
 	@Order(6)
 	void testPersonsByCity_whenOk() throws Exception {
-		mockMvc.perform(get("/persons?city=Culver"))
+		mockMvc.perform(get("/persons/search?city=Culver"))
         	.andExpect(status().isOk())
 	        .andExpect(jsonPath("$[0].firstName", is("John")));
 	}
@@ -93,14 +93,14 @@ class PersonIT {
 	@Test
 	@Order(7)
 	void testPersonsByCity_whenNull() throws Exception {
-		mockMvc.perform(get("/persons?city=Chamonix"))
+		mockMvc.perform(get("/persons/search?city=Chamonix"))
         	.andExpect(status().is(404));
 	}
 	
 	@Test
 	@Order(8)
 	void testPersonByFirstnameLastname_whenOk() throws Exception {
-		mockMvc.perform(get("/persons?firstName=John&lastName=Boyd"))
+		mockMvc.perform(get("/persons/search?firstName=John&lastName=Boyd"))
         	.andExpect(status().isOk())
 	        .andExpect(jsonPath("$.firstName", is("John")));
 	}
@@ -108,7 +108,7 @@ class PersonIT {
 	@Test
 	@Order(9)
 	void testPersonByFirstnameLastname_whenNull() throws Exception {
-		mockMvc.perform(get("/persons?firstName=Bob&lastName=BOB"))
+		mockMvc.perform(get("/persons/search?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(404));
 	}
 

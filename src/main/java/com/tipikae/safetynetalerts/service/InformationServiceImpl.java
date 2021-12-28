@@ -17,7 +17,7 @@ import com.tipikae.safetynetalerts.dto.CommunityEmail;
 import com.tipikae.safetynetalerts.dto.CommunityEmailDTO;
 import com.tipikae.safetynetalerts.dto.Fire;
 import com.tipikae.safetynetalerts.dto.FireDTO;
-import com.tipikae.safetynetalerts.dto.FirestationDTO;
+import com.tipikae.safetynetalerts.dto.FirestationInfoDTO;
 import com.tipikae.safetynetalerts.dto.FirestationInfo;
 import com.tipikae.safetynetalerts.dto.Flood;
 import com.tipikae.safetynetalerts.dto.FloodAddress;
@@ -90,7 +90,7 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public FirestationDTO getResidentsByStation(int stationNumber) throws ServiceException, StorageException {
+	public FirestationInfoDTO getResidentsByStation(int stationNumber) throws ServiceException, StorageException {
 		List<Firestation> firestations = firestationDao.findByStation(stationNumber);
 		if(!firestations.isEmpty()) {
 			List<FirestationInfo> residents = new ArrayList<>();
@@ -114,7 +114,7 @@ public class InformationServiceImpl implements IInformationService {
 				}
 			}
 			
-			return new FirestationDTO(stationNumber, nbAdults, nbChildren, residents);
+			return new FirestationInfoDTO(stationNumber, nbAdults, nbChildren, residents);
 		} else {
 			LOGGER.error("getResidentsByStation: station: " + stationNumber + " not found.");
 			throw new ServiceException("station: " + stationNumber + " not found.");
@@ -172,7 +172,7 @@ public class InformationServiceImpl implements IInformationService {
 				}
 			}
 			
-			return new PhoneAlertDTO(phones);
+			return new PhoneAlertDTO(station, phones);
 		} else {
 			LOGGER.error("getPhoneNumbersByStation: station: " + station + " not found.");
 			throw new ServiceException("station: " + station + " not found.");
@@ -313,7 +313,7 @@ public class InformationServiceImpl implements IInformationService {
 				emails.add(new CommunityEmail(person.getEmail()));
 			}
 			
-			return new CommunityEmailDTO(emails);
+			return new CommunityEmailDTO(city, emails);
 		} else {
 			LOGGER.error("getEmailsByCity: city: " + city + " not found.");
 			throw new ServiceException("city: " + city + " not found.");

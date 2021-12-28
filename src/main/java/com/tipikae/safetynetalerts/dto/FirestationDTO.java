@@ -1,10 +1,12 @@
 package com.tipikae.safetynetalerts.dto;
 
 import java.io.Serializable;
-import java.util.List;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 /**
- * A DTO for Firestation request.
+ * A DTO for Firestation model object.
  * @author tipikae
  * @version 1.0
  *
@@ -12,34 +14,47 @@ import java.util.List;
 public class FirestationDTO implements Serializable {
 
 	/**
+	 * Address.
+	 */
+	@NotBlank(message="Address is mandatory")
+	private String address;
+	/**
 	 * Station number.
 	 */
+	@Positive(message="Station must be more than zero")
 	private int station;
+
 	/**
-	 * Adults number.
+	 * The default constructor. 
 	 */
-	private int adults;
-	/**
-	 * Children number.
-	 */
-	private int children;
-	/**
-	 * Residents.
-	 */
-	private List<FirestationInfo> residents;
+	public FirestationDTO() {
+		super();
+	}
 
 	/**
 	 * The constructor.
-	 * @param station a station number Integer.
-	 * @param adults an adults number Integer.
-	 * @param children a children number Integer.
-	 * @param residents a residents List.
+	 * @param address a String.
+	 * @param station an Integer station number.
 	 */
-	public FirestationDTO(int station, int adults, int children, List<FirestationInfo> residents) {
+	public FirestationDTO(String address, int station) {
+		this.address = address;
 		this.station = station;
-		this.adults = adults;
-		this.children = children;
-		this.residents = residents;
+	}
+
+	/**
+	 * Get address.
+	 * @return String
+	 */
+	public String getAddress() {
+		return address;
+	}
+
+	/**
+	 * Set address.
+	 * @param address a String.
+	 */
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	/**
@@ -52,57 +67,10 @@ public class FirestationDTO implements Serializable {
 
 	/**
 	 * Set station number.
-	 * @param station a station number Integer.
+	 * @param station an int station number.
 	 */
 	public void setStation(int station) {
 		this.station = station;
 	}
-
-	/**
-	 * Get adults number
-	 * @return int
-	 */
-	public int getAdults() {
-		return adults;
-	}
-
-	/**
-	 * Set adults number.
-	 * @param adults an adults number Integer.
-	 */
-	public void setAdults(int adults) {
-		this.adults = adults;
-	}
-
-	/**
-	 * Get children number.
-	 * @return int
-	 */
-	public int getChildren() {
-		return children;
-	}
-
-	/**
-	 * Set children number.
-	 * @param children a children number Integer.
-	 */
-	public void setChildren(int children) {
-		this.children = children;
-	}
-
-	/**
-	 * Get residents.
-	 * @return List<FirestationInfo>
-	 */
-	public List<FirestationInfo> getResidents() {
-		return residents;
-	}
-
-	/**
-	 * Set residents.
-	 * @param residents a residents List.
-	 */
-	public void setResidents(List<FirestationInfo> residents) {
-		this.residents = residents;
-	}
 }
+

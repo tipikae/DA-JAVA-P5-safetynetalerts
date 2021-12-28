@@ -39,6 +39,7 @@ public class ControllerException implements Serializable {
 		this.code = code;
 		this.message = message;
 		this.timestamp = new Date();
+		logException(code, message);
 	}
 
 	/**
@@ -89,4 +90,7 @@ public class ControllerException implements Serializable {
 		this.timestamp = timestamp;
 	}
 
+	private void logException(int code, String message) {
+		LOGGER.error("Error code: {}, {}", code, message);
+	}
 }

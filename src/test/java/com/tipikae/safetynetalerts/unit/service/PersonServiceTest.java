@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.tipikae.safetynetalerts.dao.IPersonDAO;
 import com.tipikae.safetynetalerts.dao.PersonDAOImpl;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
@@ -21,7 +22,7 @@ import com.tipikae.safetynetalerts.service.PersonServiceImpl;
 public class PersonServiceTest {
 	
 	@Mock
-	private PersonDAOImpl dao;
+	private IPersonDAO dao;
 	
 	private static PersonServiceImpl service;
 	private static Person person;

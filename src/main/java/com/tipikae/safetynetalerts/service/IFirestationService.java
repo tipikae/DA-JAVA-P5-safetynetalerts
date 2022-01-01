@@ -1,7 +1,5 @@
 package com.tipikae.safetynetalerts.service;
 
-import java.util.List;
-
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
@@ -21,28 +19,6 @@ public interface IFirestationService {
 	 * @throws StorageException
 	 */
 	Firestation addFirestationMapping(Firestation firestation) throws StorageException;
-	/**
-	 * Get all firestations.
-	 * @return List<Firestation>
-	 * @throws StorageException
-	 */
-	List<Firestation> getFirestations() throws StorageException;
-	/**
-	 * Get a firestation by address.
-	 * @param address a String.
-	 * @return Firestation
-	 * @throws ServiceException
-	 * @throws StorageException
-	 */
-	Firestation getFirestationByAddress(String address) throws ServiceException, StorageException;
-	/**
-	 * Get firestations by station number.
-	 * @param station an int station number.
-	 * @return List<Firestation>
-	 * @throws ServiceException
-	 * @throws StorageException
-	 */
-	List<Firestation> getFirestationsByStation(int station) throws ServiceException, StorageException;
 	/**
 	 * Update a firestation mapping.
 	 * @param address a String.

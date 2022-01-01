@@ -1,7 +1,5 @@
 package com.tipikae.safetynetalerts.service;
 
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +19,13 @@ import com.tipikae.safetynetalerts.model.Person;
 @Service
 public class PersonServiceImpl implements IPersonService {
 
-	private static final Logger LOGGER = LogManager.getLogger("PersonService");
+	private static final Logger LOGGER = LogManager.getLogger("PersonServiceImpl");
 
 	/**
 	 * The DAO.
 	 */
 	@Autowired
 	private IPersonDAO personDao;
-
-	/**
-	 * Set personDao.
-	 * @param personDao a IPersonDAO interface.
-	 */
-	public void setPersonDao(IPersonDAO personDao) {
-		this.personDao = personDao;
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -45,85 +35,6 @@ public class PersonServiceImpl implements IPersonService {
 	@Override
 	public Person addPerson(Person person) throws StorageException {
 		return personDao.save(person);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<Person> getPersons() throws StorageException {
-		return personDao.findAll();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param firstname {@inheritDoc}
-	 * @param lastname {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public Person getPersonByFirstnameLastname(String firstname, String lastname) 
-			throws ServiceException, StorageException {
-		Person person = personDao.findByFirstnameLastname(firstname, lastname);
-		if (person != null) {
-			return person;
-		} else {
-			LOGGER.error("getPersonByFirstnameLastname: Firstname: " + firstname + " and lastname:" 
-					+ lastname + " not found in Person.");
-			throw new ServiceException("Firstname: " + firstname + " and lastname:" + lastname 
-					+ " not found in Person.");
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param address {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<Person> getPersonsByAddress(String address) throws ServiceException, StorageException {
-		List<Person> persons = personDao.findAll();
-		boolean exist = false;
-		
-		for(Person person: persons) {
-			if(address.equals(person.getAddress())) {
-				exist = true;
-				break;
-			}
-		}
-		
-		if(exist) {
-			return personDao.findByAddress(address);
-		} else {
-			LOGGER.error("getPersonsByAddress: Address: " + address + " not found in Person.");
-			throw new ServiceException("Address: " + address + " not found in Person.");
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param city {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<Person> getPersonsByCity(String city) throws ServiceException, StorageException {
-		List<Person> persons = personDao.findAll();
-		boolean exist = false;
-		
-		for(Person person: persons) {
-			if(city.equals(person.getCity())) {
-				exist = true;
-				break;
-			}
-		}
-		
-		if(exist) {
-			return personDao.findByCity(city);
-		} else {
-			LOGGER.error("getPersonsByCity: City: " + city + " not found in Person.");
-			throw new ServiceException("City: " + city + " not found in Person.");
-		}
 	}
 
 	/**

@@ -1,7 +1,5 @@
 package com.tipikae.safetynetalerts.service;
 
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +19,13 @@ import com.tipikae.safetynetalerts.model.MedicalRecord;
 @Service
 public class MedicalRecordServiceImpl implements IMedicalRecordService {
 
-	private static final Logger LOGGER = LogManager.getLogger("MedicalRecordService");
+	private static final Logger LOGGER = LogManager.getLogger("MedicalRecordServiceImpl");
 
 	/**
 	 * The DAO.
 	 */
 	@Autowired
 	private IMedicalRecordDAO medicalRecordDao;
-
-	/**
-	 * Set medicalRecordDao.
-	 * @param medicalRecordDao a IMedicalRecordDAO interface.
-	 */
-	public void setMedicalRecordDao(IMedicalRecordDAO medicalRecordDao) {
-		this.medicalRecordDao = medicalRecordDao;
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -45,35 +35,6 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	@Override
 	public MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) throws StorageException {
 		return medicalRecordDao.save(medicalRecord);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<MedicalRecord> getMedicalRecords() throws StorageException {
-		return medicalRecordDao.findAll();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param firstname {@inheritDoc}
-	 * @param lastname {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public MedicalRecord getMedicalRecordByFirstnameLastname(String firstname, String lastname) 
-			throws StorageException, ServiceException {
-		MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(firstname, lastname);
-		if (medicalRecord != null) {
-			return medicalRecord;
-		} else {
-			LOGGER.error("getMedicalRecordByFirstnameLastname: Firstname: " + firstname + " and lastname:" 
-					+ lastname + " not found in MedicalRecord.");
-			throw new ServiceException("Firstname: " + firstname + " and lastname:" + lastname 
-					+ " not found in MedicalRecord.");
-		}
 	}
 
 	/**

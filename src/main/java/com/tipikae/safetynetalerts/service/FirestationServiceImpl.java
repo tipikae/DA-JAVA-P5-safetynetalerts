@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tipikae.safetynetalerts.dao.IFirestationDAO;
-import com.tipikae.safetynetalerts.dao.IPersonDAO;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
@@ -22,21 +21,13 @@ import com.tipikae.safetynetalerts.model.Firestation;
 @Service
 public class FirestationServiceImpl implements IFirestationService {
 	
-	private static final Logger LOGGER = LogManager.getLogger("FirestationService");
+	private static final Logger LOGGER = LogManager.getLogger("FirestationServiceImpl");
 
 	/**
 	 * The DAO.
 	 */
 	@Autowired
-	private IFirestationDAO firestationDao;
-
-	/**
-	 * Set firestationDao.
-	 * @param firestationDao a IFirestationDAO interface.
-	 */
-	public void setFirestationDao(IFirestationDAO firestationDao) {
-		this.firestationDao = firestationDao;
-	}
+	private IFirestationDAO dao;
 
 	/**
 	 * {@inheritDoc}
@@ -45,57 +36,7 @@ public class FirestationServiceImpl implements IFirestationService {
 	 */
 	@Override
 	public Firestation addFirestationMapping(Firestation firestation) throws StorageException {
-		return firestationDao.save(firestation);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<Firestation> getFirestations() throws StorageException {
-		return firestationDao.findAll();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param station {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public Firestation getFirestationByAddress(String address) throws ServiceException, StorageException {
-		Firestation firestation = firestationDao.findByAddress(address);
-		if (firestation != null) {
-			return firestation;
-		} else {
-			LOGGER.error("getFirestationByAddress: Address: " + address + " not found in Firestation.");
-			throw new ServiceException("Address: " + address + " not found in Firestation.");
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param station {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<Firestation> getFirestationsByStation(int station) throws ServiceException, StorageException {
-		List<Firestation> firestations = firestationDao.findAll();
-		boolean exist = false;
-		
-		for(Firestation firestation: firestations) {
-			if(firestation.getStation() == station) {
-				exist = true;
-				break;
-			}
-		}
-		
-		if(exist) {
-			return firestationDao.findByStation(station);
-		} else {
-			LOGGER.error("getFirestationsByStation: Station: " + station + " not found in Firestation.");
-			throw new ServiceException("Station: " + station + " not found in Firestation.");
-		}
+		return dao.save(firestation);
 	}
 
 	/**
@@ -108,8 +49,8 @@ public class FirestationServiceImpl implements IFirestationService {
 	public Firestation updateFirestationMapping(String address, Firestation firestation) 
 			throws ServiceException, StorageException {
 		if (address.equals(firestation.getAddress())) {
-			if (firestationDao.findByAddress(address) != null) {
-				return firestationDao.update(firestation);
+			if (dao.findByAddress(address) != null) {
+				return dao.update(firestation);
 			} else {
 				LOGGER.error("updateFirestationMapping: Address: " + address + " not found in Firestation.");
 				throw new ServiceException("Address: " + address + " not found in Firestation.");
@@ -128,9 +69,9 @@ public class FirestationServiceImpl implements IFirestationService {
 	 */
 	@Override
 	public void deleteFirestationByAddress(String address) throws StorageException, ServiceException {
-		Firestation firestation = firestationDao.findByAddress(address);
+		Firestation firestation = dao.findByAddress(address);
 		if(firestation != null) {
-			firestationDao.delete(firestation);
+			dao.delete(firestation);
 		} else {
 			LOGGER.error("deleteFirestationByAddress: Address: " + address + " not found in Firestation.");
 			throw new ServiceException("Address: " + address + " not found in Firestation.");
@@ -143,9 +84,9 @@ public class FirestationServiceImpl implements IFirestationService {
 	 */
 	@Override
 	public void deleteFirestationsByStation(int station) throws ServiceException, StorageException {
-		List<Firestation> firestations = firestationDao.findByStation(station);
+		List<Firestation> firestations = dao.findByStation(station);
 		if(!firestations.isEmpty()) {
-			firestationDao.deleteFirestations(firestations);
+			dao.deleteFirestations(firestations);
 		} else {
 			LOGGER.error("deleteFirestationsByStation: Station: " + station + " not found in Firestation.");
 			throw new ServiceException("Station: " + station + " not found in Firestation.");

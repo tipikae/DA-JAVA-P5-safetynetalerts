@@ -42,7 +42,7 @@ import com.tipikae.safetynetalerts.util.Util;
 @Service
 public class InformationServiceImpl implements IInformationService {
 	
-	private static final Logger LOGGER = LogManager.getLogger("InformationService");
+	private static final Logger LOGGER = LogManager.getLogger("InformationServiceImpl");
 
 	/**
 	 * The IFirestationDAO.
@@ -59,30 +59,6 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Autowired
 	private IMedicalRecordDAO medicalRecordDao;
-
-	/**
-	 * Set firestationDAO.
-	 * @param firestationDao a IFirestationDAO interface.
-	 */
-	public void setFirestationDao(IFirestationDAO firestationDao) {
-		this.firestationDao = firestationDao;
-	}
-
-	/**
-	 * Set personDAO.
-	 * @param personDao a IPersonDAO interface.
-	 */
-	public void setPersonDao(IPersonDAO personDao) {
-		this.personDao = personDao;
-	}
-
-	/**
-	 * Set medicalRecordDAO.
-	 * @param medicalRecordDao a IMedicalRecordDAO interface.
-	 */
-	public void setMedicalRecordDao(IMedicalRecordDAO medicalRecordDao) {
-		this.medicalRecordDao = medicalRecordDao;
-	}
 
 	/**
 	 * {@inheritDoc}

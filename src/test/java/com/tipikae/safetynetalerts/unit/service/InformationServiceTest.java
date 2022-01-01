@@ -13,12 +13,13 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.tipikae.safetynetalerts.dao.FirestationDAOImpl;
-import com.tipikae.safetynetalerts.dao.MedicalRecordDAOImpl;
-import com.tipikae.safetynetalerts.dao.PersonDAOImpl;
+import com.tipikae.safetynetalerts.dao.IFirestationDAO;
+import com.tipikae.safetynetalerts.dao.IMedicalRecordDAO;
+import com.tipikae.safetynetalerts.dao.IPersonDAO;
 import com.tipikae.safetynetalerts.dto.ChildAlertDTO;
 import com.tipikae.safetynetalerts.dto.CommunityEmailDTO;
 import com.tipikae.safetynetalerts.dto.FireDTO;
@@ -37,14 +38,13 @@ import com.tipikae.safetynetalerts.service.InformationServiceImpl;
 class InformationServiceTest {
 	
 	@Mock
-	private FirestationDAOImpl firestationDao;
-	
+	private IFirestationDAO firestationDao;	
 	@Mock
-	private PersonDAOImpl personDao;
-	
+	private IPersonDAO personDao;	
 	@Mock
-	private MedicalRecordDAOImpl medicalRecordDao;
+	private IMedicalRecordDAO medicalRecordDao;
 	
+	@InjectMocks
 	private static InformationServiceImpl service;
 	
 	private static List<Firestation> firestations;
@@ -96,9 +96,6 @@ class InformationServiceTest {
 		when(firestationDao.findByStation(anyInt())).thenReturn(firestations);
 		when(personDao.findByAddress(anyString())).thenReturn(personsByAddress1, personsByAddress2);
 		when(medicalRecordDao.findByFirstnameLastname(anyString(), anyString())).thenReturn(md1, md2, md3);
-		service.setFirestationDao(firestationDao);
-		service.setMedicalRecordDao(medicalRecordDao);
-		service.setPersonDao(personDao);
 		
 		FirestationInfoDTO dto = service.getResidentsByStation(1);
 		assertEquals(2, dto.getAdults());
@@ -111,8 +108,6 @@ class InformationServiceTest {
 	void testGetResidentsByStation_whenEmpty() throws StorageException, ServiceException {
 		when(firestationDao.findByStation(anyInt())).thenReturn(firestations);
 		when(personDao.findByAddress(anyString())).thenReturn(new ArrayList<>());
-		service.setFirestationDao(firestationDao);
-		service.setPersonDao(personDao);
 		
 		FirestationInfoDTO dto = service.getResidentsByStation(1);
 		assertEquals(0, dto.getAdults());
@@ -124,14 +119,12 @@ class InformationServiceTest {
 	@Test
 	void testGetResidentsByStation_whenNoFoundStation() throws StorageException {
 		when(firestationDao.findByStation(anyInt())).thenReturn(new ArrayList<Firestation>());
-		service.setFirestationDao(firestationDao);
 		assertThrows(ServiceException.class, () -> service.getResidentsByStation(1));
 	}
 	
 	@Test
 	void testGetResidentsByStation_whenStorageException() throws StorageException {
 		doThrow(StorageException.class).when(firestationDao).findByStation(anyInt());
-		service.setFirestationDao(firestationDao);
 		assertThrows(StorageException.class, () -> service.getResidentsByStation(1));
 	}
 	
@@ -139,8 +132,6 @@ class InformationServiceTest {
 	void testGetChildrenByAddress_whenOk() throws StorageException, ServiceException {
 		when(personDao.findByAddress(anyString())).thenReturn(personsByAddress1);
 		when(medicalRecordDao.findByFirstnameLastname(anyString(), anyString())).thenReturn(md1, md2);
-		service.setPersonDao(personDao);
-		service.setMedicalRecordDao(medicalRecordDao);
 		
 		ChildAlertDTO dto = service.getChildrenByAddress("route");
 		assertEquals("route", dto.getAddress());
@@ -153,14 +144,12 @@ class InformationServiceTest {
 	@Test
 	void testGetChildrenByAddress_whenNotFound() throws StorageException {
 		when(personDao.findByAddress(anyString())).thenReturn(new ArrayList<>());
-		service.setPersonDao(personDao);
 		assertThrows(ServiceException.class, () -> service.getChildrenByAddress("avenue"));
 	}
 	
 	@Test
 	void testGetChildrenByAddress_whenStorageException() throws StorageException {
 		doThrow(StorageException.class).when(personDao).findByAddress(anyString());
-		service.setPersonDao(personDao);
 		assertThrows(StorageException.class, () -> service.getChildrenByAddress("avenue"));
 	}
 	
@@ -168,8 +157,6 @@ class InformationServiceTest {
 	void testGetPhoneNumbersByStation_whenOk() throws StorageException, ServiceException {
 		when(firestationDao.findByStation(anyInt())).thenReturn(firestations);
 		when(personDao.findByAddress(anyString())).thenReturn(personsByAddress1, personsByAddress2);
-		service.setFirestationDao(firestationDao);
-		service.setPersonDao(personDao);
 		
 		PhoneAlertDTO dto = service.getPhoneNumbersByStation(1);
 		assertEquals(3, dto.getPhones().size());
@@ -179,14 +166,12 @@ class InformationServiceTest {
 	@Test
 	void testGetPhoneNumbersByStation_whenNotFound() throws StorageException, ServiceException {
 		when(firestationDao.findByStation(anyInt())).thenReturn(new ArrayList<>());
-		service.setFirestationDao(firestationDao);
 		assertThrows(ServiceException.class, () -> service.getPhoneNumbersByStation(1));
 	}
 	
 	@Test
 	void testGetPhoneNumbersByStation_whenStorageException() throws StorageException {
 		doThrow(StorageException.class).when(firestationDao).findByStation(anyInt());
-		service.setFirestationDao(firestationDao);
 		assertThrows(StorageException.class, () -> service.getPhoneNumbersByStation(1));
 	}
 	
@@ -195,9 +180,6 @@ class InformationServiceTest {
 		when(personDao.findByAddress(anyString())).thenReturn(personsByAddress1);
 		when(firestationDao.findByAddress(anyString())).thenReturn(fs1);
 		when(medicalRecordDao.findByFirstnameLastname(anyString(), anyString())).thenReturn(md1, md2);
-		service.setPersonDao(personDao);
-		service.setFirestationDao(firestationDao);
-		service.setMedicalRecordDao(medicalRecordDao);
 		
 		FireDTO dto = service.getMembersByAddress("route");
 		assertEquals("route", dto.getAddress());
@@ -208,14 +190,12 @@ class InformationServiceTest {
 	@Test
 	void testGetMembersByAddress_whenNotFound() throws StorageException, ServiceException {
 		when(personDao.findByAddress(anyString())).thenReturn(new ArrayList<>());
-		service.setPersonDao(personDao);
 		assertThrows(ServiceException.class, () -> service.getMembersByAddress("route"));
 	}
 	
 	@Test
 	void testGetMembersByAddress_whenStorageException() throws StorageException, ServiceException {
 		doThrow(StorageException.class).when(personDao).findByAddress(anyString());
-		service.setPersonDao(personDao);
 		assertThrows(StorageException.class, () -> service.getMembersByAddress("route"));
 	}
 	
@@ -226,9 +206,6 @@ class InformationServiceTest {
 		when(firestationDao.findByStation(anyInt())).thenReturn(firestations);
 		when(personDao.findByAddress(anyString())).thenReturn(personsByAddress1, personsByAddress2);
 		when(medicalRecordDao.findByFirstnameLastname(anyString(), anyString())).thenReturn(md1, md2, md3);
-		service.setFirestationDao(firestationDao);
-		service.setMedicalRecordDao(medicalRecordDao);
-		service.setPersonDao(personDao);
 		
 		List<FloodDTO> dtos = service.getResidentsByStations(list);
 		assertEquals(1, dtos.get(0).getStation());
@@ -241,7 +218,6 @@ class InformationServiceTest {
 		List<Integer> list = new ArrayList<>();
 		list.add(10);
 		when(firestationDao.findByStation(anyInt())).thenReturn(new ArrayList<>());
-		service.setFirestationDao(firestationDao);
 		assertThrows(ServiceException.class, () -> service.getResidentsByStations(list));
 	}
 	
@@ -250,7 +226,6 @@ class InformationServiceTest {
 		List<Integer> list = new ArrayList<>();
 		list.add(1);
 		doThrow(StorageException.class).when(firestationDao).findByStation(anyInt());
-		service.setFirestationDao(firestationDao);
 		assertThrows(StorageException.class, () -> service.getResidentsByStations(list));
 	}
 	
@@ -258,8 +233,6 @@ class InformationServiceTest {
 	void testGetPersonInfoByLastname_whenOk() throws StorageException, ServiceException {
 		when(personDao.findAll()).thenReturn(personsByAddress1);
 		when(medicalRecordDao.findByFirstnameLastname(anyString(), anyString())).thenReturn(md1, md2);
-		service.setMedicalRecordDao(medicalRecordDao);
-		service.setPersonDao(personDao);
 		
 		PersonInfoDTO dto = service.getPersonInfoByLastname("Bob", "BOB");
 		assertEquals(2, dto.getPersons().size());
@@ -269,21 +242,18 @@ class InformationServiceTest {
 	@Test
 	void testGetPersonInfoByLastname_whenNotFound() throws StorageException, ServiceException {
 		when(personDao.findAll()).thenReturn(new ArrayList<>());
-		service.setPersonDao(personDao);
 		assertThrows(ServiceException.class, () -> service.getPersonInfoByLastname("Bob", "BOB"));
 	}
 	
 	@Test
 	void testGetPersonInfoByLastname_whenStorageException() throws StorageException, ServiceException {
 		doThrow(StorageException.class).when(personDao).findAll();
-		service.setPersonDao(personDao);
 		assertThrows(StorageException.class, () -> service.getPersonInfoByLastname("Bob", "BOB"));
 	}
 	
 	@Test
 	void testGetEmailsByCity_whenOk() throws StorageException, ServiceException {
 		when(personDao.findByCity(anyString())).thenReturn(persons);
-		service.setPersonDao(personDao);
 		
 		CommunityEmailDTO dto = service.getEmailsByCity("Paris");
 		assertEquals("bob@bob.com", dto.getEmails().get(0).getEmail());
@@ -292,14 +262,12 @@ class InformationServiceTest {
 	@Test
 	void testGetEmailsByCity_whenNotFound() throws StorageException, ServiceException {
 		when(personDao.findByCity(anyString())).thenReturn(new ArrayList<>());
-		service.setPersonDao(personDao);
 		assertThrows(ServiceException.class, () -> service.getEmailsByCity("Paris"));
 	}
 	
 	@Test
 	void testGetEmailsByCity_whenStorageException() throws StorageException, ServiceException {
 		doThrow(StorageException.class).when(personDao).findByCity(anyString());
-		service.setPersonDao(personDao);
 		assertThrows(StorageException.class, () -> service.getEmailsByCity("Paris"));
 	}
 

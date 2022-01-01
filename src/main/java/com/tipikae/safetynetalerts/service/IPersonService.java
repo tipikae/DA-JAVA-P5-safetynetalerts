@@ -1,7 +1,5 @@
 package com.tipikae.safetynetalerts.service;
 
-import java.util.List;
-
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
@@ -21,37 +19,6 @@ public interface IPersonService {
 	 * @throws StorageException
 	 */
 	Person addPerson(Person person) throws StorageException;
-	/**
-	 * Get all persons.
-	 * @return List<Person>
-	 * @throws StorageException
-	 */
-	List<Person> getPersons() throws StorageException;
-	/**
-	 * Get persons by address.
-	 * @param address a String.
-	 * @return List<Person>
-	 * @throws ServiceException
-	 * @throws StorageException
-	 */
-	List<Person> getPersonsByAddress(String address) throws ServiceException, StorageException;
-	/**
-	 * Get persons by city.
-	 * @param city a String.
-	 * @return List<Person>
-	 * @throws ServiceException
-	 * @throws StorageException
-	 */
-	List<Person> getPersonsByCity(String city) throws ServiceException, StorageException;
-	/**
-	 * Get a person by firstname and lastname.
-	 * @param firstname a String.
-	 * @param lastname a String.
-	 * @return Person
-	 * @throws ServiceException
-	 * @throws StorageException
-	 */
-	Person getPersonByFirstnameLastname(String firstname, String lastname) throws ServiceException, StorageException;
 	/**
 	 * Update a person.
 	 * @param firstname a String.

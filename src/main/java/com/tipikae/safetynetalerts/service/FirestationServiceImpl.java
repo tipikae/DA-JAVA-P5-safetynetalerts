@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tipikae.safetynetalerts.dao.IFirestationDAO;
+import com.tipikae.safetynetalerts.dao.IPersonDAO;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
@@ -30,8 +31,8 @@ public class FirestationServiceImpl implements IFirestationService {
 	private IFirestationDAO firestationDao;
 
 	/**
-	 * Set the DAO.
-	 * @param firestationDao a IFirestationDAO.
+	 * Set firestationDao.
+	 * @param firestationDao a IFirestationDAO interface.
 	 */
 	public void setFirestationDao(IFirestationDAO firestationDao) {
 		this.firestationDao = firestationDao;

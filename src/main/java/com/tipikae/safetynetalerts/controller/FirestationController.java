@@ -49,71 +49,11 @@ public class FirestationController {
 	 * @param firestation a FirestationDTO object.
 	 * @return ResponseEntity
 	 */
-	@PostMapping(value="/firestations", consumes={"application/json"})
+	@PostMapping(value="/firestation", consumes={"application/json"})
 	public ResponseEntity<Object> addFirestationMapping(@Valid @RequestBody FirestationDTO firestation) {
 		try {
 			Firestation added = service.addFirestationMapping(converter.toEntity(firestation));
 			return new ResponseEntity<>(converter.toDTO(added), HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
-	}
-
-	/**
-	 * Get all firestations mapping.
-	 * @return ResponseEntity
-	 */
-	@GetMapping("/firestations")
-    public ResponseEntity<Object> allFirestations() {
-		try {
-			List<Firestation> firestations = service.getFirestations();
-			return new ResponseEntity<>(converter.toDTOs(firestations), HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
-	}
-
-	/**
-	 * Get firestations by address.
-	 * @param address a String address.
-	 * @return ResponseEntity
-	 */
-	// /firestations/serach?address={address}
-	@GetMapping(value="/firestations/search", params="address")
-    public ResponseEntity<Object> firestationByAddress(@RequestParam @NotBlank String address) {
-		try {
-			Firestation firestation = service.getFirestationByAddress(address);
-			return new ResponseEntity<>(converter.toDTO(firestation), HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
-	}
-
-	/**
-	 * Get firestations by station number.
-	 * @param station an integer station number.
-	 * @return ResponseEntity
-	 */
-	// /firestations/search?station={station}
-	@GetMapping(value="/firestations/search", params="station")
-    public ResponseEntity<Object> firestationsByStation(@RequestParam @Positive @NotNull int station) {
-		try {
-			List<Firestation> firestations = service.getFirestationsByStation(station);
-			return new ResponseEntity<>(converter.toDTOs(firestations), HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -127,7 +67,7 @@ public class FirestationController {
 	 * @param firestation a FirestationDTO object.
 	 * @return ResponseEntity
 	 */
-	@PutMapping(value="/firestations/{address}", consumes={"application/json"})
+	@PutMapping(value="/firestation/{address}", consumes={"application/json"})
 	public ResponseEntity<Object> updateFirestationMapping(
 			@PathVariable @NotBlank String address, 
 			@Valid @RequestBody FirestationDTO firestation) {
@@ -151,7 +91,7 @@ public class FirestationController {
 	 * @param address a String address.
 	 * @return ResponseEntity
 	 */
-	@DeleteMapping("/firestations/{address}")
+	@DeleteMapping("/firestation/{address}")
 	public ResponseEntity<Object> deleteFirestationsByAddress(@PathVariable @NotBlank String address ) {
 		try {
 			service.deleteFirestationByAddress(address);
@@ -172,8 +112,8 @@ public class FirestationController {
 	 * @param station an integer station number.
 	 * @return ResponseEntity
 	 */
-	// /firestations?station={station}
-	@DeleteMapping("/firestations")
+	// /firestation?station={station}
+	@DeleteMapping("/firestation")
 	public ResponseEntity<Object> deleteFirestationByStation(@RequestParam @Positive @NotNull int station) {
 		try {
 			service.deleteFirestationsByStation(station);

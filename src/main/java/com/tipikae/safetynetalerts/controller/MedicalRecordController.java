@@ -1,7 +1,5 @@
 package com.tipikae.safetynetalerts.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
@@ -10,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,52 +39,11 @@ public class MedicalRecordController {
 	private IMedicalRecordService service;
 
 	/**
-	 * Get all medical records.
-	 * @return ResponseEntity
-	 */
-	@GetMapping("/medicalrecords")
-    public ResponseEntity<Object> allMedicalRecords() {
-		try {
-			List<MedicalRecord> medicalRecords = service.getMedicalRecords();
-			return new ResponseEntity<>(converter.toDTOs(medicalRecords), HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		} 
-	}
-
-	/**
-	 * Get a medical record by firstname and lastname.
-	 * @param firstName a String firstname.
-	 * @param lastName a String lastname.
-	 * @return ResponseEntity
-	 */
-	// /medicalrecords/search?firstName={firstname}&lastName={lastname}
-	@GetMapping(value="/medicalrecords/search", params={"firstName", "lastName"})
-    public ResponseEntity<Object> medicalrecordByFirstnameLastname(
-    		@RequestParam @NotBlank String firstName, 
-    		@RequestParam @NotBlank String lastName) {
-		try {
-			MedicalRecord medicalRecord = service.getMedicalRecordByFirstnameLastname(firstName, lastName);
-			return new ResponseEntity<>(converter.toDTO(medicalRecord), HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
-	}
-
-	/**
 	 * Add a medical record.
 	 * @param medicalRecord a MedicalRecordDTO object.
 	 * @return ResponseEntity
 	 */
-	@PostMapping(value="/medicalrecords", consumes={"application/json"})
+	@PostMapping(value="/medicalrecord", consumes={"application/json"})
 	public ResponseEntity<Object> addMedicalRecord(@Valid @RequestBody MedicalRecordDTO medicalRecord) {
 		try {
 			MedicalRecord added = service.addMedicalRecord(converter.toEntity(medicalRecord));
@@ -106,8 +62,8 @@ public class MedicalRecordController {
 	 * @param medicalRecord a MedicalRecordDTO object.
 	 * @return ResponseEntity
 	 */
-	// /medicalrecords?firstName={firstname}&lastName={lastname}
-	@PutMapping(value="/medicalrecords", consumes={"application/json"})
+	// /medicalrecord?firstName={firstname}&lastName={lastname}
+	@PutMapping(value="/medicalrecord", consumes={"application/json"})
 	public ResponseEntity<Object> updateMedicalRecord(
 			@RequestParam @NotBlank String firstName, 
 			@RequestParam @NotBlank String lastName,
@@ -133,8 +89,8 @@ public class MedicalRecordController {
 	 * @param lastName a String lastname.
 	 * @return ResponseEntity
 	 */
-	// /medicalrecords?firstName={firstname}&lastName={lastname}
-	@DeleteMapping("/medicalrecords")
+	// /medicalrecord?firstName={firstname}&lastName={lastname}
+	@DeleteMapping("/medicalrecord")
 	public ResponseEntity<Object> deleteMedicalRecord(
 			@RequestParam @NotBlank String firstName, 
 			@RequestParam @NotBlank String lastName) {

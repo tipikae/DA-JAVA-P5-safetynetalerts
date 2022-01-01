@@ -5,12 +5,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +43,7 @@ class PersonControllerTest {
 		when(converter.toEntity(any(PersonDTO.class))).thenReturn(new Person());
 		when(service.addPerson(any(Person.class)))
 			.thenReturn(new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "jaboyd@email.com"));
-		mockMvc.perform(post("/persons")
+		mockMvc.perform(post("/person")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
         	.andExpect(status().isOk());
@@ -56,7 +53,7 @@ class PersonControllerTest {
 	void testAddPerson_whenException() throws Exception {
 		when(converter.toEntity(any(PersonDTO.class))).thenReturn(new Person());
 		doThrow(StorageException.class).when(service).addPerson(any(Person.class));
-		mockMvc.perform(post("/persons")
+		mockMvc.perform(post("/person")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
         	.andExpect(status().is(507));
@@ -64,106 +61,17 @@ class PersonControllerTest {
 	
 	@Test
 	void testAddPerson_whenInvalid() throws Exception {
-		mockMvc.perform(post("/persons")
+		mockMvc.perform(post("/person")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
         	.andExpect(status().is(400));
 	}
 	
 	@Test
-	void testAllPersons_whenOk() throws Exception {
-		when(service.getPersons()).thenReturn(new ArrayList<Person>());
-		mockMvc.perform(get("/persons"))
-        	.andExpect(status().isOk());
-	}
-	
-	@Test
-	void testAllPersons_whenException() throws Exception {
-		doThrow(StorageException.class).when(service).getPersons();
-		mockMvc.perform(get("/persons"))
-        	.andExpect(status().is(507));
-	}
-	
-	@Test
-	void testPersonByFirstnameLastname_whenOk() throws Exception {
-		when(service.getPersonByFirstnameLastname(anyString(), anyString())).thenReturn(new Person(null, null, null, null, null, null, null));
-		mockMvc.perform(get("/persons/search?firstName=Bob&lastName=BOB"))
-        	.andExpect(status().isOk());
-	}
-	
-	@Test
-	void testPersonByFirstnameLastname_whenStorageException() throws Exception {
-		doThrow(StorageException.class).when(service).getPersonByFirstnameLastname("Bob", "BOB");
-		mockMvc.perform(get("/persons/search?firstName=Bob&lastName=BOB"))
-        	.andExpect(status().is(507));
-	}
-	
-	@Test
-	void testPersonByFirstnameLastname_whenServiceException() throws Exception {
-		doThrow(ServiceException.class).when(service).getPersonByFirstnameLastname("Bob", "BOB");
-		mockMvc.perform(get("/persons/search?firstName=Bob&lastName=BOB"))
-        	.andExpect(status().is(404));
-	}
-	
-	@Test
-	void testPersonsByAddress_whenOk() throws Exception {
-		when(service.getPersonsByAddress(anyString())).thenReturn(new ArrayList<Person>());
-		mockMvc.perform(get("/persons/search?address=route"))
-        	.andExpect(status().isOk());
-	}
-	
-	@Test
-	void testPersonsByAddress_whenInvalid() throws Exception {
-		mockMvc.perform(get("/persons/search?address="))
-        	.andExpect(status().is(400));
-	}
-	
-	@Test
-	void testPersonsByAddress_whenStorageException() throws Exception {
-		doThrow(StorageException.class).when(service).getPersonsByAddress(anyString());
-		mockMvc.perform(get("/persons/search?address=route"))
-        	.andExpect(status().is(507));
-	}
-	
-	@Test
-	void testPersonsByAddress_whenServiceException() throws Exception {
-		doThrow(ServiceException.class).when(service).getPersonsByAddress(anyString());
-		mockMvc.perform(get("/persons/search?address=route"))
-        	.andExpect(status().is(404));
-	}
-	
-	@Test
-	void testPersonsByCity_whenOk() throws Exception {
-		when(service.getPersonsByCity(anyString())).thenReturn(new ArrayList<Person>());
-		mockMvc.perform(get("/persons/search?city=Paris"))
-        	.andExpect(status().isOk());
-	}
-	
-	@Test
-	void testPersonsByCity_whenInvalid() throws Exception {
-		mockMvc.perform(get("/persons/search?city="))
-        	.andExpect(status().is(400));
-	}
-	
-	@Test
-	void testPersonsByCity_whenStorageException() throws Exception {
-		doThrow(StorageException.class).when(service).getPersonsByCity(anyString());
-		mockMvc.perform(get("/persons/search?city=Paris"))
-        	.andExpect(status().is(507));
-	}
-	
-	@Test
-	void testPersonsByCity_whenServiceException() throws Exception {
-		doThrow(ServiceException.class).when(service).getPersonsByCity(anyString());
-		mockMvc.perform(get("/persons/search?city=Paris"))
-        	.andExpect(status().is(404));
-	}
-	
-	@Test
 	void testUpdatePerson_whenOk() throws Exception {
 		when(converter.toEntity(any(PersonDTO.class))).thenReturn(new Person());
 		when(service.updatePerson(anyString(), anyString(), any(Person.class))).thenReturn(new Person(null, null, null, null, null, null, null));
-		mockMvc.perform(put("/persons?firstName=Bob&lastName=BOB")
+		mockMvc.perform(put("/person?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
         	.andExpect(status().isOk());
@@ -172,7 +80,7 @@ class PersonControllerTest {
 	@Test
 	void testUpdatePerson_whenInvalid() throws Exception {
 		when(service.updatePerson(anyString(), anyString(), any(Person.class))).thenReturn(new Person(null, null, null, null, null, null, null));
-		mockMvc.perform(put("/persons?firstName=Bob&lastName=BOB")
+		mockMvc.perform(put("/person?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
         	.andExpect(status().is(400));
@@ -182,7 +90,7 @@ class PersonControllerTest {
 	void testUpdatePerson_whenStorageException() throws Exception {
 		when(converter.toEntity(any(PersonDTO.class))).thenReturn(new Person());
 		doThrow(StorageException.class).when(service).updatePerson(anyString(), anyString(), any(Person.class));
-		mockMvc.perform(put("/persons?firstName=Bob&lastName=BOB")
+		mockMvc.perform(put("/person?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
         	.andExpect(status().is(507));
@@ -192,7 +100,7 @@ class PersonControllerTest {
 	void testUpdatePerson_whenServiceException() throws Exception {
 		when(converter.toEntity(any(PersonDTO.class))).thenReturn(new Person());
 		doThrow(ServiceException.class).when(service).updatePerson(anyString(), anyString(), any(Person.class));
-		mockMvc.perform(put("/persons?firstName=Bob&lastName=BOB")
+		mockMvc.perform(put("/person?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
         	.andExpect(status().is(404));
@@ -200,27 +108,27 @@ class PersonControllerTest {
 	
 	@Test
 	void testDeletePerson_whenOk() throws Exception {
-		mockMvc.perform(delete("/persons?firstName=John&lastName=Boyd"))
+		mockMvc.perform(delete("/person?firstName=John&lastName=Boyd"))
         	.andExpect(status().isOk());
 	}
 	
 	@Test
 	void testDeletePerson_whenInvalid() throws Exception {
-		mockMvc.perform(delete("/persons?firstName=John&lastName="))
+		mockMvc.perform(delete("/person?firstName=John&lastName="))
         	.andExpect(status().is(400));
 	}
 	
 	@Test
 	void testDeletePerson_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).deletePerson("Bob", "BOB");
-		mockMvc.perform(delete("/persons?firstName=Bob&lastName=BOB"))
+		mockMvc.perform(delete("/person?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(507));
 	}
 	
 	@Test
 	void testDeletePerson_whenServiceException() throws Exception {
 		doThrow(ServiceException.class).when(service).deletePerson("Bob", "BOB");
-		mockMvc.perform(delete("/persons?firstName=Bob&lastName=BOB"))
+		mockMvc.perform(delete("/person?firstName=Bob&lastName=BOB"))
         	.andExpect(status().is(404));
 	}
 }

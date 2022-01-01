@@ -60,7 +60,7 @@ class FirestationControllerTest {
 	
 	@Test
 	void testAddFirestationMapping_whenInvalid() throws Exception {
-		mockMvc.perform(post("/firestations")
+		mockMvc.perform(post("/firestation")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
         	.andExpect(status().is(400));

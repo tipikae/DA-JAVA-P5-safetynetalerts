@@ -1,6 +1,7 @@
 package com.tipikae.safetynetalerts.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -30,14 +31,14 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public MedicalRecord save(MedicalRecord medicalRecord) throws StorageException {
+	public Optional<MedicalRecord> save(MedicalRecord medicalRecord) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<MedicalRecord> medicalRecords = storage.getMedicalRecords();
 		medicalRecords.add(medicalRecord);
 		storage.setMedicalRecords(medicalRecords);
 		jsonStorage.writeStorage(storage);
 		
-		return medicalRecord;
+		return Optional.of(medicalRecord);
 	}
 
 	/**
@@ -45,9 +46,9 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public List<MedicalRecord> findAll() throws StorageException {
+	public Optional<List<MedicalRecord>> findAll() throws StorageException {
 		storage = jsonStorage.readStorage();
-		return storage.getMedicalRecords();
+		return Optional.ofNullable(storage.getMedicalRecords());
 	}
 
 	/**
@@ -57,7 +58,7 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public MedicalRecord findByFirstnameLastname(String firstname, String lastname) throws StorageException {
+	public Optional<MedicalRecord> findByFirstnameLastname(String firstname, String lastname) throws StorageException {
 		storage = jsonStorage.readStorage();
 		MedicalRecord medicalRecord = null;
 		for (MedicalRecord item : storage.getMedicalRecords()) {
@@ -68,7 +69,7 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 			}
 		}
 		
-		return medicalRecord;
+		return Optional.ofNullable(medicalRecord);
 	}
 
 	/**
@@ -77,7 +78,7 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public MedicalRecord update(MedicalRecord medicalRecord) throws StorageException {
+	public Optional<MedicalRecord> update(MedicalRecord medicalRecord) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<MedicalRecord> medicalRecords = storage.getMedicalRecords();
 		int i = -1;
@@ -94,9 +95,9 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 			medicalRecords.set(i, medicalRecord);
 			storage.setMedicalRecords(medicalRecords);
 			jsonStorage.writeStorage(storage);
-			return medicalRecord;
+			return Optional.of(medicalRecord);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 

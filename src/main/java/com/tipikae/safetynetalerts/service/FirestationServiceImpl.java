@@ -48,7 +48,8 @@ public class FirestationServiceImpl implements IFirestationService {
 	@Override
 	public FirestationDTO addFirestationMapping(FirestationDTO firestationDTO) throws ServiceException, StorageException {
 		Firestation firestation = converter.toEntity(firestationDTO);
-		if(dao.findByAddress(firestation.getAddress()).isPresent()) {
+		Optional<Firestation> optional = dao.findByAddress(firestation.getAddress());
+		if(!optional.isPresent()) {
 			return converter.toDTO(dao.save(firestation).get());
 		} else {
 			LOGGER.error("addFirestationMapping: mapping with address: " + firestation.getAddress()
@@ -72,7 +73,8 @@ public class FirestationServiceImpl implements IFirestationService {
 			throws ServiceException, StorageException {
 		if (address.equals(firestationDTO.getAddress())) {
 			Firestation firestation = converter.toEntity(firestationDTO);
-			if (dao.findByAddress(address).isPresent()) {
+			Optional<Firestation> optional = dao.findByAddress(address);
+			if (optional.isPresent()) {
 				return converter.toDTO(dao.update(firestation).get());
 			} else {
 				LOGGER.error("updateFirestationMapping: Address: " + address + " not found in Firestation.");

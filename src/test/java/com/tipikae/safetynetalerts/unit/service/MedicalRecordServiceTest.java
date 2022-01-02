@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,7 @@ class MedicalRecordServiceTest {
 	@Test
 	void testAddMedicalRecord_whenException() throws StorageException {
 		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
 		doThrow(StorageException.class).when(dao).save(medicalRecord);
 		assertThrows(StorageException.class, () -> service.addMedicalRecord(medicalRecordDTO));
 	}
@@ -62,7 +64,7 @@ class MedicalRecordServiceTest {
 	@Test
 	void testUpdateMedicalRecord_wheNull() throws StorageException {
 		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
-		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(null);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.updateMedicalRecord("Bob", "BOB", medicalRecordDTO));
 	}
 	
@@ -74,7 +76,7 @@ class MedicalRecordServiceTest {
 	
 	@Test
 	void testDeleteMedicalRecord_whenNull() throws StorageException {
-		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(null);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.deleteMedicalRecord("Bob", "BOB"));
 	}
 

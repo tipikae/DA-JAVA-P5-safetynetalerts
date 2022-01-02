@@ -46,7 +46,7 @@ class FirestationServiceTest {
 	@Test
 	void testAddFirestation_whenException() throws StorageException {
 		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
-		when(dao.findByAddress(anyString())).thenReturn(Optional.of(new Firestation()));
+		when(dao.findByAddress(anyString())).thenReturn(Optional.empty());
 		doThrow(StorageException.class).when(dao).save(firestation);
 		assertThrows(StorageException.class, () -> service.addFirestationMapping(firestationDTO));
 	}

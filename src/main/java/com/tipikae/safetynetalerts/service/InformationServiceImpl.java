@@ -68,27 +68,33 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Override
 	public FirestationInfoDTO getResidentsByStation(int stationNumber) throws ServiceException, StorageException {
-		Optional<List<Firestation>> optFirestation = firestationDao.findByStation(stationNumber);
-		if(optFirestation.isPresent()) {
-			List<Firestation> firestations = optFirestation.get();
+		Optional<List<Firestation>> optFirestations = firestationDao.findByStation(stationNumber);
+		if(optFirestations.isPresent()) {
+			List<Firestation> firestations = optFirestations.get();
 			List<FirestationInfo> residents = new ArrayList<>();
 			int nbAdults = 0;
 			int nbChildren = 0;
 			for(Firestation firestation: firestations) {
-				List<Person> persons = personDao.findByAddress(firestation.getAddress());
-				for(Person person: persons) {
-					MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
-							person.getFirstName(), person.getLastName());
-					if(medicalRecord != null) {
-						if(Util.isAdult(medicalRecord.getBirthdate())) {
-							nbAdults++;
-						} else {
-							nbChildren++;
+				Optional<List<Person>> optPersons = personDao.findByAddress(firestation.getAddress());
+				if(optPersons.isPresent()) {
+					List<Person> persons = optPersons.get();
+					for(Person person: persons) {
+						Optional<MedicalRecord> optMedicalRecord = medicalRecordDao.findByFirstnameLastname(
+								person.getFirstName(), person.getLastName());
+						if(optMedicalRecord.isPresent()) {
+							MedicalRecord medicalRecord = optMedicalRecord.get();
+							if(Util.isAdult(medicalRecord.getBirthdate())) {
+								nbAdults++;
+							} else {
+								nbChildren++;
+							}
 						}
+						FirestationInfo resident = new FirestationInfo(person.getFirstName(), person.getLastName(), 
+								person.getAddress(), person.getPhone());
+						residents.add(resident);
 					}
-					FirestationInfo resident = new FirestationInfo(person.getFirstName(), person.getLastName(), 
-							person.getAddress(), person.getPhone());
-					residents.add(resident);
+				} else {
+					// LOGGER.debug("");
 				}
 			}
 			
@@ -106,19 +112,25 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Override
 	public ChildAlertDTO getChildrenByAddress(String address) throws ServiceException, StorageException {
-		List<Person> persons = personDao.findByAddress(address);
-		if(!persons.isEmpty()) {
+		Optional<List<Person>> optPersons = personDao.findByAddress(address);
+		if(optPersons.isPresent()) {
+			List<Person> persons = optPersons.get();
 			List<ChildAlert> children = new ArrayList<>();
 			List<ChildAlert> adults = new ArrayList<>();
 			for(Person person: persons) {
-				MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
+				Optional<MedicalRecord> optMedicalRecord = medicalRecordDao.findByFirstnameLastname(
 						person.getFirstName(), person.getLastName());
-				if(Util.isAdult(medicalRecord.getBirthdate())) {
-					adults.add(new ChildAlert(person.getFirstName(), person.getLastName(), 
-							Util.calculateAge(medicalRecord.getBirthdate())));
+				if(optMedicalRecord.isPresent()) {
+					MedicalRecord medicalRecord = optMedicalRecord.get();
+					if(Util.isAdult(medicalRecord.getBirthdate())) {
+						adults.add(new ChildAlert(person.getFirstName(), person.getLastName(), 
+								Util.calculateAge(medicalRecord.getBirthdate())));
+					} else {
+						children.add(new ChildAlert(person.getFirstName(), person.getLastName(), 
+								Util.calculateAge(medicalRecord.getBirthdate())));
+					}
 				} else {
-					children.add(new ChildAlert(person.getFirstName(), person.getLastName(), 
-							Util.calculateAge(medicalRecord.getBirthdate())));
+					// LOGGER.debug("");
 				}
 			}
 			
@@ -145,10 +157,15 @@ public class InformationServiceImpl implements IInformationService {
 			List<Firestation> firestations = optFirestation.get();
 			List<PhoneAlert> phones = new ArrayList<>();
 			for(Firestation firestation: firestations) {
-				List<Person> persons = personDao.findByAddress(firestation.getAddress());
-				for(Person person: persons) {
-					phones.add(new PhoneAlert(person.getPhone()));
-				}
+				Optional<List<Person>> optPersons = personDao.findByAddress(firestation.getAddress());
+				if(optPersons.isPresent()) {
+					List<Person> persons = optPersons.get();
+					for(Person person: persons) {
+						phones.add(new PhoneAlert(person.getPhone()));
+					}
+				} else {
+					// LOGGER.debug("");
+				}				
 			}
 			
 			return new PhoneAlertDTO(station, phones);
@@ -165,8 +182,9 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Override
 	public FireDTO getMembersByAddress(String address) throws ServiceException, StorageException {
-		List<Person> persons = personDao.findByAddress(address);
-		if(!persons.isEmpty()) {
+		Optional<List<Person>> optPersons = personDao.findByAddress(address);
+		if(optPersons.isPresent()) {
+			List<Person> persons = optPersons.get();
 			List<Fire> members = new ArrayList<>();
 			Optional<Firestation> optFirestation = firestationDao.findByAddress(address);
 			if(optFirestation.isPresent()) {
@@ -174,18 +192,23 @@ public class InformationServiceImpl implements IInformationService {
 				int station = firestation.getStation();
 				
 				for(Person person: persons) {
-					MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
+					Optional<MedicalRecord> optMedicalRecord = medicalRecordDao.findByFirstnameLastname(
 							person.getFirstName(), person.getLastName());
-					Fire member;
-					if(medicalRecord != null) {
-						int age = Util.calculateAge(medicalRecord.getBirthdate());
-						member = new Fire(person.getFirstName(), person.getLastName(), person.getPhone(), 
-								age, medicalRecord.getMedications(), medicalRecord.getAllergies());
+					if(optMedicalRecord.isPresent()) {
+						MedicalRecord medicalRecord = optMedicalRecord.get();
+						Fire member;
+						if(medicalRecord != null) {
+							int age = Util.calculateAge(medicalRecord.getBirthdate());
+							member = new Fire(person.getFirstName(), person.getLastName(), person.getPhone(), 
+									age, medicalRecord.getMedications(), medicalRecord.getAllergies());
+						} else {
+							member = new Fire(person.getFirstName(), person.getLastName(), person.getPhone(), 
+									0, null, null);
+						}
+						members.add(member);
 					} else {
-						member = new Fire(person.getFirstName(), person.getLastName(), person.getPhone(), 
-								0, null, null);
+						// LOGGER.debug("");
 					}
-					members.add(member);
 				}
 				
 				return new FireDTO(address, station, members);
@@ -213,16 +236,18 @@ public class InformationServiceImpl implements IInformationService {
 			if (optFirestation.isPresent()) {
 				List<Firestation> firestations = optFirestation.get();
 				for (Firestation firestation : firestations) {
-					List<Flood> residents = new ArrayList<>();
-					List<Person> persons = personDao.findByAddress(firestation.getAddress());
-					if(!persons.isEmpty()) {
+					Optional<List<Person>> optPersons = personDao.findByAddress(firestation.getAddress());
+					if(optPersons.isPresent()) {
+						List<Person> persons = optPersons.get();
+						List<Flood> residents = new ArrayList<>();
 						for(Person person: persons) {
-							MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
+							Optional<MedicalRecord> optMedicalRecord = medicalRecordDao.findByFirstnameLastname(
 									person.getFirstName(), person.getLastName());
-							if(medicalRecord != null) {
+							if(optMedicalRecord.isPresent()) {
+								MedicalRecord medicalRecord = optMedicalRecord.get();
 								residents.add(new Flood(person.getFirstName(), person.getLastName(), 
-										person.getPhone(), Util.calculateAge(medicalRecord.getBirthdate()), 
-										medicalRecord.getMedications(), medicalRecord.getAllergies()));
+									person.getPhone(), Util.calculateAge(medicalRecord.getBirthdate()), 
+									medicalRecord.getMedications(), medicalRecord.getAllergies()));
 							} else {
 								LOGGER.error("getResidentsByStations: name: " + person.getFirstName() + " " + 
 										person.getLastName() + " not found in MedicalRecord.");
@@ -262,19 +287,24 @@ public class InformationServiceImpl implements IInformationService {
 	@Override
 	public PersonInfoDTO getPersonInfoByLastname(String firstname, String lastname)
 			throws ServiceException, StorageException {
-		List<Person> persons = personDao.findAll();
+		Optional<List<Person>> optPersons = personDao.findAll();
 		List<PersonInfo> personsInfo = new ArrayList<>();
-		
-		for(Person person: persons) {
-			if (person.getLastName().equals(lastname)) {
-				MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
-						person.getFirstName(), lastname);
-				if(medicalRecord != null) {
-					personsInfo.add(new PersonInfo(person.getFirstName(), lastname, person.getAddress(), 
-							Util.calculateAge(medicalRecord.getBirthdate()), person.getEmail(), 
-							medicalRecord.getMedications(), medicalRecord.getAllergies()));
+		if(optPersons.isPresent()) {
+			List<Person> persons = optPersons.get();
+			for(Person person: persons) {
+				if (person.getLastName().equals(lastname)) {
+					Optional<MedicalRecord> optMedicalRecord = medicalRecordDao.findByFirstnameLastname(
+							person.getFirstName(), person.getLastName());
+					if(optMedicalRecord.isPresent()) {
+						MedicalRecord medicalRecord = optMedicalRecord.get();
+						personsInfo.add(new PersonInfo(person.getFirstName(), lastname, person.getAddress(), 
+								Util.calculateAge(medicalRecord.getBirthdate()), person.getEmail(), 
+								medicalRecord.getMedications(), medicalRecord.getAllergies()));
+					}
 				}
 			}
+		} else {
+			// LOGGER.debug("");
 		}
 		
 		if(!personsInfo.isEmpty()) {
@@ -292,8 +322,9 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Override
 	public CommunityEmailDTO getEmailsByCity(String city) throws ServiceException, StorageException {
-		List<Person> persons = personDao.findByCity(city);
-		if(!persons.isEmpty()) {
+		Optional<List<Person>> optPersons = personDao.findByCity(city);
+		if(optPersons.isPresent()) {
+			List<Person> persons = optPersons.get();
 			List<CommunityEmail> emails = new ArrayList<>();
 			for(Person person: persons) {
 				emails.add(new CommunityEmail(person.getEmail()));

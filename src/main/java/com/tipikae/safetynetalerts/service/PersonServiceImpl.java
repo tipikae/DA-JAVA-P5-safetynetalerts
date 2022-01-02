@@ -1,5 +1,7 @@
 package com.tipikae.safetynetalerts.service;
 
+import java.util.Optional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +47,9 @@ public class PersonServiceImpl implements IPersonService {
 	@Override
 	public PersonDTO addPerson(PersonDTO personDTO) throws ServiceException, StorageException {
 		Person person = converter.toEntity(personDTO);
-		if(dao.findByFirstnameLastname(person.getFirstName(), person.getLastName()) == null) {
-			return converter.toDTO(dao.save(person));
+		Optional<Person> optional = dao.findByFirstnameLastname(person.getFirstName(), person.getLastName());
+		if(!optional.isPresent()) {
+			return converter.toDTO(dao.save(person).get());
 		} else {
 			LOGGER.error("addPerson: person with firstname: " + person.getFirstName()
 					+ " and lastname: " + person.getLastName() + " already exists.");
@@ -71,8 +74,9 @@ public class PersonServiceImpl implements IPersonService {
 			throws ServiceException, StorageException {
 		if (firstname.equals(personDTO.getFirstName()) && lastname.equals(personDTO.getLastName())) {
 			Person person = converter.toEntity(personDTO);
-			if (dao.findByFirstnameLastname(firstname, lastname) != null) {
-				return converter.toDTO(dao.update(person));
+			Optional<Person> optional = dao.findByFirstnameLastname(firstname, lastname);
+			if (optional.isPresent()) {
+				return converter.toDTO(dao.update(person).get());
 			} else {
 				LOGGER.error("updatePerson: Firstname: " + firstname + " and lastname:"
 						+ lastname + " not found in Person.");
@@ -98,8 +102,9 @@ public class PersonServiceImpl implements IPersonService {
 	 */
 	@Override
 	public void deletePerson(String firstname, String lastname) throws StorageException, ServiceException {
-		Person person = dao.findByFirstnameLastname(firstname, lastname);
-		if(person != null) {
+		Optional<Person> optional = dao.findByFirstnameLastname(firstname, lastname);
+		if(optional.isPresent()) {
+			Person person = optional.get();
 			dao.delete(person);
 		} else {
 			LOGGER.error("deletePerson: Firstname: " + firstname + " and lastname:"

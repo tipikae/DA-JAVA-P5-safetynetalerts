@@ -2,6 +2,7 @@ package com.tipikae.safetynetalerts.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -31,14 +32,14 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Person save(Person person) throws StorageException {
+	public Optional<Person> save(Person person) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> persons = storage.getPersons();
 		persons.add(person);
 		storage.setPersons(persons);
 		jsonStorage.writeStorage(storage);
 		
-		return person;
+		return Optional.of(person);
 	}
 
 	/**
@@ -46,9 +47,9 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public List<Person> findAll() throws StorageException {
+	public Optional<List<Person>> findAll() throws StorageException {
 		storage = jsonStorage.readStorage();
-		return storage.getPersons();
+		return Optional.ofNullable(storage.getPersons());
 	}
 
 	/**
@@ -58,7 +59,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Person findByFirstnameLastname(String firstname, String lastname) throws StorageException {
+	public Optional<Person> findByFirstnameLastname(String firstname, String lastname) throws StorageException {
 		storage = jsonStorage.readStorage();
 		Person person = null;
 		for (Person item : storage.getPersons()) {
@@ -69,7 +70,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 			}
 		}
 		
-		return person;
+		return Optional.of(person);
 	}
 
 	/**
@@ -78,7 +79,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public List<Person> findByAddress(String address) throws StorageException {
+	public Optional<List<Person>> findByAddress(String address) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> results = new ArrayList<>();
 		for (Person item : storage.getPersons()) {
@@ -87,7 +88,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 			}
 		}
 		
-		return results;
+		return Optional.ofNullable(results);
 	}
 
 	/**
@@ -96,7 +97,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public List<Person> findByCity(String city) throws StorageException {
+	public Optional<List<Person>> findByCity(String city) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> results = new ArrayList<>();
 		for (Person item : storage.getPersons()) {
@@ -105,7 +106,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 			}
 		}
 		
-		return results;
+		return Optional.ofNullable(results);
 	}
 
 	/**
@@ -114,7 +115,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Person update(Person person) throws StorageException {
+	public Optional<Person> update(Person person) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> persons = storage.getPersons();
 		int i = -1;
@@ -131,9 +132,9 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 			persons.set(i, person);
 			storage.setPersons(persons);
 			jsonStorage.writeStorage(storage);
-			return person;
+			return Optional.of(person);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 

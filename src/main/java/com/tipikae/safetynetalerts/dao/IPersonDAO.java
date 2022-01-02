@@ -1,6 +1,7 @@
 package com.tipikae.safetynetalerts.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
@@ -16,50 +17,50 @@ public interface IPersonDAO {
 	/**
 	 * Save a Person object.
 	 * @param person a Person object.
-	 * @return Person
+	 * @return Optional<Person>
 	 * @throws StorageException
 	 */
-	Person save(Person person) throws StorageException;
+	Optional<Person> save(Person person) throws StorageException;
 
 	/**
 	 * Find all persons.
-	 * @return List<Person>
+	 * @return Optional<List<Person>>
 	 * @throws StorageException
 	 */
-	List<Person> findAll() throws StorageException;
+	Optional<List<Person>> findAll() throws StorageException;
 
 	/**
 	 * Find a person by firstname and lastname.
 	 * @param firstname a String firtname.
 	 * @param lastname a String lastname.
-	 * @return Person
+	 * @return Optional<Person>
 	 * @throws StorageException
 	 */
-	Person findByFirstnameLastname(String firstname, String lastname) throws StorageException;
+	Optional<Person> findByFirstnameLastname(String firstname, String lastname) throws StorageException;
 
 	/**
 	 * Find persons by address.
 	 * @param address a String address.
-	 * @return List<Person>
+	 * @return Optional<List<Person>>
 	 * @throws StorageException
 	 */
-	List<Person> findByAddress(String address) throws StorageException;
+	Optional<List<Person>> findByAddress(String address) throws StorageException;
 
 	/**
 	 * Find persons by city.
 	 * @param city a String city
-	 * @return List<Person>
+	 * @return Optional<List<Person>>
 	 * @throws StorageException
 	 */
-	List<Person> findByCity(String city) throws StorageException;
+	Optional<List<Person>> findByCity(String city) throws StorageException;
 
 	/**
 	 * Update a person.
 	 * @param person a Person object.
-	 * @return Person
+	 * @return Optional<Person>
 	 * @throws StorageException
 	 */
-	Person update(Person person) throws StorageException;
+	Optional<Person> update(Person person) throws StorageException;
 
 	/**
 	 * Delete a person.

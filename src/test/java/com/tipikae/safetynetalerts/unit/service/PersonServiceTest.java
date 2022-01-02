@@ -5,6 +5,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +59,7 @@ public class PersonServiceTest {
 	@Test
 	void testUpdatePerson_wheNull() throws StorageException {
 		when(converter.toEntity(personDTO)).thenReturn(person);
-		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(null);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.updatePerson("Bob", "BOB", personDTO));
 	}
 	
@@ -69,7 +71,7 @@ public class PersonServiceTest {
 	
 	@Test
 	void testDeletePerson_whenNull() throws StorageException {
-		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(null);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.deletePerson("Bob", "BOB"));
 	}
 }

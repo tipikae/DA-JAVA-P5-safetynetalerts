@@ -1,5 +1,7 @@
 package com.tipikae.safetynetalerts.service;
 
+import java.util.Optional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +48,10 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	public MedicalRecordDTO addMedicalRecord(MedicalRecordDTO medicalRecordDTO) 
 			throws ServiceException, StorageException {
 		MedicalRecord medicalRecord = converter.toEntity(medicalRecordDTO);
-		if(dao.findByFirstnameLastname(medicalRecord.getFirstName(), medicalRecord.getLastName()) == null) {
-			return converter.toDTO(dao.save(medicalRecord));
+		Optional<MedicalRecord> optional = dao.findByFirstnameLastname(medicalRecord.getFirstName(), 
+				medicalRecord.getLastName());
+		if(!optional.isPresent()) {
+			return converter.toDTO(dao.save(medicalRecord).get());
 		} else {
 			LOGGER.error("addMedicalRecord: medical record with firstname: " + medicalRecord.getFirstName()
 					+ " and lastname: " + medicalRecord.getLastName() + " already exists.");
@@ -72,8 +76,9 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 			throws ServiceException, StorageException {
 		if (firstname.equals(medicalRecordDTO.getFirstName()) && lastname.equals(medicalRecordDTO.getLastName())) {
 			MedicalRecord medicalRecord = converter.toEntity(medicalRecordDTO);
-			if (dao.findByFirstnameLastname(firstname, lastname) != null) {
-				return converter.toDTO(dao.update(medicalRecord));
+			Optional<MedicalRecord> optional = dao.findByFirstnameLastname(firstname, lastname);
+			if (optional.isPresent()) {
+				return converter.toDTO(dao.update(medicalRecord).get());
 			} else {
 				LOGGER.error("updateMedicalRecord: Firstname: " + firstname + " and lastname:"
 						+ lastname + " not found in MedicalRecord.");
@@ -99,8 +104,9 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	 */
 	@Override
 	public void deleteMedicalRecord(String firstname, String lastname) throws ServiceException, StorageException {
-		MedicalRecord medicalRecord = dao.findByFirstnameLastname(firstname, lastname);
-		if(medicalRecord != null) {
+		Optional<MedicalRecord> optional = dao.findByFirstnameLastname(firstname, lastname);
+		if(optional.isPresent()) {
+			MedicalRecord medicalRecord = optional.get();
 			dao.delete(medicalRecord);
 		} else {
 			LOGGER.error("deleteMedicalRecord: Firstname: " + firstname + " and lastname:"

@@ -16,9 +16,10 @@ public interface IPersonService {
 	 * Add a person.
 	 * @param person a Person object.
 	 * @return Person
+	 * @throws ServiceException
 	 * @throws StorageException
 	 */
-	Person addPerson(Person person) throws StorageException;
+	Person addPerson(Person person) throws ServiceException, StorageException;
 	/**
 	 * Update a person.
 	 * @param firstname a String.

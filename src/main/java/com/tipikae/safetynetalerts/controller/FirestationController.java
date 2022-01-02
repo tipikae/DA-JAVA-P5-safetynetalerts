@@ -55,6 +55,10 @@ public class FirestationController {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
+		} catch (ServiceException e) {
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()), 
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 

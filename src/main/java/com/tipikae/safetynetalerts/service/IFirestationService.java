@@ -16,9 +16,10 @@ public interface IFirestationService {
 	 * Add a firestation mapping.
 	 * @param firestation a Firestation object.
 	 * @return Firestation
+	 * @throws ServiceException
 	 * @throws StorageException
 	 */
-	Firestation addFirestationMapping(Firestation firestation) throws StorageException;
+	Firestation addFirestationMapping(Firestation firestation) throws ServiceException, StorageException;
 	/**
 	 * Update a firestation mapping.
 	 * @param address a String.

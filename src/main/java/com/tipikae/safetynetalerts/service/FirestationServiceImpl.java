@@ -33,10 +33,20 @@ public class FirestationServiceImpl implements IFirestationService {
 	 * {@inheritDoc}
 	 * @param firestation {@inheritDoc}
 	 * @return {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
-	public Firestation addFirestationMapping(Firestation firestation) throws StorageException {
-		return dao.save(firestation);
+	public Firestation addFirestationMapping(Firestation firestation) throws ServiceException, StorageException {
+		if(dao.findByAddress(firestation.getAddress()) == null) {
+			return dao.save(firestation);
+		} else {
+			LOGGER.error("addFirestationMapping: mapping with address: " + firestation.getAddress()
+					+ " already exists.");
+			throw new ServiceException("Mapping with address: " + firestation.getAddress()
+					+ " already exists.");
+		}
+		
 	}
 
 	/**
@@ -44,6 +54,8 @@ public class FirestationServiceImpl implements IFirestationService {
 	 * @param address {@inheritDoc}
 	 * @param firestation {@inheritDoc}
 	 * @return {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
 	public Firestation updateFirestationMapping(String address, Firestation firestation) 
@@ -66,6 +78,8 @@ public class FirestationServiceImpl implements IFirestationService {
 	/**
 	 * {@inheritDoc}
 	 * @param address {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
 	public void deleteFirestationByAddress(String address) throws StorageException, ServiceException {
@@ -81,6 +95,8 @@ public class FirestationServiceImpl implements IFirestationService {
 	/**
 	 * {@inheritDoc}
 	 * @param station {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
 	public void deleteFirestationsByStation(int station) throws ServiceException, StorageException {

@@ -16,9 +16,10 @@ public interface IMedicalRecordService {
 	 * Add a medical record.
 	 * @param medicalRecord a MedicalRecord object.
 	 * @return MedicalRecord
+	 * @throws ServiceException
 	 * @throws StorageException
 	 */
-	MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) throws StorageException;
+	MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) throws ServiceException, StorageException;
 	/**
 	 * Update a medical record.
 	 * @param firstname a String.

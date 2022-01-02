@@ -25,16 +25,27 @@ public class PersonServiceImpl implements IPersonService {
 	 * The DAO.
 	 */
 	@Autowired
-	private IPersonDAO personDao;
+	private IPersonDAO dao;
 
 	/**
 	 * {@inheritDoc}
 	 * @param person {@inheritDoc}
 	 * @return {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
-	public Person addPerson(Person person) throws StorageException {
-		return personDao.save(person);
+	public Person addPerson(Person person) throws ServiceException, StorageException {
+		if(dao.findByFirstnameLastname(person.getFirstName(), person.getLastName()) == null) {
+			return dao.save(person);
+		} else {
+			LOGGER.error("addPerson: person with firstname: " + person.getFirstName()
+					+ " and lastname: " + person.getLastName() + " already exists.");
+			throw new ServiceException("Person with firstname: " + person.getFirstName()
+					+ " and lastname: " + person.getLastName() 
+					+ " already exists.");
+		}
+		
 	}
 
 	/**
@@ -43,13 +54,15 @@ public class PersonServiceImpl implements IPersonService {
 	 * @param lastname {@inheritDoc}
 	 * @param firestation {@inheritDoc}
 	 * @return {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
 	public Person updatePerson(String firstname, String lastname, Person person) 
 			throws ServiceException, StorageException {
 		if (firstname.equals(person.getFirstName()) && lastname.equals(person.getLastName())) {
-			if (personDao.findByFirstnameLastname(firstname, lastname) != null) {
-				return personDao.update(person);
+			if (dao.findByFirstnameLastname(firstname, lastname) != null) {
+				return dao.update(person);
 			} else {
 				LOGGER.error("updatePerson: Firstname: " + firstname + " and lastname:"
 						+ lastname + " not found in Person.");
@@ -70,12 +83,14 @@ public class PersonServiceImpl implements IPersonService {
 	 * {@inheritDoc}
 	 * @param firstname {@inheritDoc}
 	 * @param lastname {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
 	public void deletePerson(String firstname, String lastname) throws StorageException, ServiceException {
-		Person person = personDao.findByFirstnameLastname(firstname, lastname);
+		Person person = dao.findByFirstnameLastname(firstname, lastname);
 		if(person != null) {
-			personDao.delete(person);
+			dao.delete(person);
 		} else {
 			LOGGER.error("deletePerson: Firstname: " + firstname + " and lastname:"
 					+ lastname + " not found in Person.");

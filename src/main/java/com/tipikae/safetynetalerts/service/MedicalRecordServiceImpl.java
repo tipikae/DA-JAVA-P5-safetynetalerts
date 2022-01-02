@@ -25,16 +25,28 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	 * The DAO.
 	 */
 	@Autowired
-	private IMedicalRecordDAO medicalRecordDao;
+	private IMedicalRecordDAO dao;
 
 	/**
 	 * {@inheritDoc}
 	 * @param medicalRecord {@inheritDoc}
 	 * @return {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
-	public MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) throws StorageException {
-		return medicalRecordDao.save(medicalRecord);
+	public MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) 
+			throws ServiceException, StorageException {
+		if(dao.findByFirstnameLastname(medicalRecord.getFirstName(), medicalRecord.getLastName()) == null) {
+			return dao.save(medicalRecord);
+		} else {
+			LOGGER.error("addMedicalRecord: medical record with firstname: " + medicalRecord.getFirstName()
+					+ " and lastname: " + medicalRecord.getLastName() + " already exists.");
+			throw new ServiceException("Medical record with firstname: " + medicalRecord.getFirstName()
+					+ " and lastname: " + medicalRecord.getLastName() 
+					+ " already exists.");
+		}
+		
 	}
 
 	/**
@@ -43,13 +55,15 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	 * @param lastname {@inheritDoc}
 	 * @param medicalRecord {@inheritDoc}
 	 * @return {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
 	public MedicalRecord updateMedicalRecord(String firstname, String lastname, MedicalRecord medicalRecord) 
 			throws ServiceException, StorageException {
 		if (firstname.equals(medicalRecord.getFirstName()) && lastname.equals(medicalRecord.getLastName())) {
-			if (medicalRecordDao.findByFirstnameLastname(firstname, lastname) != null) {
-				return medicalRecordDao.update(medicalRecord);
+			if (dao.findByFirstnameLastname(firstname, lastname) != null) {
+				return dao.update(medicalRecord);
 			} else {
 				LOGGER.error("updateMedicalRecord: Firstname: " + firstname + " and lastname:"
 						+ lastname + " not found in MedicalRecord.");
@@ -70,12 +84,14 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	 * {@inheritDoc}
 	 * @param firstname {@inheritDoc}
 	 * @param lastname {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
 	public void deleteMedicalRecord(String firstname, String lastname) throws ServiceException, StorageException {
-		MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(firstname, lastname);
+		MedicalRecord medicalRecord = dao.findByFirstnameLastname(firstname, lastname);
 		if(medicalRecord != null) {
-			medicalRecordDao.delete(medicalRecord);
+			dao.delete(medicalRecord);
 		} else {
 			LOGGER.error("deleteMedicalRecord: Firstname: " + firstname + " and lastname:"
 					+ lastname + " not found in MedicalRecord.");

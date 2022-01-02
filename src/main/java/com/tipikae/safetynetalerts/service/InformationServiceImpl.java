@@ -2,6 +2,7 @@ package com.tipikae.safetynetalerts.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -67,8 +68,9 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Override
 	public FirestationInfoDTO getResidentsByStation(int stationNumber) throws ServiceException, StorageException {
-		List<Firestation> firestations = firestationDao.findByStation(stationNumber);
-		if(!firestations.isEmpty()) {
+		Optional<List<Firestation>> optFirestation = firestationDao.findByStation(stationNumber);
+		if(optFirestation.isPresent()) {
+			List<Firestation> firestations = optFirestation.get();
 			List<FirestationInfo> residents = new ArrayList<>();
 			int nbAdults = 0;
 			int nbChildren = 0;
@@ -138,8 +140,9 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Override
 	public PhoneAlertDTO getPhoneNumbersByStation(int station) throws ServiceException, StorageException {
-		List<Firestation> firestations = firestationDao.findByStation(station);
-		if(!firestations.isEmpty()) {
+		Optional<List<Firestation>> optFirestation = firestationDao.findByStation(station);
+		if(optFirestation.isPresent()) {
+			List<Firestation> firestations = optFirestation.get();
 			List<PhoneAlert> phones = new ArrayList<>();
 			for(Firestation firestation: firestations) {
 				List<Person> persons = personDao.findByAddress(firestation.getAddress());
@@ -165,25 +168,31 @@ public class InformationServiceImpl implements IInformationService {
 		List<Person> persons = personDao.findByAddress(address);
 		if(!persons.isEmpty()) {
 			List<Fire> members = new ArrayList<>();
-			Firestation firestation = firestationDao.findByAddress(address);
-			int station = firestation.getStation();
-			
-			for(Person person: persons) {
-				MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
-						person.getFirstName(), person.getLastName());
-				Fire member;
-				if(medicalRecord != null) {
-					int age = Util.calculateAge(medicalRecord.getBirthdate());
-					member = new Fire(person.getFirstName(), person.getLastName(), person.getPhone(), 
-							age, medicalRecord.getMedications(), medicalRecord.getAllergies());
-				} else {
-					member = new Fire(person.getFirstName(), person.getLastName(), person.getPhone(), 
-							0, null, null);
+			Optional<Firestation> optFirestation = firestationDao.findByAddress(address);
+			if(optFirestation.isPresent()) {
+				Firestation firestation = optFirestation.get();
+				int station = firestation.getStation();
+				
+				for(Person person: persons) {
+					MedicalRecord medicalRecord = medicalRecordDao.findByFirstnameLastname(
+							person.getFirstName(), person.getLastName());
+					Fire member;
+					if(medicalRecord != null) {
+						int age = Util.calculateAge(medicalRecord.getBirthdate());
+						member = new Fire(person.getFirstName(), person.getLastName(), person.getPhone(), 
+								age, medicalRecord.getMedications(), medicalRecord.getAllergies());
+					} else {
+						member = new Fire(person.getFirstName(), person.getLastName(), person.getPhone(), 
+								0, null, null);
+					}
+					members.add(member);
 				}
-				members.add(member);
+				
+				return new FireDTO(address, station, members);
+			} else {
+				LOGGER.error("getMembersByAddress: firestation not found.");
+				throw new ServiceException("address: firestation not found.");
 			}
-			
-			return new FireDTO(address, station, members);
 		} else {
 			LOGGER.error("getMembersByAddress: address: " + address + " not found.");
 			throw new ServiceException("address: " + address + " not found.");
@@ -200,8 +209,9 @@ public class InformationServiceImpl implements IInformationService {
 		List<FloodDTO> dtos = new ArrayList<>();
 		for(Integer station: stations) {
 			List<FloodAddress> adresses = new ArrayList<>();
-			List<Firestation> firestations = firestationDao.findByStation(station);
-			if (!firestations.isEmpty()) {
+			Optional<List<Firestation>> optFirestation = firestationDao.findByStation(station);
+			if (optFirestation.isPresent()) {
+				List<Firestation> firestations = optFirestation.get();
 				for (Firestation firestation : firestations) {
 					List<Flood> residents = new ArrayList<>();
 					List<Person> persons = personDao.findByAddress(firestation.getAddress());

@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,8 @@ class FirestationServiceTest {
 	@Test
 	void testAddFirestation_whenException() throws StorageException {
 		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
-;		doThrow(StorageException.class).when(dao).save(firestation);
+		when(dao.findByAddress(anyString())).thenReturn(Optional.of(new Firestation()));
+		doThrow(StorageException.class).when(dao).save(firestation);
 		assertThrows(StorageException.class, () -> service.addFirestationMapping(firestationDTO));
 	}
 
@@ -60,7 +61,7 @@ class FirestationServiceTest {
 	@Test
 	void testUpdateFirestationMapping_wheNull() throws StorageException {
 		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
-		when(dao.findByAddress(anyString())).thenReturn(null);
+		when(dao.findByAddress(anyString())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.updateFirestationMapping("route", firestationDTO));
 	}
 	
@@ -72,7 +73,7 @@ class FirestationServiceTest {
 	
 	@Test
 	void testDeleteFirestationByAddress_whenNull() throws StorageException {
-		when(dao.findByAddress(anyString())).thenReturn(null);
+		when(dao.findByAddress(anyString())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.deleteFirestationByAddress("route"));
 	}
 	
@@ -84,7 +85,7 @@ class FirestationServiceTest {
 	
 	@Test
 	void testDeleteFirestationsByStation_whenNull() throws StorageException {
-		when(dao.findByStation(anyInt())).thenReturn(new ArrayList<Firestation>());
+		when(dao.findByStation(anyInt())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.deleteFirestationsByStation(1));
 	}
 }

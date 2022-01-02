@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -93,7 +94,7 @@ class InformationServiceTest {
 
 	@Test
 	void testGetResidentsByStation_whenOk() throws StorageException, ServiceException {
-		when(firestationDao.findByStation(anyInt())).thenReturn(firestations);
+		when(firestationDao.findByStation(anyInt())).thenReturn(Optional.of(firestations));
 		when(personDao.findByAddress(anyString())).thenReturn(personsByAddress1, personsByAddress2);
 		when(medicalRecordDao.findByFirstnameLastname(anyString(), anyString())).thenReturn(md1, md2, md3);
 		
@@ -106,7 +107,7 @@ class InformationServiceTest {
 	
 	@Test
 	void testGetResidentsByStation_whenEmpty() throws StorageException, ServiceException {
-		when(firestationDao.findByStation(anyInt())).thenReturn(firestations);
+		when(firestationDao.findByStation(anyInt())).thenReturn(Optional.of(firestations));
 		when(personDao.findByAddress(anyString())).thenReturn(new ArrayList<>());
 		
 		FirestationInfoDTO dto = service.getResidentsByStation(1);
@@ -118,7 +119,7 @@ class InformationServiceTest {
 	
 	@Test
 	void testGetResidentsByStation_whenNoFoundStation() throws StorageException {
-		when(firestationDao.findByStation(anyInt())).thenReturn(new ArrayList<Firestation>());
+		when(firestationDao.findByStation(anyInt())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, () -> service.getResidentsByStation(1));
 	}
 	
@@ -155,8 +156,9 @@ class InformationServiceTest {
 	
 	@Test
 	void testGetPhoneNumbersByStation_whenOk() throws StorageException, ServiceException {
-		when(firestationDao.findByStation(anyInt())).thenReturn(firestations);
-		when(personDao.findByAddress(anyString())).thenReturn(personsByAddress1, personsByAddress2);
+		when(firestationDao.findByStation(anyInt())).thenReturn(Optional.of(firestations));
+		when(personDao.findByAddress(anyString()))
+			.thenReturn(personsByAddress1, personsByAddress2);
 		
 		PhoneAlertDTO dto = service.getPhoneNumbersByStation(1);
 		assertEquals(3, dto.getPhones().size());
@@ -165,7 +167,7 @@ class InformationServiceTest {
 	
 	@Test
 	void testGetPhoneNumbersByStation_whenNotFound() throws StorageException, ServiceException {
-		when(firestationDao.findByStation(anyInt())).thenReturn(new ArrayList<>());
+		when(firestationDao.findByStation(anyInt())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, () -> service.getPhoneNumbersByStation(1));
 	}
 	
@@ -178,7 +180,7 @@ class InformationServiceTest {
 	@Test
 	void testGetMembersByAddress_whenOk() throws StorageException, ServiceException {
 		when(personDao.findByAddress(anyString())).thenReturn(personsByAddress1);
-		when(firestationDao.findByAddress(anyString())).thenReturn(fs1);
+		when(firestationDao.findByAddress(anyString())).thenReturn(Optional.of(fs1));
 		when(medicalRecordDao.findByFirstnameLastname(anyString(), anyString())).thenReturn(md1, md2);
 		
 		FireDTO dto = service.getMembersByAddress("route");
@@ -203,7 +205,7 @@ class InformationServiceTest {
 	void testGetResidentsByStations_whenOk() throws StorageException, ServiceException {
 		List<Integer> list = new ArrayList<>();
 		list.add(1);
-		when(firestationDao.findByStation(anyInt())).thenReturn(firestations);
+		when(firestationDao.findByStation(anyInt())).thenReturn(Optional.of(firestations));
 		when(personDao.findByAddress(anyString())).thenReturn(personsByAddress1, personsByAddress2);
 		when(medicalRecordDao.findByFirstnameLastname(anyString(), anyString())).thenReturn(md1, md2, md3);
 		
@@ -217,7 +219,7 @@ class InformationServiceTest {
 	void testGetResidentsByStations_whenNotFound() throws StorageException, ServiceException {
 		List<Integer> list = new ArrayList<>();
 		list.add(10);
-		when(firestationDao.findByStation(anyInt())).thenReturn(new ArrayList<>());
+		when(firestationDao.findByStation(anyInt())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, () -> service.getResidentsByStations(list));
 	}
 	

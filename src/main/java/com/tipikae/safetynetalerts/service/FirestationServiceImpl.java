@@ -46,7 +46,8 @@ public class FirestationServiceImpl implements IFirestationService {
 	 * @throws {@inheritDoc}
 	 */
 	@Override
-	public FirestationDTO addFirestationMapping(FirestationDTO firestationDTO) throws ServiceException, StorageException {
+	public FirestationDTO addFirestationMapping(FirestationDTO firestationDTO) 
+			throws ServiceException, StorageException {
 		Firestation firestation = converter.toEntity(firestationDTO);
 		Optional<Firestation> optional = dao.findByAddress(firestation.getAddress());
 		if(!optional.isPresent()) {

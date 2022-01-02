@@ -9,7 +9,7 @@ import java.util.List;
  * @version 1.0
  *
  */
-public class FirestationInfoDTO implements Serializable {
+public class FirestationInfoDTO extends DTOResponse implements Serializable {
 
 	/**
 	 * Station number.

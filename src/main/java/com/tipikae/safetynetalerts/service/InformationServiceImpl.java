@@ -16,6 +16,7 @@ import com.tipikae.safetynetalerts.dto.ChildAlert;
 import com.tipikae.safetynetalerts.dto.ChildAlertDTO;
 import com.tipikae.safetynetalerts.dto.CommunityEmail;
 import com.tipikae.safetynetalerts.dto.CommunityEmailDTO;
+import com.tipikae.safetynetalerts.dto.DTOResponse;
 import com.tipikae.safetynetalerts.dto.Fire;
 import com.tipikae.safetynetalerts.dto.FireDTO;
 import com.tipikae.safetynetalerts.dto.FirestationInfoDTO;
@@ -67,13 +68,14 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public FirestationInfoDTO getResidentsByStation(int stationNumber) throws ServiceException, StorageException {
+	public DTOResponse getResidentsByStation(int stationNumber) throws ServiceException, StorageException {
 		Optional<List<Firestation>> optFirestations = firestationDao.findByStation(stationNumber);
 		if(optFirestations.isPresent()) {
 			List<Firestation> firestations = optFirestations.get();
 			List<FirestationInfo> residents = new ArrayList<>();
 			int nbAdults = 0;
 			int nbChildren = 0;
+			
 			for(Firestation firestation: firestations) {
 				Optional<List<Person>> optPersons = personDao.findByAddress(firestation.getAddress());
 				if(optPersons.isPresent()) {
@@ -100,8 +102,8 @@ public class InformationServiceImpl implements IInformationService {
 			
 			return new FirestationInfoDTO(stationNumber, nbAdults, nbChildren, residents);
 		} else {
-			LOGGER.error("getResidentsByStation: station: " + stationNumber + " not found.");
-			throw new ServiceException("station: " + stationNumber + " not found.");
+			LOGGER.debug("getResidentsByStation: station: " + stationNumber + " not found.");
+			return new DTOResponse();
 		}
 	}
 
@@ -111,7 +113,7 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public ChildAlertDTO getChildrenByAddress(String address) throws ServiceException, StorageException {
+	public DTOResponse getChildrenByAddress(String address) throws ServiceException, StorageException {
 		Optional<List<Person>> optPersons = personDao.findByAddress(address);
 		if(optPersons.isPresent()) {
 			List<Person> persons = optPersons.get();
@@ -140,8 +142,8 @@ public class InformationServiceImpl implements IInformationService {
 				return new ChildAlertDTO(address, new ArrayList<ChildAlert>(), new ArrayList<ChildAlert>());
 			}
 		} else {
-			LOGGER.error("getChildrenByAddress: address: " + address + " not found.");
-			throw new ServiceException("address: " + address + " not found.");
+			LOGGER.debug("getChildrenByAddress: address: " + address + " not found.");
+			return new DTOResponse();
 		}
 	}
 
@@ -151,7 +153,7 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public PhoneAlertDTO getPhoneNumbersByStation(int station) throws ServiceException, StorageException {
+	public DTOResponse getPhoneNumbersByStation(int station) throws ServiceException, StorageException {
 		Optional<List<Firestation>> optFirestation = firestationDao.findByStation(station);
 		if(optFirestation.isPresent()) {
 			List<Firestation> firestations = optFirestation.get();
@@ -170,8 +172,8 @@ public class InformationServiceImpl implements IInformationService {
 			
 			return new PhoneAlertDTO(station, phones);
 		} else {
-			LOGGER.error("getPhoneNumbersByStation: station: " + station + " not found.");
-			throw new ServiceException("station: " + station + " not found.");
+			LOGGER.debug("getPhoneNumbersByStation: station: " + station + " not found.");
+			return new DTOResponse();
 		}
 	}
 
@@ -181,15 +183,15 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public FireDTO getMembersByAddress(String address) throws ServiceException, StorageException {
+	public DTOResponse getMembersByAddress(String address) throws ServiceException, StorageException {
 		Optional<List<Person>> optPersons = personDao.findByAddress(address);
 		if(optPersons.isPresent()) {
 			List<Person> persons = optPersons.get();
-			List<Fire> members = new ArrayList<>();
 			Optional<Firestation> optFirestation = firestationDao.findByAddress(address);
 			if(optFirestation.isPresent()) {
 				Firestation firestation = optFirestation.get();
 				int station = firestation.getStation();
+				List<Fire> members = new ArrayList<>();
 				
 				for(Person person: persons) {
 					Optional<MedicalRecord> optMedicalRecord = medicalRecordDao.findByFirstnameLastname(
@@ -213,12 +215,12 @@ public class InformationServiceImpl implements IInformationService {
 				
 				return new FireDTO(address, station, members);
 			} else {
-				LOGGER.error("getMembersByAddress: firestation not found.");
-				throw new ServiceException("address: firestation not found.");
+				LOGGER.debug("getMembersByAddress: firestation not found.");
+				return new DTOResponse();
 			}
 		} else {
-			LOGGER.error("getMembersByAddress: address: " + address + " not found.");
-			throw new ServiceException("address: " + address + " not found.");
+			LOGGER.debug("getMembersByAddress: address: " + address + " not found.");
+			return new DTOResponse();
 		}
 	}
 
@@ -228,18 +230,22 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public List<FloodDTO> getResidentsByStations(List<Integer> stations) throws ServiceException, StorageException {
-		List<FloodDTO> dtos = new ArrayList<>();
+	public List<DTOResponse> getResidentsByStations(List<Integer> stations) 
+			throws ServiceException, StorageException {
+		List<DTOResponse> dtos = new ArrayList<>();
+		
 		for(Integer station: stations) {
-			List<FloodAddress> adresses = new ArrayList<>();
 			Optional<List<Firestation>> optFirestation = firestationDao.findByStation(station);
 			if (optFirestation.isPresent()) {
 				List<Firestation> firestations = optFirestation.get();
+				List<FloodAddress> adresses = new ArrayList<>();
+				
 				for (Firestation firestation : firestations) {
 					Optional<List<Person>> optPersons = personDao.findByAddress(firestation.getAddress());
 					if(optPersons.isPresent()) {
 						List<Person> persons = optPersons.get();
 						List<Flood> residents = new ArrayList<>();
+						
 						for(Person person: persons) {
 							Optional<MedicalRecord> optMedicalRecord = medicalRecordDao.findByFirstnameLastname(
 									person.getFirstName(), person.getLastName());
@@ -249,19 +255,19 @@ public class InformationServiceImpl implements IInformationService {
 									person.getPhone(), Util.calculateAge(medicalRecord.getBirthdate()), 
 									medicalRecord.getMedications(), medicalRecord.getAllergies()));
 							} else {
-								LOGGER.error("getResidentsByStations: name: " + person.getFirstName() + " " + 
+								LOGGER.debug("getResidentsByStations: name: " + person.getFirstName() + " " + 
 										person.getLastName() + " not found in MedicalRecord.");
 							}
 						}
 						adresses.add(new FloodAddress(firestation.getAddress(), residents));
 					} else {
-						LOGGER.error("getResidentsByStations: address: " + firestation.getAddress() + 
+						LOGGER.debug("getResidentsByStations: address: " + firestation.getAddress() + 
 								" not found in Person.");
 					}
 				} 
 				dtos.add(new FloodDTO(station, adresses));
 			} else {
-				LOGGER.error("getResidentsByStations: station: " + station + " not found in Firestation.");
+				LOGGER.debug("getResidentsByStations: station: " + station + " not found in Firestation.");
 			}
 		}
 		
@@ -273,8 +279,8 @@ public class InformationServiceImpl implements IInformationService {
 				sb.append(station.toString() + ",");
 			}
 			sb.deleteCharAt(sb.length() - 1);
-			LOGGER.error("getResidentsByStations: stations: " + sb + " not found.");
-			throw new ServiceException("stations: " + sb + " not found.");
+			LOGGER.debug("getResidentsByStations: stations: " + sb + " not found.");
+			return new ArrayList<DTOResponse>();
 		}
 	}
 
@@ -285,12 +291,13 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public PersonInfoDTO getPersonInfoByLastname(String firstname, String lastname)
+	public DTOResponse getPersonInfoByLastname(String firstname, String lastname)
 			throws ServiceException, StorageException {
 		Optional<List<Person>> optPersons = personDao.findAll();
 		List<PersonInfo> personsInfo = new ArrayList<>();
 		if(optPersons.isPresent()) {
 			List<Person> persons = optPersons.get();
+			
 			for(Person person: persons) {
 				if (person.getLastName().equals(lastname)) {
 					Optional<MedicalRecord> optMedicalRecord = medicalRecordDao.findByFirstnameLastname(
@@ -310,8 +317,8 @@ public class InformationServiceImpl implements IInformationService {
 		if(!personsInfo.isEmpty()) {
 			return new PersonInfoDTO(lastname, personsInfo);
 		} else {
-			LOGGER.error("getPersonInfoByLastname: lastname: " + lastname + " not found.");
-			throw new ServiceException("lastname: " + lastname + " not found.");
+			LOGGER.debug("getPersonInfoByLastname: lastname: " + lastname + " not found.");
+			return new DTOResponse();
 		}
 	}
 
@@ -321,19 +328,20 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public CommunityEmailDTO getEmailsByCity(String city) throws ServiceException, StorageException {
+	public DTOResponse getEmailsByCity(String city) throws ServiceException, StorageException {
 		Optional<List<Person>> optPersons = personDao.findByCity(city);
 		if(optPersons.isPresent()) {
 			List<Person> persons = optPersons.get();
 			List<CommunityEmail> emails = new ArrayList<>();
+			
 			for(Person person: persons) {
 				emails.add(new CommunityEmail(person.getEmail()));
 			}
 			
 			return new CommunityEmailDTO(city, emails);
 		} else {
-			LOGGER.error("getEmailsByCity: city: " + city + " not found.");
-			throw new ServiceException("city: " + city + " not found.");
+			LOGGER.debug("getEmailsByCity: city: " + city + " not found.");
+			return new DTOResponse();
 		}
 	}
 

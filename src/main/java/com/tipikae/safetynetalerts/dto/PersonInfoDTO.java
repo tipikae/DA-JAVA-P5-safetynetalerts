@@ -9,7 +9,7 @@ import java.util.List;
  * @version 1.0
  *
  */
-public class PersonInfoDTO implements Serializable {
+public class PersonInfoDTO extends DTOResponse implements Serializable {
 
 	/**
 	 * Lastname.

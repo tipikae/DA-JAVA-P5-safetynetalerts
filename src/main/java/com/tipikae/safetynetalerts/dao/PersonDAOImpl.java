@@ -70,7 +70,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 			}
 		}
 		
-		return Optional.of(person);
+		return Optional.ofNullable(person);
 	}
 
 	/**
@@ -81,9 +81,12 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	@Override
 	public Optional<List<Person>> findByAddress(String address) throws StorageException {
 		storage = jsonStorage.readStorage();
-		List<Person> results = new ArrayList<>();
+		List<Person> results = null;
 		for (Person item : storage.getPersons()) {
 			if (item.getAddress().equals(address)) {
+				if(results == null) {
+					results = new ArrayList<>();
+				}
 				results.add(item);
 			}
 		}
@@ -99,9 +102,12 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	@Override
 	public Optional<List<Person>> findByCity(String city) throws StorageException {
 		storage = jsonStorage.readStorage();
-		List<Person> results = new ArrayList<>();
+		List<Person> results = null;
 		for (Person item : storage.getPersons()) {
 			if (item.getCity().equals(city)) {
+				if(results == null) {
+					results = new ArrayList<>();
+				}
 				results.add(item);
 			}
 		}

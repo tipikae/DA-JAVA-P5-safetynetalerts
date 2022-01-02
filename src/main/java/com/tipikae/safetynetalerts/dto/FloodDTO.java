@@ -9,7 +9,7 @@ import java.util.List;
  * @version 1.0
  *
  */
-public class FloodDTO implements Serializable {
+public class FloodDTO extends DTOResponse implements Serializable {
 
 	/**
 	 * Station number.

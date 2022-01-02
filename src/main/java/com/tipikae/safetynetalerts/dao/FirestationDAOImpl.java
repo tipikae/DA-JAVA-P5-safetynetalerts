@@ -79,9 +79,12 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	@Override
 	public Optional<List<Firestation>> findByStation(int station) throws StorageException {
 		storage = jsonStorage.readStorage();
-		List<Firestation> results = new ArrayList<>();
+		List<Firestation> results = null;
 		for (Firestation item : storage.getFirestations()) {
 			if (item.getStation() == station) {
+				if(results == null) {
+					results = new ArrayList<>();
+				}
 				results.add(item);
 			}
 		}

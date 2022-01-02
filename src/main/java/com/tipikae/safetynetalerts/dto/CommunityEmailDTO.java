@@ -9,7 +9,7 @@ import java.util.List;
  * @version 1.0
  *
  */
-public class CommunityEmailDTO implements Serializable {
+public class CommunityEmailDTO extends DTOResponse implements Serializable {
 
 	/**
 	 * City.

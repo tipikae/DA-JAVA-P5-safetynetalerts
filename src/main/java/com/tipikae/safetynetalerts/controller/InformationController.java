@@ -14,13 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tipikae.safetynetalerts.dto.ChildAlertDTO;
-import com.tipikae.safetynetalerts.dto.CommunityEmailDTO;
-import com.tipikae.safetynetalerts.dto.FireDTO;
-import com.tipikae.safetynetalerts.dto.FirestationInfoDTO;
+import com.tipikae.safetynetalerts.dto.DTOResponse;
 import com.tipikae.safetynetalerts.dto.FloodDTO;
-import com.tipikae.safetynetalerts.dto.PersonInfoDTO;
-import com.tipikae.safetynetalerts.dto.PhoneAlertDTO;
 import com.tipikae.safetynetalerts.exception.ControllerException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
@@ -48,7 +43,7 @@ public class InformationController {
 	@GetMapping(value="/firestation", params="stationNumber")
     public ResponseEntity<Object> residentsByStation(@RequestParam @Positive int stationNumber) {
 		try {
-			FirestationInfoDTO dto = service.getResidentsByStation(stationNumber);
+			DTOResponse dto = service.getResidentsByStation(stationNumber);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
@@ -70,7 +65,7 @@ public class InformationController {
 	@GetMapping(value="/childAlert", params="address")
     public ResponseEntity<Object> childrenByAddress(@RequestParam @NotBlank String address) {
 		try {
-			ChildAlertDTO dto = service.getChildrenByAddress(address);
+			DTOResponse dto = service.getChildrenByAddress(address);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
@@ -92,7 +87,7 @@ public class InformationController {
 	@GetMapping(value="/phoneAlert", params="firestation")
     public ResponseEntity<Object> phoneNumbersByStation(@RequestParam @Positive int firestation) {
 		try {
-			PhoneAlertDTO dto = service.getPhoneNumbersByStation(firestation);
+			DTOResponse dto = service.getPhoneNumbersByStation(firestation);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
@@ -114,7 +109,7 @@ public class InformationController {
 	@GetMapping(value="/fire", params="address")
     public ResponseEntity<Object> membersByAddress(@RequestParam @NotBlank String address) {
 		try {
-			FireDTO dto = service.getMembersByAddress(address);
+			DTOResponse dto = service.getMembersByAddress(address);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
@@ -137,7 +132,7 @@ public class InformationController {
 	public ResponseEntity<Object> residentsByStations(
 			@RequestParam @NotEmpty(message = "Station number list cannot be empty.") List<Integer> stations) {
 		try {
-			List<FloodDTO> dto = service.getResidentsByStations(stations);
+			List<DTOResponse> dto = service.getResidentsByStations(stations);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
@@ -162,7 +157,7 @@ public class InformationController {
 			@RequestParam @NotBlank String firstName, 
     		@RequestParam @NotBlank String lastName) {
 		try {
-			PersonInfoDTO dto = service.getPersonInfoByLastname(firstName, lastName);
+			DTOResponse dto = service.getPersonInfoByLastname(firstName, lastName);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(
@@ -184,7 +179,7 @@ public class InformationController {
 	@GetMapping(value="/communityEmail", params="city")
 	public ResponseEntity<Object> emailsByCity(@RequestParam @NotBlank String city) {
 		try {
-			CommunityEmailDTO dto = service.getEmailsByCity(city);
+			DTOResponse dto = service.getEmailsByCity(city);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(

@@ -15,11 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tipikae.safetynetalerts.dto.PersonDTO;
-import com.tipikae.safetynetalerts.dtoconverter.IpersonConverter;
 import com.tipikae.safetynetalerts.exception.ControllerException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
-import com.tipikae.safetynetalerts.model.Person;
 import com.tipikae.safetynetalerts.service.IPersonService;
 
 /**
@@ -33,21 +31,18 @@ import com.tipikae.safetynetalerts.service.IPersonService;
 public class PersonController {
 	
 	@Autowired
-	private IpersonConverter converter;
-	
-	@Autowired
 	private IPersonService service;
 
 	/**
 	 * Add a person.
-	 * @param person a PersonDTO object.
+	 * @param personDTO a PersonDTO object.
 	 * @return ResponseEntity<Object>
 	 */
 	@PostMapping(value="/person", consumes={"application/json"})
-	public ResponseEntity<Object> addPerson(@Valid @RequestBody PersonDTO person) {
+	public ResponseEntity<Object> addPerson(@Valid @RequestBody PersonDTO personDTO) {
 		try {
-			Person added = service.addPerson(converter.toEntity(person));
-			return new ResponseEntity<>(converter.toDTO(added), HttpStatus.OK);
+			PersonDTO added = service.addPerson(personDTO);
+			return new ResponseEntity<>(added, HttpStatus.OK);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -63,7 +58,7 @@ public class PersonController {
 	 * Update a person.
 	 * @param firstName a String firstname.
 	 * @param lastName a String lastname.
-	 * @param person a PersonDTO object.
+	 * @param personDTO a PersonDTO object.
 	 * @return ResponseEntity<Object>
 	 */
 	// /person?firstName={firstname}&lastName={lastname}
@@ -71,10 +66,10 @@ public class PersonController {
 	public ResponseEntity<Object> updatePerson(
 			@RequestParam @NotBlank String firstName, 
 			@RequestParam @NotBlank String lastName, 
-			@Valid @RequestBody PersonDTO person) {
+			@Valid @RequestBody PersonDTO personDTO) {
 		try {
-			Person updated = service.updatePerson(firstName, lastName, converter.toEntity(person));
-			return new ResponseEntity<>(converter.toDTO(updated), HttpStatus.OK);
+			PersonDTO updated = service.updatePerson(firstName, lastName, personDTO);
+			return new ResponseEntity<>(updated, HttpStatus.OK);
 		} catch(StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 

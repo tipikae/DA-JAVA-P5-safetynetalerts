@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tipikae.safetynetalerts.dao.IMedicalRecordDAO;
+import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
+import com.tipikae.safetynetalerts.dtoconverter.IMedicalRecordConverter;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
@@ -26,6 +28,12 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	 */
 	@Autowired
 	private IMedicalRecordDAO dao;
+	
+	/**
+	 * The DTO converter.
+	 */
+	@Autowired
+	private IMedicalRecordConverter converter;
 
 	/**
 	 * {@inheritDoc}
@@ -35,10 +43,11 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	 * @throws {@inheritDoc}
 	 */
 	@Override
-	public MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) 
+	public MedicalRecordDTO addMedicalRecord(MedicalRecordDTO medicalRecordDTO) 
 			throws ServiceException, StorageException {
+		MedicalRecord medicalRecord = converter.toEntity(medicalRecordDTO);
 		if(dao.findByFirstnameLastname(medicalRecord.getFirstName(), medicalRecord.getLastName()) == null) {
-			return dao.save(medicalRecord);
+			return converter.toDTO(dao.save(medicalRecord));
 		} else {
 			LOGGER.error("addMedicalRecord: medical record with firstname: " + medicalRecord.getFirstName()
 					+ " and lastname: " + medicalRecord.getLastName() + " already exists.");
@@ -59,11 +68,12 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	 * @throws {@inheritDoc}
 	 */
 	@Override
-	public MedicalRecord updateMedicalRecord(String firstname, String lastname, MedicalRecord medicalRecord) 
+	public MedicalRecordDTO updateMedicalRecord(String firstname, String lastname, MedicalRecordDTO medicalRecordDTO) 
 			throws ServiceException, StorageException {
-		if (firstname.equals(medicalRecord.getFirstName()) && lastname.equals(medicalRecord.getLastName())) {
+		if (firstname.equals(medicalRecordDTO.getFirstName()) && lastname.equals(medicalRecordDTO.getLastName())) {
+			MedicalRecord medicalRecord = converter.toEntity(medicalRecordDTO);
 			if (dao.findByFirstnameLastname(firstname, lastname) != null) {
-				return dao.update(medicalRecord);
+				return converter.toDTO(dao.update(medicalRecord));
 			} else {
 				LOGGER.error("updateMedicalRecord: Firstname: " + firstname + " and lastname:"
 						+ lastname + " not found in MedicalRecord.");
@@ -72,11 +82,11 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 			} 
 		} else {
 			LOGGER.error("updateMedicalRecord: Firstname: " + firstname + " and lastname:"
-					+ lastname + " are different from Person firstname: " + medicalRecord.getFirstName() 
-					+ " lastname: " + medicalRecord.getLastName());
+					+ lastname + " are different from Person firstname: " + medicalRecordDTO.getFirstName() 
+					+ " lastname: " + medicalRecordDTO.getLastName());
 			throw new ServiceException("Firstname: " + firstname + " and lastname:"
-					+ lastname + " are different from Person firstname: " + medicalRecord.getFirstName()
-					+ "	lastname: " + medicalRecord.getLastName());
+					+ lastname + " are different from Person firstname: " + medicalRecordDTO.getFirstName()
+					+ "	lastname: " + medicalRecordDTO.getLastName());
 		}
 	}
 

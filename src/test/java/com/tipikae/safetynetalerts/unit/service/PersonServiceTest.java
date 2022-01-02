@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tipikae.safetynetalerts.dao.IPersonDAO;
+import com.tipikae.safetynetalerts.dto.PersonDTO;
+import com.tipikae.safetynetalerts.dtoconverter.IPersonConverter;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
@@ -23,33 +25,40 @@ public class PersonServiceTest {
 	
 	@Mock
 	private IPersonDAO dao;
+	@Mock
+	private IPersonConverter converter;
 	
 	@InjectMocks
 	private static PersonServiceImpl service;
 	private static Person person;
+	private static PersonDTO personDTO;
 	
 	@BeforeAll
 	private static void setUp() {
 		service = new PersonServiceImpl();
 		person = new Person("Bob", "BOB", "route de pale", "Paris", "75000", "123456789", "bob@bob.com");
+		personDTO = new PersonDTO("Bob", "BOB", "route de pale", "Paris", "75000", "123456789", "bob@bob.com");
 	}
 
 	@Test
 	void testAddPerson_whenException() throws StorageException {
+		when(converter.toEntity(personDTO)).thenReturn(person);
 		doThrow(StorageException.class).when(dao).save(person);
-		assertThrows(StorageException.class, () -> service.addPerson(person));
+		assertThrows(StorageException.class, () -> service.addPerson(personDTO));
 	}
 
 	@Test
 	void testUpdatePerson_whenException() throws StorageException {
+		when(converter.toEntity(personDTO)).thenReturn(person);
 		doThrow(StorageException.class).when(dao).findByFirstnameLastname(anyString(), anyString());
-		assertThrows(StorageException.class, ()-> service.updatePerson("Bob", "BOB", person));
+		assertThrows(StorageException.class, ()-> service.updatePerson("Bob", "BOB", personDTO));
 	}
 	
 	@Test
 	void testUpdatePerson_wheNull() throws StorageException {
+		when(converter.toEntity(personDTO)).thenReturn(person);
 		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(null);
-		assertThrows(ServiceException.class, ()-> service.updatePerson("Bob", "BOB", person));
+		assertThrows(ServiceException.class, ()-> service.updatePerson("Bob", "BOB", personDTO));
 	}
 	
 	@Test

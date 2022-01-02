@@ -9,7 +9,7 @@ import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 
 @Component
-public class MedicalRecordConverterImpl implements ImedicalRecordConverter {
+public class MedicalRecordConverterImpl implements IMedicalRecordConverter {
 
 	/**
 	 * {@inheritDoc}

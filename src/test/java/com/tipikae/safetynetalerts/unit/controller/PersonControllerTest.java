@@ -18,10 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.tipikae.safetynetalerts.controller.PersonController;
 import com.tipikae.safetynetalerts.dto.PersonDTO;
-import com.tipikae.safetynetalerts.dtoconverter.IpersonConverter;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
-import com.tipikae.safetynetalerts.model.Person;
 import com.tipikae.safetynetalerts.service.IPersonService;
 
 @WebMvcTest(controllers = PersonController.class)
@@ -33,16 +31,12 @@ class PersonControllerTest {
     private MockMvc mockMvc;
 	
 	@MockBean
-	private IpersonConverter converter;
-	
-	@MockBean
 	private IPersonService service;
 	
 	@Test
 	void testAddPerson_whenOk() throws Exception {
-		when(converter.toEntity(any(PersonDTO.class))).thenReturn(new Person());
-		when(service.addPerson(any(Person.class)))
-			.thenReturn(new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "jaboyd@email.com"));
+		when(service.addPerson(any(PersonDTO.class)))
+			.thenReturn(new PersonDTO("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "jaboyd@email.com"));
 		mockMvc.perform(post("/person")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
@@ -51,8 +45,7 @@ class PersonControllerTest {
 	
 	@Test
 	void testAddPerson_whenException() throws Exception {
-		when(converter.toEntity(any(PersonDTO.class))).thenReturn(new Person());
-		doThrow(StorageException.class).when(service).addPerson(any(Person.class));
+		doThrow(StorageException.class).when(service).addPerson(any(PersonDTO.class));
 		mockMvc.perform(post("/person")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
@@ -69,8 +62,8 @@ class PersonControllerTest {
 	
 	@Test
 	void testUpdatePerson_whenOk() throws Exception {
-		when(converter.toEntity(any(PersonDTO.class))).thenReturn(new Person());
-		when(service.updatePerson(anyString(), anyString(), any(Person.class))).thenReturn(new Person(null, null, null, null, null, null, null));
+		when(service.updatePerson(anyString(), anyString(), any(PersonDTO.class)))
+			.thenReturn(new PersonDTO(null, null, null, null, null, null, null));
 		mockMvc.perform(put("/person?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
@@ -79,7 +72,8 @@ class PersonControllerTest {
 	
 	@Test
 	void testUpdatePerson_whenInvalid() throws Exception {
-		when(service.updatePerson(anyString(), anyString(), any(Person.class))).thenReturn(new Person(null, null, null, null, null, null, null));
+		when(service.updatePerson(anyString(), anyString(), any(PersonDTO.class)))
+			.thenReturn(new PersonDTO(null, null, null, null, null, null, null));
 		mockMvc.perform(put("/person?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
@@ -88,8 +82,7 @@ class PersonControllerTest {
 	
 	@Test
 	void testUpdatePerson_whenStorageException() throws Exception {
-		when(converter.toEntity(any(PersonDTO.class))).thenReturn(new Person());
-		doThrow(StorageException.class).when(service).updatePerson(anyString(), anyString(), any(Person.class));
+		doThrow(StorageException.class).when(service).updatePerson(anyString(), anyString(), any(PersonDTO.class));
 		mockMvc.perform(put("/person?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
@@ -98,8 +91,7 @@ class PersonControllerTest {
 	
 	@Test
 	void testUpdatePerson_whenServiceException() throws Exception {
-		when(converter.toEntity(any(PersonDTO.class))).thenReturn(new Person());
-		doThrow(ServiceException.class).when(service).updatePerson(anyString(), anyString(), any(Person.class));
+		doThrow(ServiceException.class).when(service).updatePerson(anyString(), anyString(), any(PersonDTO.class));
 		mockMvc.perform(put("/person?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))

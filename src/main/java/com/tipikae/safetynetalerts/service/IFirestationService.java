@@ -1,8 +1,8 @@
 package com.tipikae.safetynetalerts.service;
 
+import com.tipikae.safetynetalerts.dto.FirestationDTO;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
-import com.tipikae.safetynetalerts.model.Firestation;
 
 /**
  * An interface providing services for FirestationController.
@@ -14,21 +14,21 @@ public interface IFirestationService {
 
 	/**
 	 * Add a firestation mapping.
-	 * @param firestation a Firestation object.
-	 * @return Firestation
+	 * @param firestationDTO a FirestationDTO object.
+	 * @return FirestationDTO
 	 * @throws ServiceException
 	 * @throws StorageException
 	 */
-	Firestation addFirestationMapping(Firestation firestation) throws ServiceException, StorageException;
+	FirestationDTO addFirestationMapping(FirestationDTO firestationDTO) throws ServiceException, StorageException;
 	/**
 	 * Update a firestation mapping.
 	 * @param address a String.
-	 * @param newFirestation a Firestation object.
-	 * @return Firestation
+	 * @param newFirestationDTO a FirestationDTO object.
+	 * @return FirestationDTO
 	 * @throws ServiceException
 	 * @throws StorageException
 	 */
-	Firestation updateFirestationMapping(String address, Firestation newFirestation) 
+	FirestationDTO updateFirestationMapping(String address, FirestationDTO newFirestationDTO) 
 			throws ServiceException, StorageException;
 	/**
 	 * Delete a firestation by address.

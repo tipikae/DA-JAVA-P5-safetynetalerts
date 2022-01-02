@@ -9,7 +9,7 @@ import com.tipikae.safetynetalerts.dto.PersonDTO;
 import com.tipikae.safetynetalerts.model.Person;
 
 @Component
-public class PersonConverterImpl implements IpersonConverter {
+public class PersonConverterImpl implements IPersonConverter {
 
 	/**
 	 * {@inheritDoc}

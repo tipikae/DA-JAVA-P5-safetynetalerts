@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tipikae.safetynetalerts.dao.IMedicalRecordDAO;
+import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
+import com.tipikae.safetynetalerts.dtoconverter.IMedicalRecordConverter;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
@@ -26,34 +28,42 @@ class MedicalRecordServiceTest {
 	
 	@Mock
 	private IMedicalRecordDAO dao;
+	@Mock
+	private IMedicalRecordConverter converter;
 	
 	@InjectMocks
 	private static MedicalRecordServiceImpl service;
 	private static MedicalRecord medicalRecord;
+	private static MedicalRecordDTO medicalRecordDTO;
 	
 	@BeforeAll
 	private static void setUp() {
 		service = new MedicalRecordServiceImpl();
 		medicalRecord = new MedicalRecord("Bob", "BOB", LocalDate.of(1980, 2, 23), new ArrayList<String>(), 
 				new ArrayList<String>());
+		medicalRecordDTO = new MedicalRecordDTO("Bob", "BOB", LocalDate.of(1980, 2, 23), new ArrayList<String>(), 
+				new ArrayList<String>());
 	}
 
 	@Test
 	void testAddMedicalRecord_whenException() throws StorageException {
+		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
 		doThrow(StorageException.class).when(dao).save(medicalRecord);
-		assertThrows(StorageException.class, () -> service.addMedicalRecord(medicalRecord));
+		assertThrows(StorageException.class, () -> service.addMedicalRecord(medicalRecordDTO));
 	}
 
 	@Test
 	void testUpdateMedicalRecord_whenException() throws StorageException {
+		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
 		doThrow(StorageException.class).when(dao).findByFirstnameLastname(anyString(), anyString());
-		assertThrows(StorageException.class, ()-> service.updateMedicalRecord("Bob", "BOB", medicalRecord));
+		assertThrows(StorageException.class, ()-> service.updateMedicalRecord("Bob", "BOB", medicalRecordDTO));
 	}
 	
 	@Test
 	void testUpdateMedicalRecord_wheNull() throws StorageException {
+		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
 		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(null);
-		assertThrows(ServiceException.class, ()-> service.updateMedicalRecord("Bob", "BOB", medicalRecord));
+		assertThrows(ServiceException.class, ()-> service.updateMedicalRecord("Bob", "BOB", medicalRecordDTO));
 	}
 	
 	@Test

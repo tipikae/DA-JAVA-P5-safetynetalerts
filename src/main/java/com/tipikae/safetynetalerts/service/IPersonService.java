@@ -1,8 +1,8 @@
 package com.tipikae.safetynetalerts.service;
 
+import com.tipikae.safetynetalerts.dto.PersonDTO;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
-import com.tipikae.safetynetalerts.model.Person;
 
 /**
  * An interface providing services for PersonController.
@@ -14,22 +14,23 @@ public interface IPersonService {
 
 	/**
 	 * Add a person.
-	 * @param person a Person object.
-	 * @return Person
+	 * @param person a PersonDTO object.
+	 * @return PersonDTO
 	 * @throws ServiceException
 	 * @throws StorageException
 	 */
-	Person addPerson(Person person) throws ServiceException, StorageException;
+	PersonDTO addPerson(PersonDTO personDTO) throws ServiceException, StorageException;
 	/**
 	 * Update a person.
 	 * @param firstname a String.
 	 * @param lastname a String.
-	 * @param person a Person object.
-	 * @return Person
+	 * @param person a PersonDTO object.
+	 * @return PersonDTO
 	 * @throws ServiceException
 	 * @throws StorageException
 	 */
-	Person updatePerson(String firstname, String lastname, Person person) throws ServiceException, StorageException;
+	PersonDTO updatePerson(String firstname, String lastname, PersonDTO personDTO) 
+			throws ServiceException, StorageException;
 	/**
 	 * Delete a person.
 	 * @param firstname a String.

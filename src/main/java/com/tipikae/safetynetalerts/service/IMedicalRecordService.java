@@ -1,8 +1,8 @@
 package com.tipikae.safetynetalerts.service;
 
+import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
-import com.tipikae.safetynetalerts.model.MedicalRecord;
 
 /**
  * An interface providing services for MedicalRecordController.
@@ -14,22 +14,22 @@ public interface IMedicalRecordService {
 
 	/**
 	 * Add a medical record.
-	 * @param medicalRecord a MedicalRecord object.
-	 * @return MedicalRecord
+	 * @param medicalRecord a MedicalRecordDTO object.
+	 * @return MedicalRecordDTO
 	 * @throws ServiceException
 	 * @throws StorageException
 	 */
-	MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) throws ServiceException, StorageException;
+	MedicalRecordDTO addMedicalRecord(MedicalRecordDTO medicalRecordDTO) throws ServiceException, StorageException;
 	/**
 	 * Update a medical record.
 	 * @param firstname a String.
 	 * @param lastname a String.
-	 * @param medicalRecord a MedicalRecord object.
-	 * @return MedicalRecord
+	 * @param medicalRecord a MedicalRecordDTO object.
+	 * @return MedicalRecordDTO
 	 * @throws ServiceException
 	 * @throws StorageException
 	 */
-	MedicalRecord updateMedicalRecord(String firstname, String lastname, MedicalRecord medicalRecord) 
+	MedicalRecordDTO updateMedicalRecord(String firstname, String lastname, MedicalRecordDTO medicalRecordDTO) 
 			throws ServiceException, StorageException;
 	/**
 	 * Delete a medical record.

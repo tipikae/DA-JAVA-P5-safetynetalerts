@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tipikae.safetynetalerts.dao.IPersonDAO;
+import com.tipikae.safetynetalerts.dto.PersonDTO;
+import com.tipikae.safetynetalerts.dtoconverter.IPersonConverter;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
@@ -26,6 +28,12 @@ public class PersonServiceImpl implements IPersonService {
 	 */
 	@Autowired
 	private IPersonDAO dao;
+	
+	/**
+	 * The DTO converter.
+	 */
+	@Autowired
+	private IPersonConverter converter;
 
 	/**
 	 * {@inheritDoc}
@@ -35,9 +43,10 @@ public class PersonServiceImpl implements IPersonService {
 	 * @throws {@inheritDoc}
 	 */
 	@Override
-	public Person addPerson(Person person) throws ServiceException, StorageException {
+	public PersonDTO addPerson(PersonDTO personDTO) throws ServiceException, StorageException {
+		Person person = converter.toEntity(personDTO);
 		if(dao.findByFirstnameLastname(person.getFirstName(), person.getLastName()) == null) {
-			return dao.save(person);
+			return converter.toDTO(dao.save(person));
 		} else {
 			LOGGER.error("addPerson: person with firstname: " + person.getFirstName()
 					+ " and lastname: " + person.getLastName() + " already exists.");
@@ -58,11 +67,12 @@ public class PersonServiceImpl implements IPersonService {
 	 * @throws {@inheritDoc}
 	 */
 	@Override
-	public Person updatePerson(String firstname, String lastname, Person person) 
+	public PersonDTO updatePerson(String firstname, String lastname, PersonDTO personDTO) 
 			throws ServiceException, StorageException {
-		if (firstname.equals(person.getFirstName()) && lastname.equals(person.getLastName())) {
+		if (firstname.equals(personDTO.getFirstName()) && lastname.equals(personDTO.getLastName())) {
+			Person person = converter.toEntity(personDTO);
 			if (dao.findByFirstnameLastname(firstname, lastname) != null) {
-				return dao.update(person);
+				return converter.toDTO(dao.update(person));
 			} else {
 				LOGGER.error("updatePerson: Firstname: " + firstname + " and lastname:"
 						+ lastname + " not found in Person.");
@@ -71,11 +81,11 @@ public class PersonServiceImpl implements IPersonService {
 			} 
 		} else {
 			LOGGER.error("updatePerson: Firstname: " + firstname + " and lastname:"
-					+ lastname + " are different from Person firstname: " + person.getFirstName() 
-					+ " lastname: " + person.getLastName());
+					+ lastname + " are different from Person firstname: " + personDTO.getFirstName() 
+					+ " lastname: " + personDTO.getLastName());
 			throw new ServiceException("Firstname: " + firstname + " and lastname:"
-					+ lastname + " are different from Person firstname: " + person.getFirstName()
-					+ "	lastname: " + person.getLastName());
+					+ lastname + " are different from Person firstname: " + personDTO.getFirstName()
+					+ "	lastname: " + personDTO.getLastName());
 		}
 	}
 

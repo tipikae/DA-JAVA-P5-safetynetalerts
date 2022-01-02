@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tipikae.safetynetalerts.dao.IFirestationDAO;
+import com.tipikae.safetynetalerts.dto.FirestationDTO;
+import com.tipikae.safetynetalerts.dtoconverter.IFirestationConverter;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
@@ -26,33 +28,40 @@ class FirestationServiceTest {
 	
 	@Mock
 	private IFirestationDAO dao;
+	@Mock
+	private IFirestationConverter converter;
 	
 	@InjectMocks
 	private static FirestationServiceImpl service;
+	private static FirestationDTO firestationDTO;
 	private static Firestation firestation;
 	
 	@BeforeAll
 	private static void setUp() {
 		service = new FirestationServiceImpl();
+		firestationDTO = new FirestationDTO("route", 1);
 		firestation = new Firestation("route", 1);
 	}
 
 	@Test
 	void testAddFirestation_whenException() throws StorageException {
-		doThrow(StorageException.class).when(dao).save(firestation);
-		assertThrows(StorageException.class, () -> service.addFirestationMapping(firestation));
+		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
+;		doThrow(StorageException.class).when(dao).save(firestation);
+		assertThrows(StorageException.class, () -> service.addFirestationMapping(firestationDTO));
 	}
 
 	@Test
 	void testUpdateFirestationMapping_whenException() throws StorageException {
+		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
 		doThrow(StorageException.class).when(dao).findByAddress(anyString());
-		assertThrows(StorageException.class, ()-> service.updateFirestationMapping("route", firestation));
+		assertThrows(StorageException.class, ()-> service.updateFirestationMapping("route", firestationDTO));
 	}
 	
 	@Test
 	void testUpdateFirestationMapping_wheNull() throws StorageException {
+		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
 		when(dao.findByAddress(anyString())).thenReturn(null);
-		assertThrows(ServiceException.class, ()-> service.updateFirestationMapping("route", firestation));
+		assertThrows(ServiceException.class, ()-> service.updateFirestationMapping("route", firestationDTO));
 	}
 	
 	@Test

@@ -49,7 +49,7 @@ class MedicalRecordControllerTest {
 		mockMvc.perform(post("/medicalrecord")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ class MedicalRecordControllerTest {
 		mockMvc.perform(put("/medicalrecord?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
@@ -116,7 +116,7 @@ class MedicalRecordControllerTest {
 	void testDeleteMedicalRecord_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).deleteMedicalRecord("Bob", "BOB");
 		mockMvc.perform(delete("/medicalrecord?firstName=Bob&lastName=BOB"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test

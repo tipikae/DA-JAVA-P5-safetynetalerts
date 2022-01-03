@@ -27,10 +27,10 @@ public class ControllerExceptionHandler {
 	 * @return ControllerException
 	 */
     @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ServiceException.class)
 	ControllerException exceptionHandler(ServiceException e) {
-		return new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+		return new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage());
 	}
 	
 	/**
@@ -39,10 +39,10 @@ public class ControllerExceptionHandler {
 	 * @return ControllerException
 	 */
     @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(StorageException.class)
 	ControllerException exceptionHandler(StorageException e) {
-		return new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+		return new ControllerException(HttpStatus.CONFLICT.value(), e.getMessage());
 	}
 	
 	/**

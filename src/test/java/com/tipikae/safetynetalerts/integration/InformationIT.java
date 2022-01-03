@@ -154,7 +154,7 @@ public class InformationIT {
 	void testResidentsByStations() throws Exception {
 		mockMvc.perform(get("/flood/stations?stations=1,2"))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$[0].adresses[0].address", is("route")));	
+			.andExpect(jsonPath("$.floods[0].adresses[0].address", is("route")));	
 	}
 
 	@Test

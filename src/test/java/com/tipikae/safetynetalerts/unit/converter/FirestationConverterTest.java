@@ -7,14 +7,19 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.tipikae.safetynetalerts.dto.FirestationDTO;
-import com.tipikae.safetynetalerts.dtoconverter.FirestationConverterImpl;
+import com.tipikae.safetynetalerts.dtoconverter.IFirestationConverter;
 import com.tipikae.safetynetalerts.model.Firestation;
 
+@SpringBootTest
 class FirestationConverterTest {
 
-	private static FirestationConverterImpl converter;
+	@Autowired
+	private IFirestationConverter converter;
+	
 	private static Firestation entity;
 	private static FirestationDTO dto;
 	private static List<Firestation> entities;
@@ -22,7 +27,6 @@ class FirestationConverterTest {
 	
 	@BeforeAll
 	private static void setUp() {
-		converter = new FirestationConverterImpl();
 		entity = new Firestation("route", 1);
 		dto = new FirestationDTO("route", 1);
 		entities = new ArrayList<>();

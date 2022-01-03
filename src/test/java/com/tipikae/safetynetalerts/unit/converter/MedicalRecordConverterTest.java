@@ -8,14 +8,19 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
-import com.tipikae.safetynetalerts.dtoconverter.MedicalRecordConverterImpl;
+import com.tipikae.safetynetalerts.dtoconverter.IMedicalRecordConverter;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 
+@SpringBootTest
 public class MedicalRecordConverterTest {
 
-	private static MedicalRecordConverterImpl converter;
+	@Autowired
+	private IMedicalRecordConverter converter;
+	
 	private static MedicalRecord entity;
 	private static MedicalRecordDTO dto;
 	private static List<MedicalRecord> entities;
@@ -23,7 +28,6 @@ public class MedicalRecordConverterTest {
 	
 	@BeforeAll
 	private static void setUp() {
-		converter = new MedicalRecordConverterImpl();
 		entity = new MedicalRecord("Bob", "BOB", LocalDate.of(1973, 9, 5), new ArrayList<String>(),
 				new ArrayList<String>());
 		dto = new MedicalRecordDTO("Bob", "BOB", LocalDate.of(1973, 9, 5), new ArrayList<String>(),

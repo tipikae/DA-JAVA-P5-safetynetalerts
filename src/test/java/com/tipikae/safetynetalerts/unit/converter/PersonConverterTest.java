@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.tipikae.safetynetalerts.dto.PersonDTO;
 import com.tipikae.safetynetalerts.dtoconverter.IPersonConverter;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.model.Person;
 
 @SpringBootTest
@@ -36,17 +37,17 @@ public class PersonConverterTest {
 	}
 
 	@Test
-	void testToDTO() {
+	void testToDTO() throws ConverterException {
 		assertEquals(dto.getFirstName(), converter.toDTO(entity).getFirstName());
 	}
 	
 	@Test
-	void testToEntity() {
+	void testToEntity() throws ConverterException {
 		assertEquals(entity.getCity(), converter.toEntity(dto).getCity());
 	}
 	
 	@Test
-	void testToDTOs() {
+	void testToDTOs() throws ConverterException {
 		assertEquals(dtos.get(0).getEmail(), converter.toDTOs(entities).get(0).getEmail());
 	}
 }

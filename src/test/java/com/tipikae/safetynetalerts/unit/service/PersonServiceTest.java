@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.tipikae.safetynetalerts.dao.IPersonDAO;
 import com.tipikae.safetynetalerts.dto.PersonDTO;
 import com.tipikae.safetynetalerts.dtoconverter.IPersonConverter;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
@@ -43,21 +44,21 @@ public class PersonServiceTest {
 	}
 
 	@Test
-	void testAddPerson_whenException() throws StorageException {
+	void testAddPerson_whenException() throws StorageException, ConverterException {
 		when(converter.toEntity(personDTO)).thenReturn(person);
 		doThrow(StorageException.class).when(dao).save(person);
 		assertThrows(StorageException.class, () -> service.addPerson(personDTO));
 	}
 
 	@Test
-	void testUpdatePerson_whenException() throws StorageException {
+	void testUpdatePerson_whenException() throws StorageException, ConverterException {
 		when(converter.toEntity(personDTO)).thenReturn(person);
 		doThrow(StorageException.class).when(dao).findByFirstnameLastname(anyString(), anyString());
 		assertThrows(StorageException.class, ()-> service.updatePerson("Bob", "BOB", personDTO));
 	}
 	
 	@Test
-	void testUpdatePerson_wheNull() throws StorageException {
+	void testUpdatePerson_wheNull() throws StorageException, ConverterException {
 		when(converter.toEntity(personDTO)).thenReturn(person);
 		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.updatePerson("Bob", "BOB", personDTO));

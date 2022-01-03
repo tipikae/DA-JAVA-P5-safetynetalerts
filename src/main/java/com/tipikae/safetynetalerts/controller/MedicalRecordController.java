@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
 import com.tipikae.safetynetalerts.exception.ControllerException;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.service.IMedicalRecordService;
@@ -51,6 +52,10 @@ public class MedicalRecordController {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()), 
 					HttpStatus.BAD_REQUEST);
+		} catch (ConverterException e) {
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()), 
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -75,6 +80,10 @@ public class MedicalRecordController {
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch(ServiceException e) {
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
+					HttpStatus.NOT_FOUND);
+		} catch (ConverterException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);

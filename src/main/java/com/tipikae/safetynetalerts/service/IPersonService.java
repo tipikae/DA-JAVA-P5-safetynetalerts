@@ -1,6 +1,7 @@
 package com.tipikae.safetynetalerts.service;
 
 import com.tipikae.safetynetalerts.dto.PersonDTO;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 
@@ -18,8 +19,9 @@ public interface IPersonService {
 	 * @return PersonDTO
 	 * @throws ServiceException
 	 * @throws StorageException
+	 * @throws ConverterException
 	 */
-	PersonDTO addPerson(PersonDTO personDTO) throws ServiceException, StorageException;
+	PersonDTO addPerson(PersonDTO personDTO) throws ServiceException, StorageException, ConverterException;
 	/**
 	 * Update a person.
 	 * @param firstname a String.
@@ -28,9 +30,10 @@ public interface IPersonService {
 	 * @return PersonDTO
 	 * @throws ServiceException
 	 * @throws StorageException
+	 * @throws ConverterException
 	 */
 	PersonDTO updatePerson(String firstname, String lastname, PersonDTO personDTO) 
-			throws ServiceException, StorageException;
+			throws ServiceException, StorageException, ConverterException;
 	/**
 	 * Delete a person.
 	 * @param firstname a String.

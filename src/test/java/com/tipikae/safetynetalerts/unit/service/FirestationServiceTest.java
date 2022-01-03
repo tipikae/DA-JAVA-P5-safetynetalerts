@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.tipikae.safetynetalerts.dao.IFirestationDAO;
 import com.tipikae.safetynetalerts.dto.FirestationDTO;
 import com.tipikae.safetynetalerts.dtoconverter.IFirestationConverter;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
@@ -44,7 +45,7 @@ class FirestationServiceTest {
 	}
 
 	@Test
-	void testAddFirestation_whenException() throws StorageException {
+	void testAddFirestation_whenException() throws StorageException, ConverterException {
 		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
 		when(dao.findByAddress(anyString())).thenReturn(Optional.empty());
 		doThrow(StorageException.class).when(dao).save(firestation);
@@ -52,14 +53,14 @@ class FirestationServiceTest {
 	}
 
 	@Test
-	void testUpdateFirestationMapping_whenException() throws StorageException {
+	void testUpdateFirestationMapping_whenException() throws StorageException, ConverterException {
 		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
 		doThrow(StorageException.class).when(dao).findByAddress(anyString());
 		assertThrows(StorageException.class, ()-> service.updateFirestationMapping("route", firestationDTO));
 	}
 	
 	@Test
-	void testUpdateFirestationMapping_wheNull() throws StorageException {
+	void testUpdateFirestationMapping_wheNull() throws StorageException, ConverterException {
 		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
 		when(dao.findByAddress(anyString())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.updateFirestationMapping("route", firestationDTO));

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.tipikae.safetynetalerts.dao.IFirestationDAO;
 import com.tipikae.safetynetalerts.dto.FirestationDTO;
 import com.tipikae.safetynetalerts.dtoconverter.IFirestationConverter;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
@@ -47,7 +48,7 @@ public class FirestationServiceImpl implements IFirestationService {
 	 */
 	@Override
 	public FirestationDTO addFirestationMapping(FirestationDTO firestationDTO) 
-			throws ServiceException, StorageException {
+			throws ServiceException, StorageException, ConverterException {
 		Firestation firestation = converter.toEntity(firestationDTO);
 		Optional<Firestation> optional = dao.findByAddress(firestation.getAddress());
 		if(!optional.isPresent()) {
@@ -71,7 +72,7 @@ public class FirestationServiceImpl implements IFirestationService {
 	 */
 	@Override
 	public FirestationDTO updateFirestationMapping(String address, FirestationDTO firestationDTO) 
-			throws ServiceException, StorageException {
+			throws ServiceException, StorageException, ConverterException {
 		if (address.equals(firestationDTO.getAddress())) {
 			Firestation firestation = converter.toEntity(firestationDTO);
 			Optional<Firestation> optional = dao.findByAddress(address);

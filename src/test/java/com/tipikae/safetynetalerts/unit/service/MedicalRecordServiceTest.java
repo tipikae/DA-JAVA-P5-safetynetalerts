@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.tipikae.safetynetalerts.dao.IMedicalRecordDAO;
 import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
 import com.tipikae.safetynetalerts.dtoconverter.IMedicalRecordConverter;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
@@ -47,7 +48,7 @@ class MedicalRecordServiceTest {
 	}
 
 	@Test
-	void testAddMedicalRecord_whenException() throws StorageException {
+	void testAddMedicalRecord_whenException() throws StorageException, ConverterException {
 		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
 		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
 		doThrow(StorageException.class).when(dao).save(medicalRecord);
@@ -55,14 +56,14 @@ class MedicalRecordServiceTest {
 	}
 
 	@Test
-	void testUpdateMedicalRecord_whenException() throws StorageException {
+	void testUpdateMedicalRecord_whenException() throws StorageException, ConverterException {
 		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
 		doThrow(StorageException.class).when(dao).findByFirstnameLastname(anyString(), anyString());
 		assertThrows(StorageException.class, ()-> service.updateMedicalRecord("Bob", "BOB", medicalRecordDTO));
 	}
 	
 	@Test
-	void testUpdateMedicalRecord_wheNull() throws StorageException {
+	void testUpdateMedicalRecord_wheNull() throws StorageException, ConverterException {
 		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
 		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.updateMedicalRecord("Bob", "BOB", medicalRecordDTO));

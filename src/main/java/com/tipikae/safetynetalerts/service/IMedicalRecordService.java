@@ -1,6 +1,7 @@
 package com.tipikae.safetynetalerts.service;
 
 import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 
@@ -18,8 +19,10 @@ public interface IMedicalRecordService {
 	 * @return MedicalRecordDTO
 	 * @throws ServiceException
 	 * @throws StorageException
+	 * @throws ConverterException
 	 */
-	MedicalRecordDTO addMedicalRecord(MedicalRecordDTO medicalRecordDTO) throws ServiceException, StorageException;
+	MedicalRecordDTO addMedicalRecord(MedicalRecordDTO medicalRecordDTO) 
+			throws ServiceException, StorageException, ConverterException;
 	/**
 	 * Update a medical record.
 	 * @param firstname a String.
@@ -28,9 +31,10 @@ public interface IMedicalRecordService {
 	 * @return MedicalRecordDTO
 	 * @throws ServiceException
 	 * @throws StorageException
+	 * @throws ConverterException
 	 */
 	MedicalRecordDTO updateMedicalRecord(String firstname, String lastname, MedicalRecordDTO medicalRecordDTO) 
-			throws ServiceException, StorageException;
+			throws ServiceException, StorageException, ConverterException;
 	/**
 	 * Delete a medical record.
 	 * @param firstname a String.

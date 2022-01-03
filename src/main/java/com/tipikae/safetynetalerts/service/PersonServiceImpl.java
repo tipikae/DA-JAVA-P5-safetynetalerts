@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.tipikae.safetynetalerts.dao.IPersonDAO;
 import com.tipikae.safetynetalerts.dto.PersonDTO;
 import com.tipikae.safetynetalerts.dtoconverter.IPersonConverter;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
@@ -43,9 +44,11 @@ public class PersonServiceImpl implements IPersonService {
 	 * @return {@inheritDoc}
 	 * @throws {@inheritDoc}
 	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
-	public PersonDTO addPerson(PersonDTO personDTO) throws ServiceException, StorageException {
+	public PersonDTO addPerson(PersonDTO personDTO) 
+			throws ServiceException, StorageException, ConverterException {
 		Person person = converter.toEntity(personDTO);
 		Optional<Person> optional = dao.findByFirstnameLastname(person.getFirstName(), person.getLastName());
 		if(!optional.isPresent()) {
@@ -68,10 +71,11 @@ public class PersonServiceImpl implements IPersonService {
 	 * @return {@inheritDoc}
 	 * @throws {@inheritDoc}
 	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
 	public PersonDTO updatePerson(String firstname, String lastname, PersonDTO personDTO) 
-			throws ServiceException, StorageException {
+			throws ServiceException, StorageException, ConverterException {
 		if (firstname.equals(personDTO.getFirstName()) && lastname.equals(personDTO.getLastName())) {
 			Person person = converter.toEntity(personDTO);
 			Optional<Person> optional = dao.findByFirstnameLastname(firstname, lastname);

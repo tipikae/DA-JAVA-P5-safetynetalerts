@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.tipikae.safetynetalerts.dao.IMedicalRecordDAO;
 import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
 import com.tipikae.safetynetalerts.dtoconverter.IMedicalRecordConverter;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
@@ -43,10 +44,11 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	 * @return {@inheritDoc}
 	 * @throws {@inheritDoc}
 	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
 	public MedicalRecordDTO addMedicalRecord(MedicalRecordDTO medicalRecordDTO) 
-			throws ServiceException, StorageException {
+			throws ServiceException, StorageException, ConverterException {
 		MedicalRecord medicalRecord = converter.toEntity(medicalRecordDTO);
 		Optional<MedicalRecord> optional = dao.findByFirstnameLastname(medicalRecord.getFirstName(), 
 				medicalRecord.getLastName());
@@ -70,10 +72,11 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	 * @return {@inheritDoc}
 	 * @throws {@inheritDoc}
 	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
 	public MedicalRecordDTO updateMedicalRecord(String firstname, String lastname, MedicalRecordDTO medicalRecordDTO) 
-			throws ServiceException, StorageException {
+			throws ServiceException, StorageException, ConverterException {
 		if (firstname.equals(medicalRecordDTO.getFirstName()) && lastname.equals(medicalRecordDTO.getLastName())) {
 			MedicalRecord medicalRecord = converter.toEntity(medicalRecordDTO);
 			Optional<MedicalRecord> optional = dao.findByFirstnameLastname(firstname, lastname);

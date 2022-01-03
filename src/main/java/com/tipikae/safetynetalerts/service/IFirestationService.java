@@ -1,6 +1,7 @@
 package com.tipikae.safetynetalerts.service;
 
 import com.tipikae.safetynetalerts.dto.FirestationDTO;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 
@@ -18,8 +19,10 @@ public interface IFirestationService {
 	 * @return FirestationDTO
 	 * @throws ServiceException
 	 * @throws StorageException
+	 * @throws ConverterException
 	 */
-	FirestationDTO addFirestationMapping(FirestationDTO firestationDTO) throws ServiceException, StorageException;
+	FirestationDTO addFirestationMapping(FirestationDTO firestationDTO) 
+			throws ServiceException, StorageException, ConverterException;
 	/**
 	 * Update a firestation mapping.
 	 * @param address a String.
@@ -27,9 +30,10 @@ public interface IFirestationService {
 	 * @return FirestationDTO
 	 * @throws ServiceException
 	 * @throws StorageException
+	 * @throws ConverterException
 	 */
 	FirestationDTO updateFirestationMapping(String address, FirestationDTO newFirestationDTO) 
-			throws ServiceException, StorageException;
+			throws ServiceException, StorageException, ConverterException;
 	/**
 	 * Delete a firestation by address.
 	 * @param address a String.

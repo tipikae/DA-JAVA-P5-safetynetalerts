@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tipikae.safetynetalerts.dto.FirestationDTO;
 import com.tipikae.safetynetalerts.exception.ControllerException;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.service.IFirestationService;
@@ -54,6 +55,10 @@ public class FirestationController {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()), 
 					HttpStatus.BAD_REQUEST);
+		} catch (ConverterException e) {
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()), 
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -78,6 +83,10 @@ public class FirestationController {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
 					HttpStatus.NOT_FOUND);
+		} catch (ConverterException e) {
+			return new ResponseEntity<>(
+					new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()), 
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 

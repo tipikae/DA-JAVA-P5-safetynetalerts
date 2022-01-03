@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.tipikae.safetynetalerts.dto.FirestationDTO;
 import com.tipikae.safetynetalerts.dtoconverter.IFirestationConverter;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.model.Firestation;
 
 @SpringBootTest
@@ -36,17 +37,17 @@ class FirestationConverterTest {
 	}
 
 	@Test
-	void testToDTO() {
+	void testToDTO() throws ConverterException {
 		assertEquals(dto.getAddress(), converter.toDTO(entity).getAddress());
 	}
 	
 	@Test
-	void testToEntity() {
+	void testToEntity() throws ConverterException {
 		assertEquals(entity.getStation(), converter.toEntity(dto).getStation());
 	}
 	
 	@Test
-	void testToDTOs() {
+	void testToDTOs() throws ConverterException {
 		assertEquals(dtos.get(0).getStation(), converter.toDTOs(entities).get(0).getStation());
 	}
 

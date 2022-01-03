@@ -3,9 +3,6 @@ package com.tipikae.safetynetalerts.exception;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 /**
  * Exception sent by all controllers.
  * @author tipikae
@@ -14,7 +11,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class ControllerException implements Serializable {
 
-	private static final Logger LOGGER = LogManager.getLogger("ControllerException");
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -39,7 +35,6 @@ public class ControllerException implements Serializable {
 		this.code = code;
 		this.message = message;
 		this.timestamp = new Date();
-		logException(code, message);
 	}
 
 	/**
@@ -88,9 +83,5 @@ public class ControllerException implements Serializable {
 	 */
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
-	}
-
-	private void logException(int code, String message) {
-		LOGGER.error("Error code: {}, {}", code, message);
 	}
 }

@@ -3,6 +3,8 @@ package com.tipikae.safetynetalerts.exception;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,6 +23,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @ControllerAdvice
 public class ControllerExceptionHandler {
 	
+	private final static Logger LOGGER = LogManager.getLogger("ControllerExceptionHandler");
+	
 	/**
 	 * Handle ServiceException.
 	 * @param e a ServiceException.
@@ -30,6 +34,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ServiceException.class)
 	ControllerException exceptionHandler(ServiceException e) {
+		logException(HttpStatus.NOT_FOUND.value(), e.getMessage());
 		return new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage());
 	}
 	
@@ -42,6 +47,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(StorageException.class)
 	ControllerException exceptionHandler(StorageException e) {
+		logException(HttpStatus.CONFLICT.value(), e.getMessage());
 		return new ControllerException(HttpStatus.CONFLICT.value(), e.getMessage());
 	}
 	
@@ -54,6 +60,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConverterException.class)
 	ControllerException exceptionHandler(ConverterException e) {
+		logException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
 		return new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
 	}
 
@@ -66,6 +73,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
     ControllerException exceptionHandler(ValidationException e) {
+		logException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
         return new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
 
@@ -82,6 +90,7 @@ public class ControllerExceptionHandler {
         e.getConstraintViolations().forEach((violation) -> {
         	errors.append(violation.getPropertyPath() + ": " + violation.getMessage() + ", ");
         });
+		logException(HttpStatus.BAD_REQUEST.value(), errors.toString());
         return new ControllerException(HttpStatus.BAD_REQUEST.value(), errors.toString());
     }
 
@@ -100,6 +109,7 @@ public class ControllerExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.append(fieldName + ": " + errorMessage + ", ");
         });
+		logException(HttpStatus.BAD_REQUEST.value(), errors.toString());
         return new ControllerException(HttpStatus.BAD_REQUEST.value(), errors.toString());
     }
 
@@ -114,6 +124,11 @@ public class ControllerExceptionHandler {
     ControllerException exceptionHandler(MethodArgumentTypeMismatchException e) {
     	StringBuilder sb = new StringBuilder();
     	sb.append("There is a problem with the parameter: " + e.getName());
+		logException(HttpStatus.BAD_REQUEST.value(), sb.toString());
     	return new ControllerException(HttpStatus.BAD_REQUEST.value(), sb.toString());
     }
+
+	private void logException(int code, String message) {
+		LOGGER.error("Error code: {}, {}", code, message);
+	}
 }

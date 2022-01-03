@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tipikae.safetynetalerts.dto.DTOResponse;
-import com.tipikae.safetynetalerts.dto.FloodDTO;
 import com.tipikae.safetynetalerts.exception.ControllerException;
-import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.service.IInformationService;
 
@@ -45,10 +43,6 @@ public class InformationController {
 		try {
 			DTOResponse dto = service.getResidentsByStation(stationNumber);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -67,10 +61,6 @@ public class InformationController {
 		try {
 			DTOResponse dto = service.getChildrenByAddress(address);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -89,10 +79,6 @@ public class InformationController {
 		try {
 			DTOResponse dto = service.getPhoneNumbersByStation(firestation);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -111,10 +97,6 @@ public class InformationController {
 		try {
 			DTOResponse dto = service.getMembersByAddress(address);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -132,12 +114,8 @@ public class InformationController {
 	public ResponseEntity<Object> residentsByStations(
 			@RequestParam @NotEmpty(message = "Station number list cannot be empty.") List<Integer> stations) {
 		try {
-			List<DTOResponse> dto = service.getResidentsByStations(stations);
+			DTOResponse dto = service.getResidentsByStations(stations);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -159,10 +137,6 @@ public class InformationController {
 		try {
 			DTOResponse dto = service.getPersonInfoByLastname(firstName, lastName);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
@@ -181,10 +155,6 @@ public class InformationController {
 		try {
 			DTOResponse dto = service.getEmailsByCity(city);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
 		} catch (StorageException e) {
 			return new ResponseEntity<>(
 					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 

@@ -8,8 +8,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -118,7 +116,7 @@ class InformationControllerTest {
 	
 	@Test
 	void testResidentsByStations_whenOk() throws Exception {
-		when(service.getResidentsByStations(anyList())).thenReturn(new ArrayList<FloodDTO>());
+		when(service.getResidentsByStations(anyList())).thenReturn(new FloodDTO(null));
 		mockMvc.perform(get("/flood/stations?stations=1,2"))
         	.andExpect(status().isOk());
 	}

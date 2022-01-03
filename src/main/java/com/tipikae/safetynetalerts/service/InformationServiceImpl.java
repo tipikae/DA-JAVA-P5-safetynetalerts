@@ -24,11 +24,11 @@ import com.tipikae.safetynetalerts.dto.FirestationInfo;
 import com.tipikae.safetynetalerts.dto.Flood;
 import com.tipikae.safetynetalerts.dto.FloodAddress;
 import com.tipikae.safetynetalerts.dto.FloodDTO;
+import com.tipikae.safetynetalerts.dto.FloodMaster;
 import com.tipikae.safetynetalerts.dto.PersonInfo;
 import com.tipikae.safetynetalerts.dto.PersonInfoDTO;
 import com.tipikae.safetynetalerts.dto.PhoneAlert;
 import com.tipikae.safetynetalerts.dto.PhoneAlertDTO;
-import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
@@ -68,7 +68,7 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public DTOResponse getResidentsByStation(int stationNumber) throws ServiceException, StorageException {
+	public DTOResponse getResidentsByStation(int stationNumber) throws StorageException {
 		Optional<List<Firestation>> optFirestations = firestationDao.findByStation(stationNumber);
 		if(optFirestations.isPresent()) {
 			List<Firestation> firestations = optFirestations.get();
@@ -113,7 +113,7 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public DTOResponse getChildrenByAddress(String address) throws ServiceException, StorageException {
+	public DTOResponse getChildrenByAddress(String address) throws StorageException {
 		Optional<List<Person>> optPersons = personDao.findByAddress(address);
 		if(optPersons.isPresent()) {
 			List<Person> persons = optPersons.get();
@@ -153,7 +153,7 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public DTOResponse getPhoneNumbersByStation(int station) throws ServiceException, StorageException {
+	public DTOResponse getPhoneNumbersByStation(int station) throws StorageException {
 		Optional<List<Firestation>> optFirestation = firestationDao.findByStation(station);
 		if(optFirestation.isPresent()) {
 			List<Firestation> firestations = optFirestation.get();
@@ -183,7 +183,7 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public DTOResponse getMembersByAddress(String address) throws ServiceException, StorageException {
+	public DTOResponse getMembersByAddress(String address) throws StorageException {
 		Optional<List<Person>> optPersons = personDao.findByAddress(address);
 		if(optPersons.isPresent()) {
 			List<Person> persons = optPersons.get();
@@ -230,9 +230,8 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public List<DTOResponse> getResidentsByStations(List<Integer> stations) 
-			throws ServiceException, StorageException {
-		List<DTOResponse> dtos = new ArrayList<>();
+	public DTOResponse getResidentsByStations(List<Integer> stations) throws StorageException {
+		List<FloodMaster> dtos = new ArrayList<>();
 		
 		for(Integer station: stations) {
 			Optional<List<Firestation>> optFirestation = firestationDao.findByStation(station);
@@ -265,14 +264,14 @@ public class InformationServiceImpl implements IInformationService {
 								" not found in Person.");
 					}
 				} 
-				dtos.add(new FloodDTO(station, adresses));
+				dtos.add(new FloodMaster(station, adresses));
 			} else {
 				LOGGER.debug("getResidentsByStations: station: " + station + " not found in Firestation.");
 			}
 		}
 		
 		if(!dtos.isEmpty()) {
-			return dtos;
+			return new FloodDTO(dtos);
 		} else {
 			StringBuilder sb = new StringBuilder();
 			for(Integer station: stations) {
@@ -280,7 +279,7 @@ public class InformationServiceImpl implements IInformationService {
 			}
 			sb.deleteCharAt(sb.length() - 1);
 			LOGGER.debug("getResidentsByStations: stations: " + sb + " not found.");
-			return new ArrayList<DTOResponse>();
+			return new DTOResponse();
 		}
 	}
 
@@ -291,8 +290,7 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public DTOResponse getPersonInfoByLastname(String firstname, String lastname)
-			throws ServiceException, StorageException {
+	public DTOResponse getPersonInfoByLastname(String firstname, String lastname) throws StorageException {
 		Optional<List<Person>> optPersons = personDao.findAll();
 		List<PersonInfo> personsInfo = new ArrayList<>();
 		if(optPersons.isPresent()) {
@@ -328,7 +326,7 @@ public class InformationServiceImpl implements IInformationService {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public DTOResponse getEmailsByCity(String city) throws ServiceException, StorageException {
+	public DTOResponse getEmailsByCity(String city) throws StorageException {
 		Optional<List<Person>> optPersons = personDao.findByCity(city);
 		if(optPersons.isPresent()) {
 			List<Person> persons = optPersons.get();

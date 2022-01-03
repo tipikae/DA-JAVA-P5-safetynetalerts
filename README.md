@@ -24,7 +24,7 @@ Execute `mvn verify` to run unit and integration tests.
 ### Documentation and reports
 Execute `mvn site` to generate reports (Surefire, Jacoco) an Javadoc.
 
-Reports and documentation's link is: `http://localhost:9000/YOUR/ROOT/PROJECT/SafetyNet-Alerts/target/site/project-reports.html` 
+Reports and documentation's link is: `file:///YOUR/ROOT/PROJECT/SafetyNet-Alerts/target/site/index.html`
 
 ### Building the project
 Execute `mvn package` to generate an executable.
@@ -40,5 +40,5 @@ You can test the API with a tool like Postman.
 Info, trace, metrics and more are available at `http://localhost:9001/actuator`.
 
 ### API documentation
-Swagger2 provides an API documentation at `http://localhost:9000/swagger-ui/index.html`.
+Swagger2 provides an API documentation at `http://localhost:8080/swagger-ui/index.html`.
 

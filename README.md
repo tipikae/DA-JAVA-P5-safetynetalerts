@@ -32,7 +32,7 @@ Execute `mvn package` to generate an executable.
 ### Running App
 Go to the `target` repository and run the executable:
 
-`java -jar SafetyNet-Alerts-0.0.1-SNAPSHOT.jar`.
+`java -jar SafetyNet-Alerts-1.2.0-SNAPSHOT.jar`.
 
 You can test the API with a tool like Postman. 
 

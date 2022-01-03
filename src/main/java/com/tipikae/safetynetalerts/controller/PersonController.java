@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tipikae.safetynetalerts.dto.PersonDTO;
-import com.tipikae.safetynetalerts.exception.ControllerException;
 import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
@@ -40,23 +39,10 @@ public class PersonController {
 	 * @return ResponseEntity<Object>
 	 */
 	@PostMapping(value="/person", consumes={"application/json"})
-	public ResponseEntity<Object> addPerson(@Valid @RequestBody PersonDTO personDTO) {
-		try {
-			PersonDTO added = service.addPerson(personDTO);
-			return new ResponseEntity<>(added, HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()), 
-					HttpStatus.BAD_REQUEST);
-		} catch (ConverterException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		}
+	public ResponseEntity<Object> addPerson(@Valid @RequestBody PersonDTO personDTO)
+			throws StorageException , ServiceException, ConverterException {
+		PersonDTO added = service.addPerson(personDTO);
+		return new ResponseEntity<>(added, HttpStatus.OK);
 	}
 
 	/**
@@ -71,23 +57,10 @@ public class PersonController {
 	public ResponseEntity<Object> updatePerson(
 			@RequestParam @NotBlank String firstName, 
 			@RequestParam @NotBlank String lastName, 
-			@Valid @RequestBody PersonDTO personDTO) {
-		try {
-			PersonDTO updated = service.updatePerson(firstName, lastName, personDTO);
-			return new ResponseEntity<>(updated, HttpStatus.OK);
-		} catch(StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		} catch(ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		} catch (ConverterException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		}
+			@Valid @RequestBody PersonDTO personDTO)
+					throws StorageException , ServiceException, ConverterException {
+		PersonDTO updated = service.updatePerson(firstName, lastName, personDTO);
+		return new ResponseEntity<>(updated, HttpStatus.OK);
 	}
 
 	/**
@@ -100,18 +73,9 @@ public class PersonController {
 	@DeleteMapping("/person")
 	public ResponseEntity<Object> deletePerson(
 			@RequestParam @NotBlank String firstName, 
-			@RequestParam @NotBlank String lastName) {
-		try {
-			service.deletePerson(firstName, lastName);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} catch(StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		} catch(ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		}
+			@RequestParam @NotBlank String lastName)
+					throws StorageException , ServiceException {
+		service.deletePerson(firstName, lastName);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

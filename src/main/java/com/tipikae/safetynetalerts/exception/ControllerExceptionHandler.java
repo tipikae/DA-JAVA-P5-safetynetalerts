@@ -20,6 +20,42 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
  */
 @ControllerAdvice
 public class ControllerExceptionHandler {
+	
+	/**
+	 * Handle ServiceException.
+	 * @param e a ServiceException.
+	 * @return ControllerException
+	 */
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ServiceException.class)
+	ControllerException exceptionHandler(ServiceException e) {
+		return new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+	}
+	
+	/**
+	 * Handle StorageException.
+	 * @param e a StorageException.
+	 * @return ControllerException
+	 */
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(StorageException.class)
+	ControllerException exceptionHandler(StorageException e) {
+		return new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+	}
+	
+	/**
+	 * Handle ConverterException.
+	 * @param e a ConverterException.
+	 * @return ControllerException
+	 */
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConverterException.class)
+	ControllerException exceptionHandler(ConverterException e) {
+		return new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+	}
 
 	/**
 	 * Handle ValidationException.

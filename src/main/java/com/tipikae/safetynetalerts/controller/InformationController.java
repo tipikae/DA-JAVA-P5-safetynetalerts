@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tipikae.safetynetalerts.dto.DTOResponse;
-import com.tipikae.safetynetalerts.exception.ControllerException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.service.IInformationService;
 
@@ -39,15 +38,10 @@ public class InformationController {
 	 */
 	// /firestation?stationNumber=<station_number>
 	@GetMapping(value="/firestation", params="stationNumber")
-    public ResponseEntity<Object> residentsByStation(@RequestParam @Positive int stationNumber) {
-		try {
-			DTOResponse dto = service.getResidentsByStation(stationNumber);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
+    public ResponseEntity<Object> residentsByStation(@RequestParam @Positive int stationNumber)
+			throws StorageException {
+		DTOResponse dto = service.getResidentsByStation(stationNumber);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	/**
@@ -57,15 +51,10 @@ public class InformationController {
 	 */
 	// /childAlert?address=<address>
 	@GetMapping(value="/childAlert", params="address")
-    public ResponseEntity<Object> childrenByAddress(@RequestParam @NotBlank String address) {
-		try {
-			DTOResponse dto = service.getChildrenByAddress(address);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
+    public ResponseEntity<Object> childrenByAddress(@RequestParam @NotBlank String address)
+			throws StorageException {
+		DTOResponse dto = service.getChildrenByAddress(address);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	/**
@@ -75,15 +64,10 @@ public class InformationController {
 	 */
 	// /phoneAlert?firestation=<firestation_number>
 	@GetMapping(value="/phoneAlert", params="firestation")
-    public ResponseEntity<Object> phoneNumbersByStation(@RequestParam @Positive int firestation) {
-		try {
-			DTOResponse dto = service.getPhoneNumbersByStation(firestation);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
+    public ResponseEntity<Object> phoneNumbersByStation(@RequestParam @Positive int firestation)
+			throws StorageException {
+		DTOResponse dto = service.getPhoneNumbersByStation(firestation);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	/**
@@ -93,15 +77,10 @@ public class InformationController {
 	 */
 	// /fire?address=<address>
 	@GetMapping(value="/fire", params="address")
-    public ResponseEntity<Object> membersByAddress(@RequestParam @NotBlank String address) {
-		try {
-			DTOResponse dto = service.getMembersByAddress(address);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
+    public ResponseEntity<Object> membersByAddress(@RequestParam @NotBlank String address)
+			throws StorageException {
+		DTOResponse dto = service.getMembersByAddress(address);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	/**
@@ -112,15 +91,10 @@ public class InformationController {
 	// /flood/stations?stations=<a list of station_numbers>
 	@GetMapping(value="/flood/stations", params="stations")
 	public ResponseEntity<Object> residentsByStations(
-			@RequestParam @NotEmpty(message = "Station number list cannot be empty.") List<Integer> stations) {
-		try {
-			DTOResponse dto = service.getResidentsByStations(stations);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
+			@RequestParam @NotEmpty(message = "Station number list cannot be empty.") List<Integer> stations)
+					throws StorageException {
+		DTOResponse dto = service.getResidentsByStations(stations);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	/**
@@ -133,15 +107,10 @@ public class InformationController {
 	@GetMapping(value="/personInfo", params={"firstName", "lastName"})
 	public ResponseEntity<Object> personInfoByLastname(
 			@RequestParam @NotBlank String firstName, 
-    		@RequestParam @NotBlank String lastName) {
-		try {
-			DTOResponse dto = service.getPersonInfoByLastname(firstName, lastName);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
+    		@RequestParam @NotBlank String lastName)
+    				throws StorageException {
+		DTOResponse dto = service.getPersonInfoByLastname(firstName, lastName);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	/**
@@ -151,15 +120,10 @@ public class InformationController {
 	 */
 	// /communityEmail?city=<city>
 	@GetMapping(value="/communityEmail", params="city")
-	public ResponseEntity<Object> emailsByCity(@RequestParam @NotBlank String city) {
-		try {
-			DTOResponse dto = service.getEmailsByCity(city);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
+	public ResponseEntity<Object> emailsByCity(@RequestParam @NotBlank String city)
+			throws StorageException {
+		DTOResponse dto = service.getEmailsByCity(city);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 }

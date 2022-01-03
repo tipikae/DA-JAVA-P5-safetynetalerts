@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tipikae.safetynetalerts.dto.FirestationDTO;
-import com.tipikae.safetynetalerts.exception.ControllerException;
 import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
@@ -43,23 +42,10 @@ public class FirestationController {
 	 * @return ResponseEntity
 	 */
 	@PostMapping(value="/firestation", consumes={"application/json"})
-	public ResponseEntity<Object> addFirestationMapping(@Valid @RequestBody FirestationDTO firestationDTO) {
-		try {
-			FirestationDTO added = service.addFirestationMapping(firestationDTO);
-			return new ResponseEntity<>(added, HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()), 
-					HttpStatus.BAD_REQUEST);
-		} catch (ConverterException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()), 
-					HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<Object> addFirestationMapping(@Valid @RequestBody FirestationDTO firestationDTO)
+			throws ServiceException, StorageException, ConverterException {
+		FirestationDTO added = service.addFirestationMapping(firestationDTO);
+		return new ResponseEntity<>(added, HttpStatus.OK);
 	}
 
 	/**
@@ -71,23 +57,10 @@ public class FirestationController {
 	@PutMapping(value="/firestation/{address}", consumes={"application/json"})
 	public ResponseEntity<Object> updateFirestationMapping(
 			@PathVariable @NotBlank String address, 
-			@Valid @RequestBody FirestationDTO firestationDTO) {
-		try {
-			FirestationDTO updated = service.updateFirestationMapping(address, firestationDTO);
-			return new ResponseEntity<>(updated, HttpStatus.OK);
-		} catch(StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		} catch(ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		} catch (ConverterException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()), 
-					HttpStatus.BAD_REQUEST);
-		}
+			@Valid @RequestBody FirestationDTO firestationDTO)
+					throws ServiceException, StorageException, ConverterException {
+		FirestationDTO updated = service.updateFirestationMapping(address, firestationDTO);
+		return new ResponseEntity<>(updated, HttpStatus.OK);
 	}
 
 	/**
@@ -96,19 +69,10 @@ public class FirestationController {
 	 * @return ResponseEntity
 	 */
 	@DeleteMapping("/firestation/{address}")
-	public ResponseEntity<Object> deleteFirestationsByAddress(@PathVariable @NotBlank String address ) {
-		try {
-			service.deleteFirestationByAddress(address);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} catch(StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		} catch(ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		}
+	public ResponseEntity<Object> deleteFirestationsByAddress(@PathVariable @NotBlank String address )
+			throws ServiceException, StorageException {
+		service.deleteFirestationByAddress(address);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	/**
@@ -118,18 +82,9 @@ public class FirestationController {
 	 */
 	// /firestation?station={station}
 	@DeleteMapping("/firestation")
-	public ResponseEntity<Object> deleteFirestationByStation(@RequestParam @Positive @NotNull int station) {
-		try {
-			service.deleteFirestationsByStation(station);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} catch(StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		} catch(ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		}
+	public ResponseEntity<Object> deleteFirestationByStation(@RequestParam @Positive @NotNull int station)
+			throws ServiceException, StorageException {
+		service.deleteFirestationsByStation(station);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

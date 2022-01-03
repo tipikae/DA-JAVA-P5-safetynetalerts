@@ -48,7 +48,7 @@ class FirestationControllerTest {
 		mockMvc.perform(post("/firestation")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"3\" }"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
@@ -85,7 +85,7 @@ class FirestationControllerTest {
 		mockMvc.perform(put("/firestation/3200 chemin de Pâle")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"address\":\"3200 chemin de Pâle\", \"station\":\"1\" }"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
@@ -113,7 +113,7 @@ class FirestationControllerTest {
 	void testDeleteFirestationByAddress_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).deleteFirestationByAddress(anyString());
 		mockMvc.perform(delete("/firestation/route"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
@@ -139,7 +139,7 @@ class FirestationControllerTest {
 	void testDeleteFirestationsByStation_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).deleteFirestationsByStation(anyInt());
 		mockMvc.perform(delete("/firestation?station=1"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test

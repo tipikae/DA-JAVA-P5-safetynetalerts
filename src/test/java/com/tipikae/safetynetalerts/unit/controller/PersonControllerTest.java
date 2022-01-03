@@ -49,7 +49,7 @@ class PersonControllerTest {
 		mockMvc.perform(post("/person")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
@@ -86,7 +86,7 @@ class PersonControllerTest {
 		mockMvc.perform(put("/person?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(BODY_REQ))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
@@ -114,7 +114,7 @@ class PersonControllerTest {
 	void testDeletePerson_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).deletePerson("Bob", "BOB");
 		mockMvc.perform(delete("/person?firstName=Bob&lastName=BOB"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test

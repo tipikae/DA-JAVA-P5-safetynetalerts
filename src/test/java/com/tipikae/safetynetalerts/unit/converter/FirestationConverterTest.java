@@ -7,14 +7,20 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.tipikae.safetynetalerts.dto.FirestationDTO;
-import com.tipikae.safetynetalerts.dtoconverter.FirestationConverterImpl;
+import com.tipikae.safetynetalerts.dtoconverter.IFirestationConverter;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.model.Firestation;
 
+@SpringBootTest
 class FirestationConverterTest {
 
-	private static FirestationConverterImpl converter;
+	@Autowired
+	private IFirestationConverter converter;
+	
 	private static Firestation entity;
 	private static FirestationDTO dto;
 	private static List<Firestation> entities;
@@ -22,7 +28,6 @@ class FirestationConverterTest {
 	
 	@BeforeAll
 	private static void setUp() {
-		converter = new FirestationConverterImpl();
 		entity = new Firestation("route", 1);
 		dto = new FirestationDTO("route", 1);
 		entities = new ArrayList<>();
@@ -32,17 +37,17 @@ class FirestationConverterTest {
 	}
 
 	@Test
-	void testToDTO() {
+	void testToDTO() throws ConverterException {
 		assertEquals(dto.getAddress(), converter.toDTO(entity).getAddress());
 	}
 	
 	@Test
-	void testToEntity() {
+	void testToEntity() throws ConverterException {
 		assertEquals(entity.getStation(), converter.toEntity(dto).getStation());
 	}
 	
 	@Test
-	void testToDTOs() {
+	void testToDTOs() throws ConverterException {
 		assertEquals(dtos.get(0).getStation(), converter.toDTOs(entities).get(0).getStation());
 	}
 

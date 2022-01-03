@@ -7,14 +7,20 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.tipikae.safetynetalerts.dto.PersonDTO;
-import com.tipikae.safetynetalerts.dtoconverter.PersonConverterImpl;
+import com.tipikae.safetynetalerts.dtoconverter.IPersonConverter;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.model.Person;
 
+@SpringBootTest
 public class PersonConverterTest {
 
-	private static PersonConverterImpl converter;
+	@Autowired
+	private IPersonConverter converter;
+	
 	private static Person entity;
 	private static PersonDTO dto;
 	private static List<Person> entities;
@@ -22,7 +28,6 @@ public class PersonConverterTest {
 	
 	@BeforeAll
 	private static void setUp() {
-		converter = new PersonConverterImpl();
 		entity = new Person("Bob", "BOB", "route", "Paris", "75000", "123456", "bob@bob.com");
 		dto = new PersonDTO("Bob", "BOB", "route", "Paris", "75000", "123456", "bob@bob.com");
 		entities = new ArrayList<>();
@@ -32,17 +37,17 @@ public class PersonConverterTest {
 	}
 
 	@Test
-	void testToDTO() {
+	void testToDTO() throws ConverterException {
 		assertEquals(dto.getFirstName(), converter.toDTO(entity).getFirstName());
 	}
 	
 	@Test
-	void testToEntity() {
+	void testToEntity() throws ConverterException {
 		assertEquals(entity.getCity(), converter.toEntity(dto).getCity());
 	}
 	
 	@Test
-	void testToDTOs() {
+	void testToDTOs() throws ConverterException {
 		assertEquals(dtos.get(0).getEmail(), converter.toDTOs(entities).get(0).getEmail());
 	}
 }

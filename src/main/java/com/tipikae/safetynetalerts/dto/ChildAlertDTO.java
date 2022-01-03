@@ -9,7 +9,7 @@ import java.util.List;
  * @version 1.0
  *
  */
-public class ChildAlertDTO implements Serializable {
+public class ChildAlertDTO extends DTOResponse implements Serializable {
 
 	/**
 	 * Address.

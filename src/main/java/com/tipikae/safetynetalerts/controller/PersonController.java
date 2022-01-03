@@ -1,7 +1,5 @@
 package com.tipikae.safetynetalerts.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
@@ -10,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tipikae.safetynetalerts.dto.PersonDTO;
-import com.tipikae.safetynetalerts.dtoconverter.IpersonConverter;
-import com.tipikae.safetynetalerts.exception.ControllerException;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
-import com.tipikae.safetynetalerts.model.Person;
 import com.tipikae.safetynetalerts.service.IPersonService;
+
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 
 /**
  * A Person controller CRUD.
@@ -36,138 +35,54 @@ import com.tipikae.safetynetalerts.service.IPersonService;
 public class PersonController {
 	
 	@Autowired
-	private IpersonConverter converter;
-	
-	@Autowired
 	private IPersonService service;
 
 	/**
-	 * Get all persons.
-	 * @return ResponseEntity<Object>
-	 */
-	@GetMapping("/persons")
-    public ResponseEntity<Object> allPersons() {
-		try {
-			List<Person> persons = service.getPersons();
-			return new ResponseEntity<>(converter.toDTOs(persons), HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
-	}
-
-	/**
-	 * Get persons by address.
-	 * @param address a String address.
-	 * @return ResponseEntity<Object>
-	 */
-	// /persons/search?address={address}
-	@GetMapping(value="/persons/search", params="address")
-    public ResponseEntity<Object> personsByAddress(@RequestParam @NotBlank String address) {
-		try {
-			List<Person> persons = service.getPersonsByAddress(address);
-			return new ResponseEntity<>(converter.toDTOs(persons), HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
-
-	}
-
-	/**
-	 * Get persons by city.
-	 * @param city a String city.
-	 * @return ResponseEntity<Object>
-	 */
-	// /persons/search?city={city}
-	@GetMapping(value="/persons/search", params="city")
-    public ResponseEntity<Object> personsByCity(@RequestParam @NotBlank String city) {
-		try {
-			List<Person> persons = service.getPersonsByCity(city);
-			return new ResponseEntity<>(converter.toDTOs(persons), HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
-	}
-
-	/**
-	 * Get a person by firstname and lastname.
-	 * @param firstName a String firstname.
-	 * @param lastName a String lastname.
-	 * @return ResponseEntity<Object>
-	 */
-	// /persons/search?firstName={firstname}&lastName={lastname}
-	@GetMapping(value="/persons/search", params={"firstName", "lastName"})
-    public ResponseEntity<Object> personByFirstnameLastname(@RequestParam @NotBlank String firstName, 
-    		@RequestParam @NotBlank String lastName) {
-		try {
-			Person person = service.getPersonByFirstnameLastname(firstName, lastName);
-			return new ResponseEntity<>(converter.toDTO(person), HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
-	}
-
-	/**
 	 * Add a person.
-	 * @param person a PersonDTO object.
+	 * @param personDTO a PersonDTO object.
 	 * @return ResponseEntity<Object>
+	 * @throws StorageException
+	 * @throws ServiceException
+	 * @throws ConverterException
 	 */
-	@PostMapping(value="/persons", consumes={"application/json"})
-	public ResponseEntity<Object> addPerson(@Valid @RequestBody PersonDTO person) {
-		try {
-			Person added = service.addPerson(converter.toEntity(person));
-			return new ResponseEntity<>(converter.toDTO(added), HttpStatus.OK);
-		} catch (StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		}
+	@ApiOperation(value="Adding a person")
+	@ApiResponses(value = {  
+		      @ApiResponse(code = 200, message = "Operation succeed!", response = PersonDTO.class),
+		      @ApiResponse(code = 400, message = "Invalid parameters"),
+		      @ApiResponse(code = 404, message = "Person already exists"),
+		      @ApiResponse(code = 409, message = "Persistence problem, try later")})
+	@PostMapping(value="/person", consumes={"application/json"})
+	public ResponseEntity<Object> addPerson(@Valid @RequestBody PersonDTO personDTO)
+			throws StorageException , ServiceException, ConverterException {
+		PersonDTO added = service.addPerson(personDTO);
+		return new ResponseEntity<>(added, HttpStatus.OK);
 	}
 
 	/**
 	 * Update a person.
 	 * @param firstName a String firstname.
 	 * @param lastName a String lastname.
-	 * @param person a PersonDTO object.
+	 * @param personDTO a PersonDTO object.
 	 * @return ResponseEntity<Object>
+	 * @throws StorageException
+	 * @throws ServiceException
+	 * @throws ConverterException
 	 */
-	// /persons?firstName={firstname}&lastName={lastname}
-	@PutMapping(value="/persons", consumes={"application/json"})
+	@ApiOperation(value="Updating a person")
+	@ApiResponses(value = {  
+		      @ApiResponse(code = 200, message = "Operation succeed!", response = PersonDTO.class),
+		      @ApiResponse(code = 400, message = "Invalid parameters"),
+		      @ApiResponse(code = 404, message = "Person not found"),
+		      @ApiResponse(code = 409, message = "Persistence problem, try later")})
+	// /person?firstName={firstname}&lastName={lastname}
+	@PutMapping(value="/person", consumes={"application/json"})
 	public ResponseEntity<Object> updatePerson(
 			@RequestParam @NotBlank String firstName, 
 			@RequestParam @NotBlank String lastName, 
-			@Valid @RequestBody PersonDTO person) {
-		try {
-			Person updated = service.updatePerson(firstName, lastName, converter.toEntity(person));
-			return new ResponseEntity<>(converter.toDTO(updated), HttpStatus.OK);
-		} catch(StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		} catch(ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		}
+			@Valid @RequestBody PersonDTO personDTO)
+					throws StorageException , ServiceException, ConverterException {
+		PersonDTO updated = service.updatePerson(firstName, lastName, personDTO);
+		return new ResponseEntity<>(updated, HttpStatus.OK);
 	}
 
 	/**
@@ -175,23 +90,22 @@ public class PersonController {
 	 * @param firstName a String firstname.
 	 * @param lastName a String lastname.
 	 * @return ResponseEntity<Object>
+	 * @throws StorageException
+	 * @throws ServiceException
 	 */
-	// /persons?firstName={firstname}&lastName={lastname}
-	@DeleteMapping("/persons")
+	@ApiOperation(value="Deleting a person")
+	@ApiResponses(value = {  
+		      @ApiResponse(code = 200, message = "Operation succeed!"),
+		      @ApiResponse(code = 400, message = "Invalid parameters"),
+		      @ApiResponse(code = 404, message = "Person not found"),
+		      @ApiResponse(code = 409, message = "Persistence problem, try later")})
+	// /person?firstName={firstname}&lastName={lastname}
+	@DeleteMapping("/person")
 	public ResponseEntity<Object> deletePerson(
 			@RequestParam @NotBlank String firstName, 
-			@RequestParam @NotBlank String lastName) {
-		try {
-			service.deletePerson(firstName, lastName);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} catch(StorageException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage()), 
-					HttpStatus.INSUFFICIENT_STORAGE);
-		} catch(ServiceException e) {
-			return new ResponseEntity<>(
-					new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage()), 
-					HttpStatus.NOT_FOUND);
-		}
+			@RequestParam @NotBlank String lastName)
+					throws StorageException , ServiceException {
+		service.deletePerson(firstName, lastName);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

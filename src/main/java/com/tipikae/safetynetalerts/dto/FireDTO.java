@@ -9,7 +9,7 @@ import java.util.List;
  * @version 1.0
  *
  */
-public class FireDTO implements Serializable {
+public class FireDTO extends DTOResponse implements Serializable {
 
 	/**
 	 * Address.

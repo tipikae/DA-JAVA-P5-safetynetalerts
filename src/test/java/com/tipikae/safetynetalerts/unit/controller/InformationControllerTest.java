@@ -8,8 +8,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -53,7 +51,7 @@ class InformationControllerTest {
 	void testResidentsByStation_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getResidentsByStation(anyInt());
 		mockMvc.perform(get("/firestation?stationNumber=1"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
@@ -73,7 +71,7 @@ class InformationControllerTest {
 	void testChildrenByAddress_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getChildrenByAddress(anyString());
 		mockMvc.perform(get("/childAlert?address=route"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
@@ -93,7 +91,7 @@ class InformationControllerTest {
 	void testPhoneNumbersByStation_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getPhoneNumbersByStation(anyInt());
 		mockMvc.perform(get("/phoneAlert?firestation=1"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
@@ -113,12 +111,12 @@ class InformationControllerTest {
 	void testMembersByAddress_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getMembersByAddress(anyString());
 		mockMvc.perform(get("/fire?address=route"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
 	void testResidentsByStations_whenOk() throws Exception {
-		when(service.getResidentsByStations(anyList())).thenReturn(new ArrayList<FloodDTO>());
+		when(service.getResidentsByStations(anyList())).thenReturn(new FloodDTO(null));
 		mockMvc.perform(get("/flood/stations?stations=1,2"))
         	.andExpect(status().isOk());
 	}
@@ -133,7 +131,7 @@ class InformationControllerTest {
 	void testResidentsByStations_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getResidentsByStations(anyList());
 		mockMvc.perform(get("/flood/stations?stations=1,2"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
@@ -153,7 +151,7 @@ class InformationControllerTest {
 	void testPersonInfoByLastname_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getPersonInfoByLastname(anyString(), anyString());
 		mockMvc.perform(get("/personInfo?firstName=bob&lastName=BOB"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 	
 	@Test
@@ -173,7 +171,7 @@ class InformationControllerTest {
 	void testEmailsByCity_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).getEmailsByCity(anyString());
 		mockMvc.perform(get("/communityEmail?city=Paris"))
-        	.andExpect(status().is(507));
+        	.andExpect(status().is(409));
 	}
 
 }

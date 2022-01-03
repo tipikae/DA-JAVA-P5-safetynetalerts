@@ -9,7 +9,7 @@ import java.util.List;
  * @version 1.0
  *
  */
-public class PhoneAlertDTO implements Serializable {
+public class PhoneAlertDTO extends DTOResponse implements Serializable {
 
 	/**
 	 * Station number

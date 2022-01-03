@@ -1,6 +1,7 @@
 package com.tipikae.safetynetalerts.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
@@ -15,42 +16,42 @@ public interface IFirestationDAO {
 
 	/**
 	 * Find all firestations.
-	 * @return List<Firestation>
+	 * @return Optional<List<Firestation>>
 	 * @throws StorageException
 	 */
-	List<Firestation> findAll() throws StorageException;
+	Optional<List<Firestation>> findAll() throws StorageException;
 
 	/**
 	 * Find a firestation by address.
 	 * @param address a String address.
-	 * @return Firestation
+	 * @return Optional<Firestation>
 	 * @throws StorageException
 	 */
-	Firestation findByAddress(String address) throws StorageException;
+	Optional<Firestation> findByAddress(String address) throws StorageException;
 
 	/**
 	 * Find firestations by station number.
 	 * @param station an Integer station number.
-	 * @return List<Firestation>
+	 * @return Optional<List<Firestation>>
 	 * @throws StorageException
 	 */
-	List<Firestation> findByStation(int station) throws StorageException;
+	Optional<List<Firestation>> findByStation(int station) throws StorageException;
 
 	/**
 	 * Save a Firestation object.
 	 * @param firestation a Firestation object.
-	 * @return Firestation
+	 * @return Optional<Firestation>
 	 * @throws StorageException
 	 */
-	Firestation save(Firestation firestation) throws StorageException;
+	Optional<Firestation> save(Firestation firestation) throws StorageException;
 
 	/**
 	 * Update a Firestation.
 	 * @param firestation a Firestation object.
-	 * @return Firestation
+	 * @return Optional<Firestation>
 	 * @throws StorageException
 	 */
-	Firestation update(Firestation firestation) throws StorageException;
+	Optional<Firestation> update(Firestation firestation) throws StorageException;
 
 	/**
 	 * Delete a Firestation object.

@@ -51,7 +51,7 @@ class FirestationDAOTest {
 		when(storage.getFirestations()).thenReturn(firestations);
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertEquals(firestation, dao.save(firestation));
+		assertEquals(firestation, dao.save(firestation).get());
 	}
 
 	@Test
@@ -62,28 +62,28 @@ class FirestationDAOTest {
 		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertThrows(StorageException.class, () -> dao.save(firestation));
+		assertThrows(StorageException.class, () -> dao.save(firestation).get());
 	}
 
 	@Test
 	void testFindAll_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
 		dao.setJsonStorage(jsonStorage);
-		assertThrows(StorageException.class, () -> dao.findAll());
+		assertThrows(StorageException.class, () -> dao.findAll().get());
 	}
 
 	@Test
 	void testFindByAddress_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
 		dao.setJsonStorage(jsonStorage);
-		assertThrows(StorageException.class, () -> dao.findByAddress("route"));
+		assertThrows(StorageException.class, () -> dao.findByAddress("route").get());
 	}
 
 	@Test
 	void testFindByStation_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
 		dao.setJsonStorage(jsonStorage);
-		assertThrows(StorageException.class, () -> dao.findByStation(1));
+		assertThrows(StorageException.class, () -> dao.findByStation(1).get());
 	}
 	
 	@Test
@@ -94,7 +94,7 @@ class FirestationDAOTest {
 		when(storage.getFirestations()).thenReturn(firestations);
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		Firestation result = dao.update(updatedFirestation);
+		Firestation result = dao.update(updatedFirestation).get();
 		assertEquals(updatedFirestation.getAddress(),result.getAddress());
 		assertEquals(updatedFirestation.getStation(),result.getStation());
 	}
@@ -108,7 +108,7 @@ class FirestationDAOTest {
 		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
 		dao.setJsonStorage(jsonStorage);
 		dao.setStorage(storage);
-		assertThrows(StorageException.class, () -> dao.update(firestation));
+		assertThrows(StorageException.class, () -> dao.update(firestation).get());
 	}
 	
 	@Test

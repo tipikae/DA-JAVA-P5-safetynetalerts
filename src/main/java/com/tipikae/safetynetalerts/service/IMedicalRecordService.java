@@ -1,10 +1,9 @@
 package com.tipikae.safetynetalerts.service;
 
-import java.util.List;
-
+import com.tipikae.safetynetalerts.dto.MedicalRecordDTO;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
-import com.tipikae.safetynetalerts.model.MedicalRecord;
 
 /**
  * An interface providing services for MedicalRecordController.
@@ -16,38 +15,26 @@ public interface IMedicalRecordService {
 
 	/**
 	 * Add a medical record.
-	 * @param medicalRecord a MedicalRecord object.
-	 * @return MedicalRecord
-	 * @throws StorageException
-	 */
-	MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) throws StorageException;
-	/**
-	 * Get all medical records.
-	 * @return List<MedicalRecord>
-	 * @throws StorageException
-	 */
-	List<MedicalRecord> getMedicalRecords() throws StorageException;
-	/**
-	 * Get a medical record by firstname and lastname.
-	 * @param firstname a String.
-	 * @param lastname a String.
-	 * @return MedicalRecord
+	 * @param medicalRecord a MedicalRecordDTO object.
+	 * @return MedicalRecordDTO
 	 * @throws ServiceException
 	 * @throws StorageException
+	 * @throws ConverterException
 	 */
-	MedicalRecord getMedicalRecordByFirstnameLastname(String firstname, String lastname) 
-			throws ServiceException, StorageException;
+	MedicalRecordDTO addMedicalRecord(MedicalRecordDTO medicalRecordDTO) 
+			throws ServiceException, StorageException, ConverterException;
 	/**
 	 * Update a medical record.
 	 * @param firstname a String.
 	 * @param lastname a String.
-	 * @param medicalRecord a MedicalRecord object.
-	 * @return MedicalRecord
+	 * @param medicalRecord a MedicalRecordDTO object.
+	 * @return MedicalRecordDTO
 	 * @throws ServiceException
 	 * @throws StorageException
+	 * @throws ConverterException
 	 */
-	MedicalRecord updateMedicalRecord(String firstname, String lastname, MedicalRecord medicalRecord) 
-			throws ServiceException, StorageException;
+	MedicalRecordDTO updateMedicalRecord(String firstname, String lastname, MedicalRecordDTO medicalRecordDTO) 
+			throws ServiceException, StorageException, ConverterException;
 	/**
 	 * Delete a medical record.
 	 * @param firstname a String.

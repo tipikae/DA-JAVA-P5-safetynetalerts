@@ -4,62 +4,39 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * A DTO for Flood request.
+ * The Flood DTO.
  * @author tipikae
  * @version 1.0
  *
  */
-public class FloodDTO implements Serializable {
+public class FloodDTO extends DTOResponse implements Serializable {
 
 	/**
-	 * Station number.
+	 * The floods.
 	 */
-	private int station;
-	/**
-	 * Addresses.
-	 */
-	private List<FloodAddress> adresses;
+	private List<FloodMaster> floods;
 
-	/**
-	 * The constructor.
-	 * @param station an Integer station number.
-	 * @param adresses a List of addresses.
+	/** The constructor.
+	 * @param floods
 	 */
-	public FloodDTO(int station, List<FloodAddress> adresses) {
-		this.station = station;
-		this.adresses = adresses;
+	public FloodDTO(List<FloodMaster> floods) {
+		this.floods = floods;
 	}
 
 	/**
-	 * Get station number.
-	 * @return int
+	 * Get the floods.
+	 * @return the floods
 	 */
-	public int getStation() {
-		return station;
+	public List<FloodMaster> getFloods() {
+		return floods;
 	}
 
 	/**
-	 * Set station number.
-	 * @param station an Integer station number.
+	 * Set the floods.
+	 * @param floods the floods to set
 	 */
-	public void setStation(int station) {
-		this.station = station;
-	}
-
-	/**
-	 * Get addresses.
-	 * @return List<FloodAddress>
-	 */
-	public List<FloodAddress> getAdresses() {
-		return adresses;
-	}
-
-	/**
-	 * Set addresses.
-	 * @param adresses a List of addresses.
-	 */
-	public void setAdresses(List<FloodAddress> adresses) {
-		this.adresses = adresses;
+	public void setFloods(List<FloodMaster> floods) {
+		this.floods = floods;
 	}
 	
 }

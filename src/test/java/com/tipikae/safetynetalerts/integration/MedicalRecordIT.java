@@ -2,7 +2,6 @@ package com.tipikae.safetynetalerts.integration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -44,15 +43,8 @@ class MedicalRecordIT {
     
     @Test
     @Order(1)
-	void testAllMedicalRecords_whenEmpty() throws Exception {
-		mockMvc.perform(get("/medicalrecords"))
-        	.andExpect(status().isOk());
-	}
-
-	@Test
-    @Order(2)
 	void testAddMedicalRecord_whenOk() throws Exception {
-		mockMvc.perform(post("/medicalrecords")
+		mockMvc.perform(post("/medicalrecord")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
 			.andExpect(status().isOk())
@@ -60,66 +52,43 @@ class MedicalRecordIT {
 	}
 	
 	@Test
-    @Order(3)
-	void testAllMedicalRecords_whenOk() throws Exception {
-		mockMvc.perform(get("/medicalrecords"))
-        	.andExpect(status().isOk())
-	        .andExpect(jsonPath("$[0].firstName", is("John")));
-	}
-	
-	@Test
-    @Order(4)
-	void testMedicalRecordByFirstnameLastname_whenOk() throws Exception {
-		mockMvc.perform(get("/medicalrecords/search?firstName=John&lastName=Boyd"))
-        	.andExpect(status().isOk())
-	        .andExpect(jsonPath("$.firstName", is("John")));
-	}
-	
-	@Test
-    @Order(5)
+    @Order(2)
 	void testUpdateMedicalRecord_whenOk() throws Exception {
-		mockMvc.perform(put("/medicalrecords?firstName=John&lastName=Boyd")
+		mockMvc.perform(put("/medicalrecord?firstName=John&lastName=Boyd")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:400mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
 			.andExpect(status().isOk());
 	}
 	
 	@Test
-    @Order(6)
+    @Order(3)
 	void testUpdateMedicalRecord_whenNull() throws Exception {
-		mockMvc.perform(put("/medicalrecords?firstName=Bob&lastName=BOB")
+		mockMvc.perform(put("/medicalrecord?firstName=Bob&lastName=BOB")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{ \"firstName\":\"Bob\", \"lastName\":\"BOB\", \"birthdate\":\"1984-03-06\", \"medications\":[\"aznol:350mg\", \"hydrapermazol:100mg\"], \"allergies\":[\"nillacilan\"] }"))
 			.andExpect(status().is(404));
 	}
 	
 	@Test
-    @Order(7)
-	void testMedicalRecordByFirstnameLastname_whenNull() throws Exception {
-		mockMvc.perform(get("/medicalrecords/search?firstName=Bob&lastName=BOB"))
-        	.andExpect(status().is(404));
-	}
-
-	@Test
-    @Order(8)
+    @Order(4)
 	void testAddMedicalRecord_whenNull() throws Exception {
-		mockMvc.perform(post("/medicalrecords")
+		mockMvc.perform(post("/medicalrecord")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
 			.andExpect(status().is(400));	
 	}
 	
 	@Test
-    @Order(9)
+    @Order(5)
 	void testDeleteMedicalRecord_whenOk() throws Exception {
-		mockMvc.perform(delete("/medicalrecords?firstName=John&lastName=Boyd"))
+		mockMvc.perform(delete("/medicalrecord?firstName=John&lastName=Boyd"))
 			.andExpect(status().isOk());
 	}
 	
 	@Test
-    @Order(10)
+    @Order(6)
 	void testDeleteMedicalRecord_whenNull() throws Exception {
-		mockMvc.perform(delete("/medicalrecords?firstName=Alice&lastName=BOB"))
+		mockMvc.perform(delete("/medicalrecord?firstName=Alice&lastName=BOB"))
 			.andExpect(status().is(404));
 	}
 }

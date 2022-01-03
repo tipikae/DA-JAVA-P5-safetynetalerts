@@ -1,10 +1,9 @@
 package com.tipikae.safetynetalerts.service;
 
-import java.util.List;
-
+import com.tipikae.safetynetalerts.dto.FirestationDTO;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
-import com.tipikae.safetynetalerts.model.Firestation;
 
 /**
  * An interface providing services for FirestationController.
@@ -16,43 +15,25 @@ public interface IFirestationService {
 
 	/**
 	 * Add a firestation mapping.
-	 * @param firestation a Firestation object.
-	 * @return Firestation
-	 * @throws StorageException
-	 */
-	Firestation addFirestationMapping(Firestation firestation) throws StorageException;
-	/**
-	 * Get all firestations.
-	 * @return List<Firestation>
-	 * @throws StorageException
-	 */
-	List<Firestation> getFirestations() throws StorageException;
-	/**
-	 * Get a firestation by address.
-	 * @param address a String.
-	 * @return Firestation
+	 * @param firestationDTO a FirestationDTO object.
+	 * @return FirestationDTO
 	 * @throws ServiceException
 	 * @throws StorageException
+	 * @throws ConverterException
 	 */
-	Firestation getFirestationByAddress(String address) throws ServiceException, StorageException;
-	/**
-	 * Get firestations by station number.
-	 * @param station an int station number.
-	 * @return List<Firestation>
-	 * @throws ServiceException
-	 * @throws StorageException
-	 */
-	List<Firestation> getFirestationsByStation(int station) throws ServiceException, StorageException;
+	FirestationDTO addFirestationMapping(FirestationDTO firestationDTO) 
+			throws ServiceException, StorageException, ConverterException;
 	/**
 	 * Update a firestation mapping.
 	 * @param address a String.
-	 * @param newFirestation a Firestation object.
-	 * @return Firestation
+	 * @param newFirestationDTO a FirestationDTO object.
+	 * @return FirestationDTO
 	 * @throws ServiceException
 	 * @throws StorageException
+	 * @throws ConverterException
 	 */
-	Firestation updateFirestationMapping(String address, Firestation newFirestation) 
-			throws ServiceException, StorageException;
+	FirestationDTO updateFirestationMapping(String address, FirestationDTO newFirestationDTO) 
+			throws ServiceException, StorageException, ConverterException;
 	/**
 	 * Delete a firestation by address.
 	 * @param address a String.

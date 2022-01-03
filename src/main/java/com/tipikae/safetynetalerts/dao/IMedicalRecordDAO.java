@@ -1,6 +1,7 @@
 package com.tipikae.safetynetalerts.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
@@ -16,34 +17,34 @@ public interface IMedicalRecordDAO {
 	/**
 	 * Save a MedicalRecord object.
 	 * @param medicalRecord a MedicalRecord object.
-	 * @return MedicalRecord
+	 * @return Optional<MedicalRecord>
 	 * @throws StorageException
 	 */
-	MedicalRecord save(MedicalRecord medicalRecord) throws StorageException;
+	Optional<MedicalRecord> save(MedicalRecord medicalRecord) throws StorageException;
 
 	/**
 	 * Find all medical records.
-	 * @return List<MedicalRecord>
+	 * @return Optional<List<MedicalRecord>>
 	 * @throws StorageException
 	 */
-	List<MedicalRecord> findAll() throws StorageException;
+	Optional<List<MedicalRecord>> findAll() throws StorageException;
 
 	/**
 	 * Find a medical record by firstname and lastname.
 	 * @param firstname a String firstname.
 	 * @param lastname a String lastname.
-	 * @return MedicalRecord
+	 * @return Optional<MedicalRecord>
 	 * @throws StorageException
 	 */
-	MedicalRecord findByFirstnameLastname(String firstname, String lastname) throws StorageException;
+	Optional<MedicalRecord> findByFirstnameLastname(String firstname, String lastname) throws StorageException;
 
 	/**
 	 * Update a medical record.
 	 * @param medicalRecord a MedicalRecord object.
-	 * @return MedicalRecord
+	 * @return Optional<MedicalRecord>
 	 * @throws StorageException
 	 */
-	MedicalRecord update(MedicalRecord medicalRecord) throws StorageException;
+	Optional<MedicalRecord> update(MedicalRecord medicalRecord) throws StorageException;
 
 	/**
 	 * Delete a medical record.

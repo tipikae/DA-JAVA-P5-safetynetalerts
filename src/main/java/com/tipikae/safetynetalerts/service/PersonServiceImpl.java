@@ -1,13 +1,16 @@
 package com.tipikae.safetynetalerts.service;
 
-import java.util.List;
+import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tipikae.safetynetalerts.dao.IPersonDAO;
+import com.tipikae.safetynetalerts.dto.PersonDTO;
+import com.tipikae.safetynetalerts.dtoconverter.IPersonConverter;
+import com.tipikae.safetynetalerts.exception.ConverterException;
 import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
@@ -21,109 +24,43 @@ import com.tipikae.safetynetalerts.model.Person;
 @Service
 public class PersonServiceImpl implements IPersonService {
 
-	private static final Logger LOGGER = LogManager.getLogger("PersonService");
+	private static final Logger LOGGER = LoggerFactory.getLogger(PersonServiceImpl.class);
 
 	/**
 	 * The DAO.
 	 */
 	@Autowired
-	private IPersonDAO personDao;
-
+	private IPersonDAO dao;
+	
 	/**
-	 * Set personDao.
-	 * @param personDao a IPersonDAO interface.
+	 * The DTO converter.
 	 */
-	public void setPersonDao(IPersonDAO personDao) {
-		this.personDao = personDao;
-	}
+	@Autowired
+	private IPersonConverter converter;
 
 	/**
 	 * {@inheritDoc}
 	 * @param person {@inheritDoc}
 	 * @return {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
-	public Person addPerson(Person person) throws StorageException {
-		return personDao.save(person);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<Person> getPersons() throws StorageException {
-		return personDao.findAll();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param firstname {@inheritDoc}
-	 * @param lastname {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public Person getPersonByFirstnameLastname(String firstname, String lastname) 
-			throws ServiceException, StorageException {
-		Person person = personDao.findByFirstnameLastname(firstname, lastname);
-		if (person != null) {
-			return person;
+	public PersonDTO addPerson(PersonDTO personDTO) 
+			throws ServiceException, StorageException, ConverterException {
+		Person person = converter.toEntity(personDTO);
+		Optional<Person> optional = dao.findByFirstnameLastname(person.getFirstName(), person.getLastName());
+		if(!optional.isPresent()) {
+			return converter.toDTO(dao.save(person).get());
 		} else {
-			LOGGER.error("getPersonByFirstnameLastname: Firstname: " + firstname + " and lastname:" 
-					+ lastname + " not found in Person.");
-			throw new ServiceException("Firstname: " + firstname + " and lastname:" + lastname 
-					+ " not found in Person.");
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param address {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<Person> getPersonsByAddress(String address) throws ServiceException, StorageException {
-		List<Person> persons = personDao.findAll();
-		boolean exist = false;
-		
-		for(Person person: persons) {
-			if(address.equals(person.getAddress())) {
-				exist = true;
-				break;
-			}
+			LOGGER.error("addPerson: person with firstname: " + person.getFirstName()
+					+ " and lastname: " + person.getLastName() + " already exists.");
+			throw new ServiceException("Person with firstname: " + person.getFirstName()
+					+ " and lastname: " + person.getLastName() 
+					+ " already exists.");
 		}
 		
-		if(exist) {
-			return personDao.findByAddress(address);
-		} else {
-			LOGGER.error("getPersonsByAddress: Address: " + address + " not found in Person.");
-			throw new ServiceException("Address: " + address + " not found in Person.");
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param city {@inheritDoc}
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<Person> getPersonsByCity(String city) throws ServiceException, StorageException {
-		List<Person> persons = personDao.findAll();
-		boolean exist = false;
-		
-		for(Person person: persons) {
-			if(city.equals(person.getCity())) {
-				exist = true;
-				break;
-			}
-		}
-		
-		if(exist) {
-			return personDao.findByCity(city);
-		} else {
-			LOGGER.error("getPersonsByCity: City: " + city + " not found in Person.");
-			throw new ServiceException("City: " + city + " not found in Person.");
-		}
 	}
 
 	/**
@@ -132,13 +69,18 @@ public class PersonServiceImpl implements IPersonService {
 	 * @param lastname {@inheritDoc}
 	 * @param firestation {@inheritDoc}
 	 * @return {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
-	public Person updatePerson(String firstname, String lastname, Person person) 
-			throws ServiceException, StorageException {
-		if (firstname.equals(person.getFirstName()) && lastname.equals(person.getLastName())) {
-			if (personDao.findByFirstnameLastname(firstname, lastname) != null) {
-				return personDao.update(person);
+	public PersonDTO updatePerson(String firstname, String lastname, PersonDTO personDTO) 
+			throws ServiceException, StorageException, ConverterException {
+		if (firstname.equals(personDTO.getFirstName()) && lastname.equals(personDTO.getLastName())) {
+			Person person = converter.toEntity(personDTO);
+			Optional<Person> optional = dao.findByFirstnameLastname(firstname, lastname);
+			if (optional.isPresent()) {
+				return converter.toDTO(dao.update(person).get());
 			} else {
 				LOGGER.error("updatePerson: Firstname: " + firstname + " and lastname:"
 						+ lastname + " not found in Person.");
@@ -147,11 +89,11 @@ public class PersonServiceImpl implements IPersonService {
 			} 
 		} else {
 			LOGGER.error("updatePerson: Firstname: " + firstname + " and lastname:"
-					+ lastname + " are different from Person firstname: " + person.getFirstName() 
-					+ " lastname: " + person.getLastName());
+					+ lastname + " are different from Person firstname: " + personDTO.getFirstName() 
+					+ " lastname: " + personDTO.getLastName());
 			throw new ServiceException("Firstname: " + firstname + " and lastname:"
-					+ lastname + " are different from Person firstname: " + person.getFirstName()
-					+ "	lastname: " + person.getLastName());
+					+ lastname + " are different from Person firstname: " + personDTO.getFirstName()
+					+ "	lastname: " + personDTO.getLastName());
 		}
 	}
 
@@ -159,12 +101,15 @@ public class PersonServiceImpl implements IPersonService {
 	 * {@inheritDoc}
 	 * @param firstname {@inheritDoc}
 	 * @param lastname {@inheritDoc}
+	 * @throws {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	@Override
 	public void deletePerson(String firstname, String lastname) throws StorageException, ServiceException {
-		Person person = personDao.findByFirstnameLastname(firstname, lastname);
-		if(person != null) {
-			personDao.delete(person);
+		Optional<Person> optional = dao.findByFirstnameLastname(firstname, lastname);
+		if(optional.isPresent()) {
+			Person person = optional.get();
+			dao.delete(person);
 		} else {
 			LOGGER.error("deletePerson: Firstname: " + firstname + " and lastname:"
 					+ lastname + " not found in Person.");

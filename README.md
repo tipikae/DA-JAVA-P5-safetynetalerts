@@ -22,7 +22,7 @@ Execute `mvn clean test` to run unit tests.
 Execute `mvn verify` to run unit and integration tests.
 
 ### Documentation and reports
-Execute `mvn site` to generate reports (Surefire, Jacoco) an Javadoc.
+Execute `mvn site` to generate reports (Surefire, Jacoco) and Javadoc.
 
 Reports and documentation's link is: `file:///YOUR/ROOT/PROJECT/SafetyNet-Alerts/target/site/index.html`
 

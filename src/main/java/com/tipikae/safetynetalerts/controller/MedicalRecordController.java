@@ -20,6 +20,10 @@ import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.service.IMedicalRecordService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 /**
  * A MedicalRecord controller CRUD.
  * @author tipikae
@@ -37,7 +41,16 @@ public class MedicalRecordController {
 	 * Add a medical record.
 	 * @param medicalRecordDTO a MedicalRecordDTO object.
 	 * @return ResponseEntity
+	 * @throws StorageException
+	 * @throws ServiceException
+	 * @throws ConverterException
 	 */
+	@ApiOperation(value="Adding a medical record")
+	@ApiResponses(value = {  
+		      @ApiResponse(code = 200, message = "Operation succeed!", response = MedicalRecordDTO.class),
+		      @ApiResponse(code = 400, message = "Invalid parameters"),
+		      @ApiResponse(code = 404, message = "Medical record already exists"),
+		      @ApiResponse(code = 409, message = "Persistence problem, try later")})
 	@PostMapping(value="/medicalrecord", consumes={"application/json"})
 	public ResponseEntity<Object> addMedicalRecord(@Valid @RequestBody MedicalRecordDTO medicalRecordDTO)
 			throws StorageException , ServiceException, ConverterException {
@@ -51,7 +64,16 @@ public class MedicalRecordController {
 	 * @param lastName a String lastname.
 	 * @param medicalRecordDTO a MedicalRecordDTO object.
 	 * @return ResponseEntity
+	 * @throws StorageException
+	 * @throws ServiceException
+	 * @throws ConverterException
 	 */
+	@ApiOperation(value="Updating a medical record")
+	@ApiResponses(value = {  
+		      @ApiResponse(code = 200, message = "Operation succeed!"),
+		      @ApiResponse(code = 400, message = "Invalid parameters"),
+		      @ApiResponse(code = 404, message = "Medical record not found"),
+		      @ApiResponse(code = 409, message = "Persistence problem, try later")})
 	// /medicalrecord?firstName={firstname}&lastName={lastname}
 	@PutMapping(value="/medicalrecord", consumes={"application/json"})
 	public ResponseEntity<Object> updateMedicalRecord(
@@ -68,7 +90,15 @@ public class MedicalRecordController {
 	 * @param firstName a String firstname.
 	 * @param lastName a String lastname.
 	 * @return ResponseEntity
+	 * @throws StorageException
+	 * @throws ServiceException
 	 */
+	@ApiOperation(value="Deleting a medical record")
+	@ApiResponses(value = {  
+		      @ApiResponse(code = 200, message = "Operation succeed!"),
+		      @ApiResponse(code = 400, message = "Invalid parameters"),
+		      @ApiResponse(code = 404, message = "Medical record not found"),
+		      @ApiResponse(code = 409, message = "Persistence problem, try later")})
 	// /medicalrecord?firstName={firstname}&lastName={lastname}
 	@DeleteMapping("/medicalrecord")
 	public ResponseEntity<Object> deleteMedicalRecord(

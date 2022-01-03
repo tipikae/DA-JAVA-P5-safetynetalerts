@@ -20,6 +20,10 @@ import com.tipikae.safetynetalerts.exception.ServiceException;
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.service.IPersonService;
 
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+
 /**
  * A Person controller CRUD.
  * @author tipikae
@@ -37,7 +41,16 @@ public class PersonController {
 	 * Add a person.
 	 * @param personDTO a PersonDTO object.
 	 * @return ResponseEntity<Object>
+	 * @throws StorageException
+	 * @throws ServiceException
+	 * @throws ConverterException
 	 */
+	@ApiOperation(value="Adding a person")
+	@ApiResponses(value = {  
+		      @ApiResponse(code = 200, message = "Operation succeed!", response = PersonDTO.class),
+		      @ApiResponse(code = 400, message = "Invalid parameters"),
+		      @ApiResponse(code = 404, message = "Person already exists"),
+		      @ApiResponse(code = 409, message = "Persistence problem, try later")})
 	@PostMapping(value="/person", consumes={"application/json"})
 	public ResponseEntity<Object> addPerson(@Valid @RequestBody PersonDTO personDTO)
 			throws StorageException , ServiceException, ConverterException {
@@ -51,7 +64,16 @@ public class PersonController {
 	 * @param lastName a String lastname.
 	 * @param personDTO a PersonDTO object.
 	 * @return ResponseEntity<Object>
+	 * @throws StorageException
+	 * @throws ServiceException
+	 * @throws ConverterException
 	 */
+	@ApiOperation(value="Updating a person")
+	@ApiResponses(value = {  
+		      @ApiResponse(code = 200, message = "Operation succeed!", response = PersonDTO.class),
+		      @ApiResponse(code = 400, message = "Invalid parameters"),
+		      @ApiResponse(code = 404, message = "Person not found"),
+		      @ApiResponse(code = 409, message = "Persistence problem, try later")})
 	// /person?firstName={firstname}&lastName={lastname}
 	@PutMapping(value="/person", consumes={"application/json"})
 	public ResponseEntity<Object> updatePerson(
@@ -68,7 +90,15 @@ public class PersonController {
 	 * @param firstName a String firstname.
 	 * @param lastName a String lastname.
 	 * @return ResponseEntity<Object>
+	 * @throws StorageException
+	 * @throws ServiceException
 	 */
+	@ApiOperation(value="Deleting a person")
+	@ApiResponses(value = {  
+		      @ApiResponse(code = 200, message = "Operation succeed!"),
+		      @ApiResponse(code = 400, message = "Invalid parameters"),
+		      @ApiResponse(code = 404, message = "Person not found"),
+		      @ApiResponse(code = 409, message = "Persistence problem, try later")})
 	// /person?firstName={firstname}&lastName={lastname}
 	@DeleteMapping("/person")
 	public ResponseEntity<Object> deletePerson(

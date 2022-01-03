@@ -3,8 +3,8 @@ package com.tipikae.safetynetalerts.exception;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,7 +23,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @ControllerAdvice
 public class ControllerExceptionHandler {
 	
-	private final static Logger LOGGER = LogManager.getLogger("ControllerExceptionHandler");
+	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 	
 	/**
 	 * Handle ServiceException.

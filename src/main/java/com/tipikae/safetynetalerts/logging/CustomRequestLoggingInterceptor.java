@@ -3,8 +3,8 @@ package com.tipikae.safetynetalerts.logging;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -17,7 +17,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class CustomRequestLoggingInterceptor implements HandlerInterceptor {
 	
-	private static final Logger LOGGER = LogManager.getLogger("CustomRequestLoggingInterceptor");
+	private static final Logger LOGGER = LoggerFactory.getLogger(CustomRequestLoggingInterceptor.class);
 
 	/**
 	 * {@inheritDoc}

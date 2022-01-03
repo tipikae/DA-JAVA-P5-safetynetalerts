@@ -2,8 +2,8 @@ package com.tipikae.safetynetalerts.service;
 
 import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ import com.tipikae.safetynetalerts.model.Person;
 @Service
 public class PersonServiceImpl implements IPersonService {
 
-	private static final Logger LOGGER = LogManager.getLogger("PersonServiceImpl");
+	private static final Logger LOGGER = LoggerFactory.getLogger(PersonServiceImpl.class);
 
 	/**
 	 * The DAO.

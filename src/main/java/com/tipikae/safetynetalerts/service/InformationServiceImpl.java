@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +44,7 @@ import com.tipikae.safetynetalerts.util.Util;
 @Service
 public class InformationServiceImpl implements IInformationService {
 	
-	private static final Logger LOGGER = LogManager.getLogger("InformationServiceImpl");
+	private static final Logger LOGGER = LoggerFactory.getLogger(InformationServiceImpl.class);
 
 	/**
 	 * The IFirestationDAO.

@@ -3,8 +3,8 @@ package com.tipikae.safetynetalerts.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ import com.tipikae.safetynetalerts.model.Firestation;
 @Service
 public class FirestationServiceImpl implements IFirestationService {
 	
-	private static final Logger LOGGER = LogManager.getLogger("FirestationServiceImpl");
+	private static final Logger LOGGER = LoggerFactory.getLogger(FirestationServiceImpl.class);
 
 	/**
 	 * The DAO.

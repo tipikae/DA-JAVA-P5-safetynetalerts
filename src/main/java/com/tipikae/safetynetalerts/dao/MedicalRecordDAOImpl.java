@@ -57,16 +57,13 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 	@Override
 	public Optional<MedicalRecord> findByFirstnameLastname(String firstname, String lastname) throws StorageException {
 		storage = jsonStorage.readStorage();
-		MedicalRecord medicalRecord = null;
 		for (MedicalRecord item : storage.getMedicalRecords()) {
 			if (item.getFirstName().equals(firstname) && item.getLastName().equals(lastname)) {
-				medicalRecord = new MedicalRecord(firstname, lastname, item.getBirthdate(), item.getMedications(),
-						item.getAllergies());
-				break;
+				return Optional.of(item);
 			}
 		}
 		
-		return Optional.ofNullable(medicalRecord);
+		return Optional.empty();
 	}
 
 	/**

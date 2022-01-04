@@ -58,16 +58,13 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	@Override
 	public Optional<Person> findByFirstnameLastname(String firstname, String lastname) throws StorageException {
 		storage = jsonStorage.readStorage();
-		Person person = null;
 		for (Person item : storage.getPersons()) {
 			if (item.getFirstName().equals(firstname) && item.getLastName().equals(lastname)) {
-				person = new Person(firstname, lastname, item.getAddress(), item.getCity(), item.getZip(), 
-						item.getPhone(), item.getEmail());
-				break;
+				return Optional.of(item);
 			}
 		}
 		
-		return Optional.ofNullable(person);
+		return Optional.empty();
 	}
 
 	/**

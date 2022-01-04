@@ -53,7 +53,7 @@ class MedicalRecordDAOTest {
 		medicalRecords.add(medicalRecord);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
-		assertEquals(medicalRecord, dao.save(medicalRecord).get());
+		assertEquals(medicalRecord, dao.save(medicalRecord));
 	}
 
 	@Test
@@ -83,7 +83,7 @@ class MedicalRecordDAOTest {
 		medicalRecords.add(medicalRecord);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
-		MedicalRecord result = dao.update(updatedMedicalRecord).get();
+		MedicalRecord result = dao.update(updatedMedicalRecord);
 		assertEquals(updatedMedicalRecord, result);
 	}
 	

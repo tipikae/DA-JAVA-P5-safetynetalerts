@@ -49,7 +49,7 @@ class PersonDAOTest {
 		persons.add(person);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getPersons()).thenReturn(persons);
-		assertEquals(person, dao.save(person).get());
+		assertEquals(person, dao.save(person));
 	}
 
 	@Test
@@ -91,7 +91,7 @@ class PersonDAOTest {
 		persons.add(person);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getPersons()).thenReturn(persons);
-		Person result = dao.update(updatedPerson).get();
+		Person result = dao.update(updatedPerson);
 		assertEquals(updatedPerson.getFirstName(),result.getFirstName());
 		assertEquals(updatedPerson.getLastName(),result.getLastName());
 	}

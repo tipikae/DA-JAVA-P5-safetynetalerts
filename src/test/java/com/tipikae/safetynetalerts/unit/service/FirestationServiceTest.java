@@ -87,7 +87,7 @@ class FirestationServiceTest {
 	
 	@Test
 	void testDeleteFirestationsByStation_whenNull() throws StorageException {
-		when(dao.findByStation(anyInt())).thenReturn(Optional.empty());
+		when(dao.findByStation(anyInt())).thenReturn(null);
 		assertThrows(ServiceException.class, ()-> service.deleteFirestationsByStation(1));
 	}
 }

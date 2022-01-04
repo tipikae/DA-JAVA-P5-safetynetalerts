@@ -29,14 +29,14 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<Person> save(Person person) throws StorageException {
+	public Person save(Person person) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> persons = storage.getPersons();
 		persons.add(person);
 		storage.setPersons(persons);
 		jsonStorage.writeStorage(storage);
 		
-		return Optional.of(person);
+		return person;
 	}
 
 	/**
@@ -44,9 +44,9 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<List<Person>> findAll() throws StorageException {
+	public List<Person> findAll() throws StorageException {
 		storage = jsonStorage.readStorage();
-		return Optional.ofNullable(storage.getPersons());
+		return storage.getPersons();
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<List<Person>> findByAddress(String address) throws StorageException {
+	public List<Person> findByAddress(String address) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> results = null;
 		for (Person item : storage.getPersons()) {
@@ -88,7 +88,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 			}
 		}
 		
-		return Optional.ofNullable(results);
+		return results;
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<List<Person>> findByCity(String city) throws StorageException {
+	public List<Person> findByCity(String city) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> results = null;
 		for (Person item : storage.getPersons()) {
@@ -109,7 +109,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 			}
 		}
 		
-		return Optional.ofNullable(results);
+		return results;
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<Person> update(Person person) throws StorageException {
+	public Person update(Person person) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> persons = storage.getPersons();
 		int i = -1;
@@ -131,14 +131,10 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 			}
 		}
 		
-		if (i != -1) {
-			persons.set(i, person);
-			storage.setPersons(persons);
-			jsonStorage.writeStorage(storage);
-			return Optional.of(person);
-		} else {
-			return Optional.empty();
-		}
+		persons.set(i, person);
+		storage.setPersons(persons);
+		jsonStorage.writeStorage(storage);
+		return person;
 	}
 
 	/**

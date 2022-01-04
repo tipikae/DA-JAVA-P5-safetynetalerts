@@ -53,7 +53,7 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 		Optional<MedicalRecord> optional = medicalRecordDao.findByFirstnameLastname(medicalRecord.getFirstName(), 
 				medicalRecord.getLastName());
 		if(!optional.isPresent()) {
-			return medicalRecordConverter.toDTO(medicalRecordDao.save(medicalRecord).get());
+			return medicalRecordConverter.toDTO(medicalRecordDao.save(medicalRecord));
 		} else {
 			LOGGER.error("addMedicalRecord: medical record with firstname: " + medicalRecord.getFirstName()
 					+ " and lastname: " + medicalRecord.getLastName() + " already exists.");
@@ -81,7 +81,7 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 			MedicalRecord medicalRecord = medicalRecordConverter.toEntity(medicalRecordDTO);
 			Optional<MedicalRecord> optional = medicalRecordDao.findByFirstnameLastname(firstname, lastname);
 			if (optional.isPresent()) {
-				return medicalRecordConverter.toDTO(medicalRecordDao.update(medicalRecord).get());
+				return medicalRecordConverter.toDTO(medicalRecordDao.update(medicalRecord));
 			} else {
 				LOGGER.error("updateMedicalRecord: Firstname: " + firstname + " and lastname:"
 						+ lastname + " not found in MedicalRecord.");

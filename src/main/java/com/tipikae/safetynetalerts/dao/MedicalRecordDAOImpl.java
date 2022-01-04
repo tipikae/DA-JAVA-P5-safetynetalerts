@@ -28,14 +28,14 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<MedicalRecord> save(MedicalRecord medicalRecord) throws StorageException {
+	public MedicalRecord save(MedicalRecord medicalRecord) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<MedicalRecord> medicalRecords = storage.getMedicalRecords();
 		medicalRecords.add(medicalRecord);
 		storage.setMedicalRecords(medicalRecords);
 		jsonStorage.writeStorage(storage);
 		
-		return Optional.of(medicalRecord);
+		return medicalRecord;
 	}
 
 	/**
@@ -43,9 +43,9 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<List<MedicalRecord>> findAll() throws StorageException {
+	public List<MedicalRecord> findAll() throws StorageException {
 		storage = jsonStorage.readStorage();
-		return Optional.ofNullable(storage.getMedicalRecords());
+		return storage.getMedicalRecords();
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<MedicalRecord> update(MedicalRecord medicalRecord) throws StorageException {
+	public MedicalRecord update(MedicalRecord medicalRecord) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<MedicalRecord> medicalRecords = storage.getMedicalRecords();
 		int i = -1;
@@ -88,14 +88,10 @@ public class MedicalRecordDAOImpl extends AbstractDAOImpl implements IMedicalRec
 			}
 		}
 		
-		if (i != -1) {
-			medicalRecords.set(i, medicalRecord);
-			storage.setMedicalRecords(medicalRecords);
-			jsonStorage.writeStorage(storage);
-			return Optional.of(medicalRecord);
-		} else {
-			return Optional.empty();
-		}
+		medicalRecords.set(i, medicalRecord);
+		storage.setMedicalRecords(medicalRecords);
+		jsonStorage.writeStorage(storage);
+		return medicalRecord;
 	}
 
 	/**

@@ -33,7 +33,7 @@ import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.model.Person;
-import com.tipikae.safetynetalerts.util.Util;
+import com.tipikae.safetynetalerts.util.IUtil;
 
 /**
  * An implementation of IInformationService.
@@ -61,6 +61,11 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Autowired
 	private IMedicalRecordDAO medicalRecordDao;
+	/**
+	 * The utility class
+	 */
+	@Autowired
+	private IUtil utility;
 
 	/**
 	 * {@inheritDoc}
@@ -85,7 +90,7 @@ public class InformationServiceImpl implements IInformationService {
 								person.getFirstName(), person.getLastName());
 						if(optMedicalRecord.isPresent()) {
 							MedicalRecord medicalRecord = optMedicalRecord.get();
-							if(Util.isAdult(medicalRecord.getBirthdate())) {
+							if(utility.isAdult(medicalRecord.getBirthdate())) {
 								nbAdults++;
 							} else {
 								nbChildren++;
@@ -124,12 +129,12 @@ public class InformationServiceImpl implements IInformationService {
 						person.getFirstName(), person.getLastName());
 				if(optMedicalRecord.isPresent()) {
 					MedicalRecord medicalRecord = optMedicalRecord.get();
-					if(Util.isAdult(medicalRecord.getBirthdate())) {
+					if(utility.isAdult(medicalRecord.getBirthdate())) {
 						adults.add(new ChildAlert(person.getFirstName(), person.getLastName(), 
-								Util.calculateAge(medicalRecord.getBirthdate())));
+								utility.calculateAge(medicalRecord.getBirthdate())));
 					} else {
 						children.add(new ChildAlert(person.getFirstName(), person.getLastName(), 
-								Util.calculateAge(medicalRecord.getBirthdate())));
+								utility.calculateAge(medicalRecord.getBirthdate())));
 					}
 				} else {
 					// LOGGER.debug("");
@@ -200,7 +205,7 @@ public class InformationServiceImpl implements IInformationService {
 						MedicalRecord medicalRecord = optMedicalRecord.get();
 						Fire member;
 						if(medicalRecord != null) {
-							int age = Util.calculateAge(medicalRecord.getBirthdate());
+							int age = utility.calculateAge(medicalRecord.getBirthdate());
 							member = new Fire(person.getFirstName(), person.getLastName(), person.getPhone(), 
 									age, medicalRecord.getMedications(), medicalRecord.getAllergies());
 						} else {
@@ -251,7 +256,7 @@ public class InformationServiceImpl implements IInformationService {
 							if(optMedicalRecord.isPresent()) {
 								MedicalRecord medicalRecord = optMedicalRecord.get();
 								residents.add(new Flood(person.getFirstName(), person.getLastName(), 
-									person.getPhone(), Util.calculateAge(medicalRecord.getBirthdate()), 
+									person.getPhone(), utility.calculateAge(medicalRecord.getBirthdate()), 
 									medicalRecord.getMedications(), medicalRecord.getAllergies()));
 							} else {
 								LOGGER.debug("getResidentsByStations: name: " + person.getFirstName() + " " + 
@@ -303,7 +308,7 @@ public class InformationServiceImpl implements IInformationService {
 					if(optMedicalRecord.isPresent()) {
 						MedicalRecord medicalRecord = optMedicalRecord.get();
 						personsInfo.add(new PersonInfo(person.getFirstName(), lastname, person.getAddress(), 
-								Util.calculateAge(medicalRecord.getBirthdate()), person.getEmail(), 
+								utility.calculateAge(medicalRecord.getBirthdate()), person.getEmail(), 
 								medicalRecord.getMedications(), medicalRecord.getAllergies()));
 					}
 				}

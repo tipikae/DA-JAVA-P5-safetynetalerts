@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
-import com.tipikae.safetynetalerts.storage.JsonStorage;
+import com.tipikae.safetynetalerts.storage.IStorage;
 
 /**
  * An IFirestationDAO implementation.
@@ -19,12 +20,8 @@ import com.tipikae.safetynetalerts.storage.JsonStorage;
 @Repository
 public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationDAO {
 
-	/**
-	 * The constructor.
-	 */
-	public FirestationDAOImpl() {
-		jsonStorage = new JsonStorage();
-	}
+	@Autowired
+	private IStorage jsonStorage;
 
 	/**
 	 * {@inheritDoc}

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.tipikae.safetynetalerts.constant.Constant;
 
 /**
- * An utility class.
+ * An utility class implementation of IUtil.
  * @author tipikae
  * @version 1.0
  *

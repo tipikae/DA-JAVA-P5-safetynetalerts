@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
-import com.tipikae.safetynetalerts.storage.JsonStorage;
+import com.tipikae.safetynetalerts.storage.IStorage;
 import com.tipikae.safetynetalerts.storage.Storage;
 
 @SpringBootTest
@@ -34,8 +34,7 @@ class MedicalRecordIT {
     private MockMvc mockMvc;
 	
 	@BeforeAll
-    private static void setUp() throws StorageException {
-		JsonStorage jsonStorage = new JsonStorage();
+	private static void init(@Autowired IStorage jsonStorage) throws StorageException {
 		Storage storage = jsonStorage.readStorage();
 		storage.setMedicalRecords(new ArrayList<MedicalRecord>());
         jsonStorage.writeStorage(storage);

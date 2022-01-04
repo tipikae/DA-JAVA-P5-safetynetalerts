@@ -23,7 +23,7 @@ import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Firestation;
 import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.model.Person;
-import com.tipikae.safetynetalerts.storage.JsonStorage;
+import com.tipikae.safetynetalerts.storage.IStorage;
 import com.tipikae.safetynetalerts.storage.Storage;
 
 @SpringBootTest
@@ -35,8 +35,7 @@ public class InformationIT {
     private MockMvc mockMvc;
 	
 	@BeforeAll
-    private static void setUp() throws StorageException {
-		JsonStorage jsonStorage = new JsonStorage();
+	private static void init(@Autowired IStorage jsonStorage) throws StorageException {
 		Storage storage = jsonStorage.readStorage();
     	storage.setFirestations(new ArrayList<Firestation>());
     	storage.setPersons(new ArrayList<Person>());

@@ -34,6 +34,7 @@ class FirestationServiceTest {
 	
 	@InjectMocks
 	private static FirestationServiceImpl service;
+	
 	private static FirestationDTO firestationDTO;
 	private static Firestation firestation;
 	

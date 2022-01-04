@@ -52,7 +52,7 @@ public class PersonServiceImpl implements IPersonService {
 		Person person = personConverter.toEntity(personDTO);
 		Optional<Person> optional = personDao.findByFirstnameLastname(person.getFirstName(), person.getLastName());
 		if(!optional.isPresent()) {
-			return personConverter.toDTO(personDao.save(person).get());
+			return personConverter.toDTO(personDao.save(person));
 		} else {
 			LOGGER.error("addPerson: person with firstname: " + person.getFirstName()
 					+ " and lastname: " + person.getLastName() + " already exists.");
@@ -80,7 +80,7 @@ public class PersonServiceImpl implements IPersonService {
 			Person person = personConverter.toEntity(personDTO);
 			Optional<Person> optional = personDao.findByFirstnameLastname(firstname, lastname);
 			if (optional.isPresent()) {
-				return personConverter.toDTO(personDao.update(person).get());
+				return personConverter.toDTO(personDao.update(person));
 			} else {
 				LOGGER.error("updatePerson: Firstname: " + firstname + " and lastname:"
 						+ lastname + " not found in Person.");

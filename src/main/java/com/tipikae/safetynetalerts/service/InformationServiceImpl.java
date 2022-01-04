@@ -74,17 +74,15 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Override
 	public DTOResponse getResidentsByStation(int stationNumber) throws StorageException {
-		Optional<List<Firestation>> optFirestations = firestationDao.findByStation(stationNumber);
-		if(optFirestations.isPresent()) {
-			List<Firestation> firestations = optFirestations.get();
+		List<Firestation> firestations = firestationDao.findByStation(stationNumber);
+		if(firestations != null) {
 			List<FirestationInfo> residents = new ArrayList<>();
 			int nbAdults = 0;
 			int nbChildren = 0;
 			
 			for(Firestation firestation: firestations) {
-				Optional<List<Person>> optPersons = personDao.findByAddress(firestation.getAddress());
-				if(optPersons.isPresent()) {
-					List<Person> persons = optPersons.get();
+				List<Person> persons = personDao.findByAddress(firestation.getAddress());
+				if(persons != null) {
 					for(Person person: persons) {
 						Optional<MedicalRecord> optMedicalRecord = medicalRecordDao.findByFirstnameLastname(
 								person.getFirstName(), person.getLastName());
@@ -119,9 +117,8 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Override
 	public DTOResponse getChildrenByAddress(String address) throws StorageException {
-		Optional<List<Person>> optPersons = personDao.findByAddress(address);
-		if(optPersons.isPresent()) {
-			List<Person> persons = optPersons.get();
+		List<Person> persons = personDao.findByAddress(address);
+		if(persons != null) {
 			List<ChildAlert> children = new ArrayList<>();
 			List<ChildAlert> adults = new ArrayList<>();
 			for(Person person: persons) {
@@ -159,14 +156,12 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Override
 	public DTOResponse getPhoneNumbersByStation(int station) throws StorageException {
-		Optional<List<Firestation>> optFirestation = firestationDao.findByStation(station);
-		if(optFirestation.isPresent()) {
-			List<Firestation> firestations = optFirestation.get();
+		List<Firestation> firestations = firestationDao.findByStation(station);
+		if(firestations != null) {
 			List<PhoneAlert> phones = new ArrayList<>();
 			for(Firestation firestation: firestations) {
-				Optional<List<Person>> optPersons = personDao.findByAddress(firestation.getAddress());
-				if(optPersons.isPresent()) {
-					List<Person> persons = optPersons.get();
+				List<Person> persons = personDao.findByAddress(firestation.getAddress());
+				if(persons != null) {
 					for(Person person: persons) {
 						phones.add(new PhoneAlert(person.getPhone()));
 					}
@@ -189,9 +184,8 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Override
 	public DTOResponse getMembersByAddress(String address) throws StorageException {
-		Optional<List<Person>> optPersons = personDao.findByAddress(address);
-		if(optPersons.isPresent()) {
-			List<Person> persons = optPersons.get();
+		List<Person> persons = personDao.findByAddress(address);
+		if(persons != null) {
 			Optional<Firestation> optFirestation = firestationDao.findByAddress(address);
 			if(optFirestation.isPresent()) {
 				Firestation firestation = optFirestation.get();
@@ -239,15 +233,13 @@ public class InformationServiceImpl implements IInformationService {
 		List<FloodMaster> dtos = new ArrayList<>();
 		
 		for(Integer station: stations) {
-			Optional<List<Firestation>> optFirestation = firestationDao.findByStation(station);
-			if (optFirestation.isPresent()) {
-				List<Firestation> firestations = optFirestation.get();
+			List<Firestation> firestations = firestationDao.findByStation(station);
+			if (firestations != null) {
 				List<FloodAddress> adresses = new ArrayList<>();
 				
 				for (Firestation firestation : firestations) {
-					Optional<List<Person>> optPersons = personDao.findByAddress(firestation.getAddress());
-					if(optPersons.isPresent()) {
-						List<Person> persons = optPersons.get();
+					List<Person> persons = personDao.findByAddress(firestation.getAddress());
+					if(persons != null) {
 						List<Flood> residents = new ArrayList<>();
 						
 						for(Person person: persons) {
@@ -296,11 +288,10 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Override
 	public DTOResponse getPersonInfoByLastname(String firstname, String lastname) throws StorageException {
-		Optional<List<Person>> optPersons = personDao.findAll();
+		List<Person> persons = personDao.findAll();
 		List<PersonInfo> personsInfo = new ArrayList<>();
-		if(optPersons.isPresent()) {
-			List<Person> persons = optPersons.get();
-			
+		
+		if(!persons.isEmpty()) {
 			for(Person person: persons) {
 				if (person.getLastName().equals(lastname)) {
 					Optional<MedicalRecord> optMedicalRecord = medicalRecordDao.findByFirstnameLastname(
@@ -332,9 +323,8 @@ public class InformationServiceImpl implements IInformationService {
 	 */
 	@Override
 	public DTOResponse getEmailsByCity(String city) throws StorageException {
-		Optional<List<Person>> optPersons = personDao.findByCity(city);
-		if(optPersons.isPresent()) {
-			List<Person> persons = optPersons.get();
+		List<Person> persons = personDao.findByCity(city);
+		if(persons != null) {
 			List<CommunityEmail> emails = new ArrayList<>();
 			
 			for(Person person: persons) {

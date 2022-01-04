@@ -16,10 +16,10 @@ public interface IFirestationDAO {
 
 	/**
 	 * Find all firestations.
-	 * @return Optional<List<Firestation>>
+	 * @return List<Firestation>
 	 * @throws StorageException
 	 */
-	Optional<List<Firestation>> findAll() throws StorageException;
+	List<Firestation> findAll() throws StorageException;
 
 	/**
 	 * Find a firestation by address.
@@ -32,26 +32,26 @@ public interface IFirestationDAO {
 	/**
 	 * Find firestations by station number.
 	 * @param station an Integer station number.
-	 * @return Optional<List<Firestation>>
+	 * @return List<Firestation>
 	 * @throws StorageException
 	 */
-	Optional<List<Firestation>> findByStation(int station) throws StorageException;
+	List<Firestation> findByStation(int station) throws StorageException;
 
 	/**
 	 * Save a Firestation object.
 	 * @param firestation a Firestation object.
-	 * @return Optional<Firestation>
+	 * @return Firestation
 	 * @throws StorageException
 	 */
-	Optional<Firestation> save(Firestation firestation) throws StorageException;
+	Firestation save(Firestation firestation) throws StorageException;
 
 	/**
 	 * Update a Firestation.
 	 * @param firestation a Firestation object.
-	 * @return Optional<Firestation>
+	 * @return Firestation
 	 * @throws StorageException
 	 */
-	Optional<Firestation> update(Firestation firestation) throws StorageException;
+	Firestation update(Firestation firestation) throws StorageException;
 
 	/**
 	 * Delete a Firestation object.

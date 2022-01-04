@@ -52,7 +52,7 @@ public class FirestationServiceImpl implements IFirestationService {
 		Firestation firestation = firestationConverter.toEntity(firestationDTO);
 		Optional<Firestation> optional = firestationDao.findByAddress(firestation.getAddress());
 		if(!optional.isPresent()) {
-			return firestationConverter.toDTO(firestationDao.save(firestation).get());
+			return firestationConverter.toDTO(firestationDao.save(firestation));
 		} else {
 			LOGGER.error("addFirestationMapping: mapping with address: " + firestation.getAddress()
 					+ " already exists.");
@@ -77,7 +77,7 @@ public class FirestationServiceImpl implements IFirestationService {
 			Firestation firestation = firestationConverter.toEntity(firestationDTO);
 			Optional<Firestation> optional = firestationDao.findByAddress(address);
 			if (optional.isPresent()) {
-				return firestationConverter.toDTO(firestationDao.update(firestation).get());
+				return firestationConverter.toDTO(firestationDao.update(firestation));
 			} else {
 				LOGGER.error("updateFirestationMapping: Address: " + address + " not found in Firestation.");
 				throw new ServiceException("Address: " + address + " not found in Firestation.");
@@ -116,9 +116,8 @@ public class FirestationServiceImpl implements IFirestationService {
 	 */
 	@Override
 	public void deleteFirestationsByStation(int station) throws ServiceException, StorageException {
-		Optional<List<Firestation>> optional = firestationDao.findByStation(station);
-		if(optional.isPresent()) {
-			List<Firestation> firestations = optional.get();
+		List<Firestation> firestations = firestationDao.findByStation(station);
+		if(firestations != null) {
 			firestationDao.deleteFirestations(firestations);
 		} else {
 			LOGGER.error("deleteFirestationsByStation: Station: " + station + " not found in Firestation.");

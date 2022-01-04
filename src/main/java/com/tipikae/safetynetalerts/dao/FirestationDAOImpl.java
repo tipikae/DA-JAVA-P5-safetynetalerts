@@ -29,14 +29,14 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<Firestation> save(Firestation firestation) throws StorageException {
+	public Firestation save(Firestation firestation) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Firestation> firestations = storage.getFirestations();
 		firestations.add(firestation);
 		storage.setFirestations(firestations);
 		jsonStorage.writeStorage(storage);
 		
-		return Optional.of(firestation);
+		return firestation;
 	}
 
 	/**
@@ -44,9 +44,9 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<List<Firestation>> findAll() throws StorageException {
+	public List<Firestation> findAll() throws StorageException {
 		storage = jsonStorage.readStorage();
-		return Optional.ofNullable(storage.getFirestations());
+		return storage.getFirestations();
 	}
 
 	/**
@@ -74,9 +74,10 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<List<Firestation>> findByStation(int station) throws StorageException {
+	public List<Firestation> findByStation(int station) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Firestation> results = null;
+		
 		for (Firestation item : storage.getFirestations()) {
 			if (item.getStation() == station) {
 				if(results == null) {
@@ -86,7 +87,7 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 			}
 		}
 		
-		return Optional.ofNullable(results);
+		return results;
 	}
 
 	/**
@@ -95,7 +96,7 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<Firestation> update(Firestation firestation) throws StorageException {
+	public Firestation update(Firestation firestation) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Firestation> firestations = storage.getFirestations();
 		int i = -1;
@@ -107,14 +108,10 @@ public class FirestationDAOImpl extends AbstractDAOImpl implements IFirestationD
 			}
 		}
 		
-		if (i != -1) {
-			firestations.set(i, firestation);
-			storage.setFirestations(firestations);
-			jsonStorage.writeStorage(storage);
-			return Optional.of(firestation);
-		} else {
-			return Optional.empty();
-		}
+		firestations.set(i, firestation);
+		storage.setFirestations(firestations);
+		jsonStorage.writeStorage(storage);
+		return firestation;
 	}
 
 	/**

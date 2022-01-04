@@ -50,7 +50,7 @@ class FirestationDAOTest {
 		firestations.add(firestation);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
-		assertEquals(firestation, dao.save(firestation).get());
+		assertEquals(firestation, dao.save(firestation));
 	}
 
 	@Test
@@ -59,13 +59,13 @@ class FirestationDAOTest {
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
 		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
-		assertThrows(StorageException.class, () -> dao.save(firestation).get());
+		assertThrows(StorageException.class, () -> dao.save(firestation));
 	}
 
 	@Test
 	void testFindAll_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
-		assertThrows(StorageException.class, () -> dao.findAll().get());
+		assertThrows(StorageException.class, () -> dao.findAll());
 	}
 
 	@Test
@@ -77,7 +77,7 @@ class FirestationDAOTest {
 	@Test
 	void testFindByStation_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
-		assertThrows(StorageException.class, () -> dao.findByStation(1).get());
+		assertThrows(StorageException.class, () -> dao.findByStation(1));
 	}
 	
 	@Test
@@ -86,7 +86,7 @@ class FirestationDAOTest {
 		firestations.add(firestation);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
-		Firestation result = dao.update(updatedFirestation).get();
+		Firestation result = dao.update(updatedFirestation);
 		assertEquals(updatedFirestation.getAddress(),result.getAddress());
 		assertEquals(updatedFirestation.getStation(),result.getStation());
 	}
@@ -98,7 +98,7 @@ class FirestationDAOTest {
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
 		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
-		assertThrows(StorageException.class, () -> dao.update(firestation).get());
+		assertThrows(StorageException.class, () -> dao.update(firestation));
 	}
 	
 	@Test

@@ -2,6 +2,7 @@ package com.tipikae.safetynetalerts.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -45,6 +46,7 @@ public class PersonDTO implements Serializable {
 	/**
 	 * Email.
 	 */
+	@Email(message="Email must be well-formed")
 	@NotBlank(message="Email is mandatory")
 	private String email;
 

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
 /**
@@ -28,8 +29,8 @@ public class MedicalRecordDTO implements Serializable {
 	/**
 	 * Birthdate.
 	 */
-	@Past
-	@NotBlank(message="Birthdate is mandatory")
+	@NotNull(message="Birthdate is mandatory")
+	@Past(message="Birthdate must be passed")
 	private LocalDate birthdate;
 	/**
 	 * Medications.

@@ -8,11 +8,11 @@ An application which send informations about people to emergency services.
 ### Installing
 Import the project in your favorite IDE.
 
-Create 2 files: `data.json` and `data-test.json` in a location of your choice (outside the classpath's application).
+Production data are stored in `resources/data.json`. Test Data are in `resources/data-test.json`.
 
-Fill `data.json` with your data. You have an example in `resources/data.json`.
+Fill `data.json` with your data.
 
-Then in the 2 `application.properties` files located in `src/main/resources` and `src/test/resources`, update the key `storage.file` with the path of your JSON files.
+In the two `application.properties` files located in `src/main/resources` and `src/test/resources`, the key `storage.file` contains the data files path.
 
 ### Testing
 Go to the root repository of the application:
@@ -32,9 +32,11 @@ Execute `mvn package` to generate an executable.
 ### Running App
 Go to the `target` repository and run the executable:
 
-`java -jar SafetyNet-Alerts-1.2.0-SNAPSHOT.jar`.
+`java -jar SafetyNet-Alerts-1.3.0-SNAPSHOT.jar`.
 
 You can test the API with a tool like Postman. 
+
+If you move the jar file, you need to move your data file `data.json` in a folder named `resources` located in the same repository that the jar file.
 
 ### Monitoring
 Info, trace, metrics and more are available at `http://localhost:9001/actuator`.

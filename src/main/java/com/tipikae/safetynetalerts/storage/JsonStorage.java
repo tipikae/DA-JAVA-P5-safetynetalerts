@@ -1,5 +1,6 @@
 package com.tipikae.safetynetalerts.storage;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
@@ -64,7 +65,7 @@ public class JsonStorage implements IStorage {
 			
 			prop.load(fis);
 			
-			Reader reader = new FileReader(prop.getProperty(PROPERTY_KEY_FILE));
+			Reader reader = new FileReader(new File(prop.getProperty(PROPERTY_KEY_FILE)).getCanonicalPath());
 			Storage storage = gson.fromJson(reader, Storage.class);
 			reader.close();
 			
@@ -94,7 +95,9 @@ public class JsonStorage implements IStorage {
 			
 			prop.load(fis);
 			
-			Writer writer = new FileWriter(prop.getProperty(PROPERTY_KEY_FILE), false);
+			Writer writer = new FileWriter(
+					new File(prop.getProperty(PROPERTY_KEY_FILE)).getCanonicalPath(), 
+					false);
 			gson.toJson(storage, writer);
 			writer.close();
 		} catch (Exception e) {

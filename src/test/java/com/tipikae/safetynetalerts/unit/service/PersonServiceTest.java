@@ -33,6 +33,7 @@ public class PersonServiceTest {
 	
 	@InjectMocks
 	private static PersonServiceImpl service;
+	
 	private static Person person;
 	private static PersonDTO personDTO;
 	

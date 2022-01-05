@@ -30,13 +30,13 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	 * The DAO.
 	 */
 	@Autowired
-	private IMedicalRecordDAO dao;
+	private IMedicalRecordDAO medicalRecordDao;
 	
 	/**
 	 * The DTO converter.
 	 */
 	@Autowired
-	private IMedicalRecordConverter converter;
+	private IMedicalRecordConverter medicalRecordConverter;
 
 	/**
 	 * {@inheritDoc}
@@ -49,11 +49,11 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	@Override
 	public MedicalRecordDTO addMedicalRecord(MedicalRecordDTO medicalRecordDTO) 
 			throws ServiceException, StorageException, ConverterException {
-		MedicalRecord medicalRecord = converter.toEntity(medicalRecordDTO);
-		Optional<MedicalRecord> optional = dao.findByFirstnameLastname(medicalRecord.getFirstName(), 
+		MedicalRecord medicalRecord = medicalRecordConverter.toEntity(medicalRecordDTO);
+		Optional<MedicalRecord> optional = medicalRecordDao.findByFirstnameLastname(medicalRecord.getFirstName(), 
 				medicalRecord.getLastName());
 		if(!optional.isPresent()) {
-			return converter.toDTO(dao.save(medicalRecord).get());
+			return medicalRecordConverter.toDTO(medicalRecordDao.save(medicalRecord));
 		} else {
 			LOGGER.error("addMedicalRecord: medical record with firstname: " + medicalRecord.getFirstName()
 					+ " and lastname: " + medicalRecord.getLastName() + " already exists.");
@@ -78,10 +78,10 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	public MedicalRecordDTO updateMedicalRecord(String firstname, String lastname, MedicalRecordDTO medicalRecordDTO) 
 			throws ServiceException, StorageException, ConverterException {
 		if (firstname.equals(medicalRecordDTO.getFirstName()) && lastname.equals(medicalRecordDTO.getLastName())) {
-			MedicalRecord medicalRecord = converter.toEntity(medicalRecordDTO);
-			Optional<MedicalRecord> optional = dao.findByFirstnameLastname(firstname, lastname);
+			MedicalRecord medicalRecord = medicalRecordConverter.toEntity(medicalRecordDTO);
+			Optional<MedicalRecord> optional = medicalRecordDao.findByFirstnameLastname(firstname, lastname);
 			if (optional.isPresent()) {
-				return converter.toDTO(dao.update(medicalRecord).get());
+				return medicalRecordConverter.toDTO(medicalRecordDao.update(medicalRecord));
 			} else {
 				LOGGER.error("updateMedicalRecord: Firstname: " + firstname + " and lastname:"
 						+ lastname + " not found in MedicalRecord.");
@@ -107,10 +107,10 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService {
 	 */
 	@Override
 	public void deleteMedicalRecord(String firstname, String lastname) throws ServiceException, StorageException {
-		Optional<MedicalRecord> optional = dao.findByFirstnameLastname(firstname, lastname);
+		Optional<MedicalRecord> optional = medicalRecordDao.findByFirstnameLastname(firstname, lastname);
 		if(optional.isPresent()) {
 			MedicalRecord medicalRecord = optional.get();
-			dao.delete(medicalRecord);
+			medicalRecordDao.delete(medicalRecord);
 		} else {
 			LOGGER.error("deleteMedicalRecord: Firstname: " + firstname + " and lastname:"
 					+ lastname + " not found in MedicalRecord.");

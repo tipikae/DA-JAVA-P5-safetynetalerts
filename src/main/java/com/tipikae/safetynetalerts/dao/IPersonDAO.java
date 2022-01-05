@@ -17,17 +17,17 @@ public interface IPersonDAO {
 	/**
 	 * Save a Person object.
 	 * @param person a Person object.
-	 * @return Optional<Person>
+	 * @return Person
 	 * @throws StorageException
 	 */
-	Optional<Person> save(Person person) throws StorageException;
+	Person save(Person person) throws StorageException;
 
 	/**
 	 * Find all persons.
-	 * @return Optional<List<Person>>
+	 * @return List<Person>
 	 * @throws StorageException
 	 */
-	Optional<List<Person>> findAll() throws StorageException;
+	List<Person> findAll() throws StorageException;
 
 	/**
 	 * Find a person by firstname and lastname.
@@ -41,26 +41,26 @@ public interface IPersonDAO {
 	/**
 	 * Find persons by address.
 	 * @param address a String address.
-	 * @return Optional<List<Person>>
+	 * @return List<Person>
 	 * @throws StorageException
 	 */
-	Optional<List<Person>> findByAddress(String address) throws StorageException;
+	List<Person> findByAddress(String address) throws StorageException;
 
 	/**
 	 * Find persons by city.
 	 * @param city a String city
-	 * @return Optional<List<Person>>
+	 * @return List<Person>
 	 * @throws StorageException
 	 */
-	Optional<List<Person>> findByCity(String city) throws StorageException;
+	List<Person> findByCity(String city) throws StorageException;
 
 	/**
 	 * Update a person.
 	 * @param person a Person object.
-	 * @return Optional<Person>
+	 * @return Person
 	 * @throws StorageException
 	 */
-	Optional<Person> update(Person person) throws StorageException;
+	Person update(Person person) throws StorageException;
 
 	/**
 	 * Delete a person.

@@ -30,13 +30,13 @@ public class PersonServiceImpl implements IPersonService {
 	 * The DAO.
 	 */
 	@Autowired
-	private IPersonDAO dao;
+	private IPersonDAO personDao;
 	
 	/**
 	 * The DTO converter.
 	 */
 	@Autowired
-	private IPersonConverter converter;
+	private IPersonConverter personConverter;
 
 	/**
 	 * {@inheritDoc}
@@ -49,10 +49,10 @@ public class PersonServiceImpl implements IPersonService {
 	@Override
 	public PersonDTO addPerson(PersonDTO personDTO) 
 			throws ServiceException, StorageException, ConverterException {
-		Person person = converter.toEntity(personDTO);
-		Optional<Person> optional = dao.findByFirstnameLastname(person.getFirstName(), person.getLastName());
+		Person person = personConverter.toEntity(personDTO);
+		Optional<Person> optional = personDao.findByFirstnameLastname(person.getFirstName(), person.getLastName());
 		if(!optional.isPresent()) {
-			return converter.toDTO(dao.save(person).get());
+			return personConverter.toDTO(personDao.save(person));
 		} else {
 			LOGGER.error("addPerson: person with firstname: " + person.getFirstName()
 					+ " and lastname: " + person.getLastName() + " already exists.");
@@ -77,10 +77,10 @@ public class PersonServiceImpl implements IPersonService {
 	public PersonDTO updatePerson(String firstname, String lastname, PersonDTO personDTO) 
 			throws ServiceException, StorageException, ConverterException {
 		if (firstname.equals(personDTO.getFirstName()) && lastname.equals(personDTO.getLastName())) {
-			Person person = converter.toEntity(personDTO);
-			Optional<Person> optional = dao.findByFirstnameLastname(firstname, lastname);
+			Person person = personConverter.toEntity(personDTO);
+			Optional<Person> optional = personDao.findByFirstnameLastname(firstname, lastname);
 			if (optional.isPresent()) {
-				return converter.toDTO(dao.update(person).get());
+				return personConverter.toDTO(personDao.update(person));
 			} else {
 				LOGGER.error("updatePerson: Firstname: " + firstname + " and lastname:"
 						+ lastname + " not found in Person.");
@@ -106,10 +106,10 @@ public class PersonServiceImpl implements IPersonService {
 	 */
 	@Override
 	public void deletePerson(String firstname, String lastname) throws StorageException, ServiceException {
-		Optional<Person> optional = dao.findByFirstnameLastname(firstname, lastname);
+		Optional<Person> optional = personDao.findByFirstnameLastname(firstname, lastname);
 		if(optional.isPresent()) {
 			Person person = optional.get();
-			dao.delete(person);
+			personDao.delete(person);
 		} else {
 			LOGGER.error("deletePerson: Firstname: " + firstname + " and lastname:"
 					+ lastname + " not found in Person.");

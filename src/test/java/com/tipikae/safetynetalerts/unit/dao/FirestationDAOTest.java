@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,19 +27,19 @@ import com.tipikae.safetynetalerts.storage.Storage;
 @ExtendWith(MockitoExtension.class)
 class FirestationDAOTest {
 	
-	@Mock
-	private static JsonStorage jsonStorage;
+	@InjectMocks
+	private FirestationDAOImpl dao;
 	
 	@Mock
-	private static Storage storage;
+	private JsonStorage jsonStorage;
+	@Mock
+	private Storage storage;
 	
-	private static FirestationDAOImpl dao;
 	private static Firestation firestation;
 	private static Firestation updatedFirestation;
 	
 	@BeforeAll
 	private static void setUp() throws Exception {
-		dao = new FirestationDAOImpl();
 		firestation = new Firestation("route", 1);
 		updatedFirestation = new Firestation("route", 2);
 	}
@@ -49,9 +50,7 @@ class FirestationDAOTest {
 		firestations.add(firestation);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
-		assertEquals(firestation, dao.save(firestation).get());
+		assertEquals(firestation, dao.save(firestation));
 	}
 
 	@Test
@@ -60,30 +59,25 @@ class FirestationDAOTest {
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
 		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
-		assertThrows(StorageException.class, () -> dao.save(firestation).get());
+		assertThrows(StorageException.class, () -> dao.save(firestation));
 	}
 
 	@Test
 	void testFindAll_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
-		dao.setJsonStorage(jsonStorage);
-		assertThrows(StorageException.class, () -> dao.findAll().get());
+		assertThrows(StorageException.class, () -> dao.findAll());
 	}
 
 	@Test
 	void testFindByAddress_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
-		dao.setJsonStorage(jsonStorage);
 		assertThrows(StorageException.class, () -> dao.findByAddress("route").get());
 	}
 
 	@Test
 	void testFindByStation_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
-		dao.setJsonStorage(jsonStorage);
-		assertThrows(StorageException.class, () -> dao.findByStation(1).get());
+		assertThrows(StorageException.class, () -> dao.findByStation(1));
 	}
 	
 	@Test
@@ -92,9 +86,7 @@ class FirestationDAOTest {
 		firestations.add(firestation);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
-		Firestation result = dao.update(updatedFirestation).get();
+		Firestation result = dao.update(updatedFirestation);
 		assertEquals(updatedFirestation.getAddress(),result.getAddress());
 		assertEquals(updatedFirestation.getStation(),result.getStation());
 	}
@@ -106,9 +98,7 @@ class FirestationDAOTest {
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
 		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
-		assertThrows(StorageException.class, () -> dao.update(firestation).get());
+		assertThrows(StorageException.class, () -> dao.update(firestation));
 	}
 	
 	@Test
@@ -117,8 +107,6 @@ class FirestationDAOTest {
 		firestations.add(firestation);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
 		dao.delete(firestation);
 		verify(jsonStorage, Mockito.times(1)).writeStorage(storage);
 	}
@@ -130,8 +118,6 @@ class FirestationDAOTest {
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
 		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
 		assertThrows(StorageException.class, () -> dao.delete(firestation));
 	}
 	
@@ -143,8 +129,6 @@ class FirestationDAOTest {
 		firestationsToRemove.add(firestation);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
 		dao.deleteFirestations(firestationsToRemove);
 		verify(jsonStorage, Mockito.times(1)).writeStorage(storage);
 	}
@@ -158,8 +142,6 @@ class FirestationDAOTest {
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getFirestations()).thenReturn(firestations);
 		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
 		assertThrows(StorageException.class, () -> dao.deleteFirestations(firestationsToRemove));
 	}
 }

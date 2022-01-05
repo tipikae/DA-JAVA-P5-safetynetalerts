@@ -31,13 +31,13 @@ public class FirestationServiceImpl implements IFirestationService {
 	 * The DAO.
 	 */
 	@Autowired
-	private IFirestationDAO dao;
+	private IFirestationDAO firestationDao;
 	
 	/**
 	 * The DTO converter.
 	 */
 	@Autowired
-	private IFirestationConverter converter;
+	private IFirestationConverter firestationConverter;
 
 	/**
 	 * {@inheritDoc}
@@ -49,10 +49,10 @@ public class FirestationServiceImpl implements IFirestationService {
 	@Override
 	public FirestationDTO addFirestationMapping(FirestationDTO firestationDTO) 
 			throws ServiceException, StorageException, ConverterException {
-		Firestation firestation = converter.toEntity(firestationDTO);
-		Optional<Firestation> optional = dao.findByAddress(firestation.getAddress());
+		Firestation firestation = firestationConverter.toEntity(firestationDTO);
+		Optional<Firestation> optional = firestationDao.findByAddress(firestation.getAddress());
 		if(!optional.isPresent()) {
-			return converter.toDTO(dao.save(firestation).get());
+			return firestationConverter.toDTO(firestationDao.save(firestation));
 		} else {
 			LOGGER.error("addFirestationMapping: mapping with address: " + firestation.getAddress()
 					+ " already exists.");
@@ -74,10 +74,10 @@ public class FirestationServiceImpl implements IFirestationService {
 	public FirestationDTO updateFirestationMapping(String address, FirestationDTO firestationDTO) 
 			throws ServiceException, StorageException, ConverterException {
 		if (address.equals(firestationDTO.getAddress())) {
-			Firestation firestation = converter.toEntity(firestationDTO);
-			Optional<Firestation> optional = dao.findByAddress(address);
+			Firestation firestation = firestationConverter.toEntity(firestationDTO);
+			Optional<Firestation> optional = firestationDao.findByAddress(address);
 			if (optional.isPresent()) {
-				return converter.toDTO(dao.update(firestation).get());
+				return firestationConverter.toDTO(firestationDao.update(firestation));
 			} else {
 				LOGGER.error("updateFirestationMapping: Address: " + address + " not found in Firestation.");
 				throw new ServiceException("Address: " + address + " not found in Firestation.");
@@ -98,10 +98,10 @@ public class FirestationServiceImpl implements IFirestationService {
 	 */
 	@Override
 	public void deleteFirestationByAddress(String address) throws StorageException, ServiceException {
-		Optional<Firestation> optional = dao.findByAddress(address);
+		Optional<Firestation> optional = firestationDao.findByAddress(address);
 		if(optional.isPresent()) {
 			Firestation firestation = optional.get();
-			dao.delete(firestation);
+			firestationDao.delete(firestation);
 		} else {
 			LOGGER.error("deleteFirestationByAddress: Address: " + address + " not found in Firestation.");
 			throw new ServiceException("Address: " + address + " not found in Firestation.");
@@ -116,10 +116,9 @@ public class FirestationServiceImpl implements IFirestationService {
 	 */
 	@Override
 	public void deleteFirestationsByStation(int station) throws ServiceException, StorageException {
-		Optional<List<Firestation>> optional = dao.findByStation(station);
-		if(optional.isPresent()) {
-			List<Firestation> firestations = optional.get();
-			dao.deleteFirestations(firestations);
+		List<Firestation> firestations = firestationDao.findByStation(station);
+		if(firestations != null) {
+			firestationDao.deleteFirestations(firestations);
 		} else {
 			LOGGER.error("deleteFirestationsByStation: Station: " + station + " not found in Firestation.");
 			throw new ServiceException("Station: " + station + " not found in Firestation.");

@@ -1,0 +1,63 @@
+{
+  "persons": [
+    {
+      "firstName": "Bob",
+      "lastName": "BOB",
+      "address": "route",
+      "city": "Paris",
+      "zip": "75000",
+      "phone": "123456",
+      "email": "bob@bob.com"
+    },
+    {
+      "firstName": "Alice",
+      "lastName": "BOB",
+      "address": "route",
+      "city": "Paris",
+      "zip": "75000",
+      "phone": "123456",
+      "email": "bob@bob.com"
+    },
+    {
+      "firstName": "Prout",
+      "lastName": "Pouet",
+      "address": "chemin",
+      "city": "Paris",
+      "zip": "75000",
+      "phone": "123456",
+      "email": "bob@bob.com"
+    }
+  ],
+  "firestations": [],
+  "medicalrecords": [
+    {
+      "firstName": "Bob",
+      "lastName": "BOB",
+      "birthdate": "09/05/1973",
+      "medications": [
+        "aznol:350mg",
+        "hydrapermazol:100mg"
+      ],
+      "allergies": [
+        "nillacilan"
+      ]
+    },
+    {
+      "firstName": "Alice",
+      "lastName": "BOB",
+      "birthdate": "09/05/2005",
+      "medications": [
+        "aznol:350mg",
+        "hydrapermazol:100mg"
+      ],
+      "allergies": []
+    },
+    {
+      "firstName": "Prout",
+      "lastName": "Pouet",
+      "birthdate": "09/05/1985",
+      "medications": [],
+      "allergies": []
+    }
+  ]
+}

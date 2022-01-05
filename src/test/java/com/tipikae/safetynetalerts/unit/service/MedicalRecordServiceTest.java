@@ -35,6 +35,7 @@ class MedicalRecordServiceTest {
 	
 	@InjectMocks
 	private static MedicalRecordServiceImpl service;
+	
 	private static MedicalRecord medicalRecord;
 	private static MedicalRecordDTO medicalRecordDTO;
 	

@@ -17,17 +17,17 @@ public interface IMedicalRecordDAO {
 	/**
 	 * Save a MedicalRecord object.
 	 * @param medicalRecord a MedicalRecord object.
-	 * @return Optional<MedicalRecord>
+	 * @return MedicalRecord
 	 * @throws StorageException
 	 */
-	Optional<MedicalRecord> save(MedicalRecord medicalRecord) throws StorageException;
+	MedicalRecord save(MedicalRecord medicalRecord) throws StorageException;
 
 	/**
 	 * Find all medical records.
-	 * @return Optional<List<MedicalRecord>>
+	 * @return List<MedicalRecord>
 	 * @throws StorageException
 	 */
-	Optional<List<MedicalRecord>> findAll() throws StorageException;
+	List<MedicalRecord> findAll() throws StorageException;
 
 	/**
 	 * Find a medical record by firstname and lastname.
@@ -41,10 +41,10 @@ public interface IMedicalRecordDAO {
 	/**
 	 * Update a medical record.
 	 * @param medicalRecord a MedicalRecord object.
-	 * @return Optional<MedicalRecord>
+	 * @return MedicalRecord
 	 * @throws StorageException
 	 */
-	Optional<MedicalRecord> update(MedicalRecord medicalRecord) throws StorageException;
+	MedicalRecord update(MedicalRecord medicalRecord) throws StorageException;
 
 	/**
 	 * Delete a medical record.

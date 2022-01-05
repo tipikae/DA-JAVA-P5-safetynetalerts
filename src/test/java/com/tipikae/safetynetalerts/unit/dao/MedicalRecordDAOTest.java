@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,19 +27,19 @@ import com.tipikae.safetynetalerts.storage.Storage;
 @ExtendWith(MockitoExtension.class)
 class MedicalRecordDAOTest {
 	
+	@InjectMocks
+	private MedicalRecordDAOImpl dao;
+	
 	@Mock
 	private JsonStorage jsonStorage;
-	
 	@Mock
 	private Storage storage;
 	
-	private static MedicalRecordDAOImpl dao;
 	private static MedicalRecord medicalRecord;
 	private static MedicalRecord updatedMedicalRecord;
 	
 	@BeforeAll
 	private static void setUp() {
-		dao = new MedicalRecordDAOImpl();
 		medicalRecord = new MedicalRecord("Bob", "BOB", LocalDate.now(), new ArrayList<String>(), 
 				new ArrayList<String>());
 		List<String> medications = new ArrayList<>();
@@ -52,9 +53,7 @@ class MedicalRecordDAOTest {
 		medicalRecords.add(medicalRecord);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
-		assertEquals(medicalRecord, dao.save(medicalRecord).get());
+		assertEquals(medicalRecord, dao.save(medicalRecord));
 	}
 
 	@Test
@@ -63,22 +62,18 @@ class MedicalRecordDAOTest {
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
 		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
 		assertThrows(StorageException.class, () -> dao.save(medicalRecord));
 	}
 
 	@Test
 	void testFindAll_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
-		dao.setJsonStorage(jsonStorage);
 		assertThrows(StorageException.class, () -> dao.findAll());
 	}
 
 	@Test
 	void testFindByFirstnameLastname_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
-		dao.setJsonStorage(jsonStorage);
 		assertThrows(StorageException.class, () -> dao.findByFirstnameLastname("bob", "BOB"));
 	}
 	
@@ -88,9 +83,7 @@ class MedicalRecordDAOTest {
 		medicalRecords.add(medicalRecord);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
-		MedicalRecord result = dao.update(updatedMedicalRecord).get();
+		MedicalRecord result = dao.update(updatedMedicalRecord);
 		assertEquals(updatedMedicalRecord, result);
 	}
 	
@@ -101,8 +94,6 @@ class MedicalRecordDAOTest {
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
 		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
 		assertThrows(StorageException.class, () -> dao.update(medicalRecord));
 	}
 	
@@ -112,8 +103,6 @@ class MedicalRecordDAOTest {
 		medicalRecords.add(medicalRecord);
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
 		dao.delete(medicalRecord);
 		verify(jsonStorage, Mockito.times(1)).writeStorage(storage);
 	}
@@ -125,8 +114,6 @@ class MedicalRecordDAOTest {
 		when(jsonStorage.readStorage()).thenReturn(storage);
 		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
 		doThrow(StorageException.class).when(jsonStorage).writeStorage(any(Storage.class));
-		dao.setJsonStorage(jsonStorage);
-		dao.setStorage(storage);
 		assertThrows(StorageException.class, () -> dao.delete(medicalRecord));
 	}
 }

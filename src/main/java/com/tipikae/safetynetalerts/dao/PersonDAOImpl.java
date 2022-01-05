@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.tipikae.safetynetalerts.exception.StorageException;
 import com.tipikae.safetynetalerts.model.Person;
-import com.tipikae.safetynetalerts.storage.JsonStorage;
+import com.tipikae.safetynetalerts.storage.IStorage;
 
 /**
  * An implementation of IPersonDAO.
@@ -19,12 +20,8 @@ import com.tipikae.safetynetalerts.storage.JsonStorage;
 @Repository
 public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 
-	/**
-	 * The constructor.
-	 */
-	public PersonDAOImpl() {
-		jsonStorage = new JsonStorage();
-	}
+	@Autowired
+	private IStorage jsonStorage;
 
 	/**
 	 * {@inheritDoc}
@@ -32,14 +29,14 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<Person> save(Person person) throws StorageException {
+	public Person save(Person person) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> persons = storage.getPersons();
 		persons.add(person);
 		storage.setPersons(persons);
 		jsonStorage.writeStorage(storage);
 		
-		return Optional.of(person);
+		return person;
 	}
 
 	/**
@@ -47,9 +44,9 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<List<Person>> findAll() throws StorageException {
+	public List<Person> findAll() throws StorageException {
 		storage = jsonStorage.readStorage();
-		return Optional.ofNullable(storage.getPersons());
+		return storage.getPersons();
 	}
 
 	/**
@@ -61,16 +58,13 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	@Override
 	public Optional<Person> findByFirstnameLastname(String firstname, String lastname) throws StorageException {
 		storage = jsonStorage.readStorage();
-		Person person = null;
 		for (Person item : storage.getPersons()) {
 			if (item.getFirstName().equals(firstname) && item.getLastName().equals(lastname)) {
-				person = new Person(firstname, lastname, item.getAddress(), item.getCity(), item.getZip(), 
-						item.getPhone(), item.getEmail());
-				break;
+				return Optional.of(item);
 			}
 		}
 		
-		return Optional.ofNullable(person);
+		return Optional.empty();
 	}
 
 	/**
@@ -79,7 +73,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<List<Person>> findByAddress(String address) throws StorageException {
+	public List<Person> findByAddress(String address) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> results = null;
 		for (Person item : storage.getPersons()) {
@@ -91,7 +85,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 			}
 		}
 		
-		return Optional.ofNullable(results);
+		return results;
 	}
 
 	/**
@@ -100,7 +94,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<List<Person>> findByCity(String city) throws StorageException {
+	public List<Person> findByCity(String city) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> results = null;
 		for (Person item : storage.getPersons()) {
@@ -112,7 +106,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 			}
 		}
 		
-		return Optional.ofNullable(results);
+		return results;
 	}
 
 	/**
@@ -121,7 +115,7 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Optional<Person> update(Person person) throws StorageException {
+	public Person update(Person person) throws StorageException {
 		storage = jsonStorage.readStorage();
 		List<Person> persons = storage.getPersons();
 		int i = -1;
@@ -134,14 +128,10 @@ public class PersonDAOImpl extends AbstractDAOImpl implements IPersonDAO {
 			}
 		}
 		
-		if (i != -1) {
-			persons.set(i, person);
-			storage.setPersons(persons);
-			jsonStorage.writeStorage(storage);
-			return Optional.of(person);
-		} else {
-			return Optional.empty();
-		}
+		persons.set(i, person);
+		storage.setPersons(persons);
+		jsonStorage.writeStorage(storage);
+		return person;
 	}
 
 	/**

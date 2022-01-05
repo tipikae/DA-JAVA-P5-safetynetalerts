@@ -1,5 +1,6 @@
 package com.tipikae.safetynetalerts.storage;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
@@ -13,6 +14,8 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,12 +32,13 @@ import com.tipikae.safetynetalerts.model.MedicalRecord;
 import com.tipikae.safetynetalerts.model.Person;
 
 /**
- * A class accessing data stored in a json file.
+ * An implementation of IStorage accessing data stored in a json file.
  * @author tipikae
  * @version 1.0
  *
  */
-public class JsonStorage {
+@Component
+public class JsonStorage implements IStorage {
 	
 	private static final String PROPERTIES_FILE = "/application.properties";
 	private static final String PROPERTY_KEY_FILE = "storage.file";
@@ -44,27 +48,13 @@ public class JsonStorage {
 	/**
 	 * Properties.
 	 */
+	@Autowired
 	private Properties prop;
 
 	/**
-	 * The constructor
-	 */
-	public JsonStorage() {
-		this.prop = new Properties();
-	}
-
-	/**
-	 * Set properties.
-	 * @param prop a Properties object.
-	 */
-	public void setProp(Properties prop) {
-		this.prop = prop;
-	}
-
-	/**
-	 * Read the json file.
-	 * @return Storage
-	 * @throws StorageException
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	public Storage readStorage() throws StorageException {
 		Gson gson = new GsonBuilder()
@@ -75,7 +65,7 @@ public class JsonStorage {
 			
 			prop.load(fis);
 			
-			Reader reader = new FileReader(prop.getProperty(PROPERTY_KEY_FILE));
+			Reader reader = new FileReader(new File(prop.getProperty(PROPERTY_KEY_FILE)).getCanonicalPath());
 			Storage storage = gson.fromJson(reader, Storage.class);
 			reader.close();
 			
@@ -92,9 +82,9 @@ public class JsonStorage {
 	}
 
 	/**
-	 * Write the json file.
-	 * @param storage a Storage object.
-	 * @throws StorageException
+	 * {@inheritDoc}
+	 * @param {@inheritDoc}
+	 * @throws {@inheritDoc}
 	 */
 	public void writeStorage(Storage storage) throws StorageException {
 		Gson gson = new GsonBuilder()
@@ -105,7 +95,9 @@ public class JsonStorage {
 			
 			prop.load(fis);
 			
-			Writer writer = new FileWriter(prop.getProperty(PROPERTY_KEY_FILE), false);
+			Writer writer = new FileWriter(
+					new File(prop.getProperty(PROPERTY_KEY_FILE)).getCanonicalPath(), 
+					false);
 			gson.toJson(storage, writer);
 			writer.close();
 		} catch (Exception e) {

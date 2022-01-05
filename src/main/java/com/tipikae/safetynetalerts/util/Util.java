@@ -3,22 +3,25 @@ package com.tipikae.safetynetalerts.util;
 import java.time.LocalDate;
 import java.time.Period;
 
+import org.springframework.stereotype.Service;
+
 import com.tipikae.safetynetalerts.constant.Constant;
 
 /**
- * An utility class.
+ * An utility class implementation of IUtil.
  * @author tipikae
  * @version 1.0
  *
  */
-public class Util {
+@Service
+public class Util implements IUtil {
 	
 	/**
-	 * Calculate an age.
-	 * @param birthDate a LocalDate object.
-	 * @return int
+	 * {@inheritDoc}
+	 * @param {@inheritDoc}
+	 * @return {@inheritDoc}
 	 */
-	public static int calculateAge(LocalDate birthDate) {
+	public int calculateAge(LocalDate birthDate) {
 		if ((birthDate != null)) {
             return Period.between(birthDate, LocalDate.now()).getYears();
         } else {
@@ -27,11 +30,11 @@ public class Util {
 	}
 
 	/**
-	 * Check if a LocalDate is an adult age.
-	 * @param birthDate a LocalDate object.
-	 * @return boolean
+	 * {@inheritDoc}
+	 * @param {@inheritDoc}
+	 * @return {@inheritDoc}
 	 */
-	public static boolean isAdult(LocalDate birthDate) {
+	public boolean isAdult(LocalDate birthDate) {
 		return calculateAge(birthDate) > Constant.ADULT_AGE;
 	}
 }

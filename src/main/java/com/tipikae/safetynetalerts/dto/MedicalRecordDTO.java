@@ -29,6 +29,7 @@ public class MedicalRecordDTO implements Serializable {
 	 * Birthdate.
 	 */
 	@Past
+	@NotBlank(message="Birthdate is mandatory")
 	private LocalDate birthdate;
 	/**
 	 * Medications.

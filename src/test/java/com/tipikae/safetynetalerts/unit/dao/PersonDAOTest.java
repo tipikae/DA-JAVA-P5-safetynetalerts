@@ -62,9 +62,35 @@ class PersonDAOTest {
 	}
 
 	@Test
+	void testFindAll_whenOk() throws StorageException {
+		List<Person> persons = new ArrayList<>();
+		persons.add(person);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getPersons()).thenReturn(persons);
+		assertEquals(1, dao.findAll().size());
+	}
+
+	@Test
 	void testFindAll_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
 		assertThrows(StorageException.class, () -> dao.findAll());
+	}
+
+	@Test
+	void testFindByFirstnameLastname_whenOk() throws StorageException {
+		List<Person> persons = new ArrayList<>();
+		persons.add(person);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getPersons()).thenReturn(persons);
+		assertEquals(person.getAddress(), dao.findByFirstnameLastname("Bob", "BOB").get().getAddress());
+	}
+
+	@Test
+	void testFindByFirstnameLastname_whenNotFound() throws StorageException {
+		List<Person> persons = new ArrayList<>();
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getPersons()).thenReturn(persons);
+		assertFalse(dao.findByFirstnameLastname("bob", "BOB").isPresent());
 	}
 
 	@Test
@@ -74,15 +100,49 @@ class PersonDAOTest {
 	}
 
 	@Test
+	void testFindByCity_whenOk() throws StorageException {
+		List<Person> persons = new ArrayList<>();
+		persons.add(person);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getPersons()).thenReturn(persons);
+		assertEquals(person.getAddress(), dao.findByCity("Paris").get(0).getAddress());
+	}
+
+	@Test
+	void testFindByCity_whenEmpty() throws StorageException {
+		List<Person> persons = new ArrayList<>();
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getPersons()).thenReturn(persons);
+		assertNull(dao.findByCity("Paris"));
+	}
+
+	@Test
 	void testFindByCity_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
 		assertThrows(StorageException.class, () -> dao.findByCity("Paris"));
 	}
 
 	@Test
+	void testFindByAddress_whenOk() throws StorageException {
+		List<Person> persons = new ArrayList<>();
+		persons.add(person);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getPersons()).thenReturn(persons);
+		assertEquals(person.getAddress(), dao.findByAddress("route de la soie").get(0).getAddress());
+	}
+
+	@Test
+	void testFindByAddress_whenEmpty() throws StorageException {
+		List<Person> persons = new ArrayList<>();
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getPersons()).thenReturn(persons);
+		assertNull(dao.findByAddress("route de pale"));
+	}
+
+	@Test
 	void testFindByAddress_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
-		assertThrows(StorageException.class, () -> dao.findByCity("route de pale"));
+		assertThrows(StorageException.class, () -> dao.findByAddress("route de pale"));
 	}
 	
 	@Test

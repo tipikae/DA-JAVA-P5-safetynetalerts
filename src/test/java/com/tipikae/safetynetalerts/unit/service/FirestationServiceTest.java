@@ -1,6 +1,7 @@
 package com.tipikae.safetynetalerts.unit.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -46,7 +47,24 @@ class FirestationServiceTest {
 	}
 
 	@Test
-	void testAddFirestation_whenException() throws StorageException, ConverterException {
+	void testAddFirestation_whenOk() throws StorageException, ConverterException, ServiceException {
+		when(converter.toEntity(any(FirestationDTO.class))).thenReturn(firestation);
+		when(dao.findByAddress(anyString())).thenReturn(Optional.empty());
+		when(dao.save(any(Firestation.class))).thenReturn(firestation);
+		when(converter.toDTO(any(Firestation.class))).thenReturn(firestationDTO);
+		FirestationDTO result = service.addFirestationMapping(firestationDTO);
+		assertEquals(result.getAddress(), firestationDTO.getAddress());
+	}
+
+	@Test
+	void testAddFirestation_whenServiceException() throws StorageException, ConverterException {
+		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
+		when(dao.findByAddress(anyString())).thenReturn(Optional.of(firestation));
+		assertThrows(ServiceException.class, () -> service.addFirestationMapping(firestationDTO));
+	}
+
+	@Test
+	void testAddFirestation_whenStorageException() throws StorageException, ConverterException {
 		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
 		when(dao.findByAddress(anyString())).thenReturn(Optional.empty());
 		doThrow(StorageException.class).when(dao).save(firestation);
@@ -54,17 +72,39 @@ class FirestationServiceTest {
 	}
 
 	@Test
-	void testUpdateFirestationMapping_whenException() throws StorageException, ConverterException {
+	void testUpdateFirestationMapping_whenOk() throws StorageException, ConverterException, ServiceException {
+		when(converter.toEntity(any(FirestationDTO.class))).thenReturn(firestation);
+		when(dao.findByAddress(anyString())).thenReturn(Optional.of(firestation));
+		when(dao.update(any(Firestation.class))).thenReturn(firestation);
+		when(converter.toDTO(any(Firestation.class))).thenReturn(firestationDTO);
+		FirestationDTO result = service.updateFirestationMapping("route", firestationDTO);
+		assertEquals(result.getAddress(), firestationDTO.getAddress());
+	}
+
+	@Test
+	void testUpdateFirestationMapping_whenServiceException() throws StorageException, ConverterException {
+		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
+		when(dao.findByAddress(anyString())).thenReturn(Optional.empty());
+		assertThrows(ServiceException.class, () -> service.updateFirestationMapping("route", firestationDTO));
+	}
+
+	@Test
+	void testUpdateFirestationMapping_whenStorageException() throws StorageException, ConverterException {
 		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
 		doThrow(StorageException.class).when(dao).findByAddress(anyString());
 		assertThrows(StorageException.class, ()-> service.updateFirestationMapping("route", firestationDTO));
 	}
 	
 	@Test
-	void testUpdateFirestationMapping_wheNull() throws StorageException, ConverterException {
+	void testUpdateFirestationMapping_whenNull() throws StorageException, ConverterException {
 		when(converter.toEntity(firestationDTO)).thenReturn(firestation);
 		when(dao.findByAddress(anyString())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.updateFirestationMapping("route", firestationDTO));
+	}
+	
+	@Test
+	void testUpdateFirestationMapping_whenDifferent() throws StorageException, ConverterException {
+		assertThrows(ServiceException.class, ()-> service.updateFirestationMapping("chemin", firestationDTO));
 	}
 	
 	@Test

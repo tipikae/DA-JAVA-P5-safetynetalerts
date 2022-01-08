@@ -50,5 +50,10 @@ class FirestationConverterTest {
 	void testToDTOs() throws ConverterException {
 		assertEquals(dtos.get(0).getStation(), converter.toDTOs(entities).get(0).getStation());
 	}
+	
+	@Test
+	void testToDTOsWhenNull() throws ConverterException {
+		assertNull(converter.toDTOs(null));
+	}
 
 }

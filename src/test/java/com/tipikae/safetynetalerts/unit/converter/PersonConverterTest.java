@@ -50,4 +50,9 @@ public class PersonConverterTest {
 	void testToDTOs() throws ConverterException {
 		assertEquals(dtos.get(0).getEmail(), converter.toDTOs(entities).get(0).getEmail());
 	}
+	
+	@Test
+	void testToDTOsWhenNull() throws ConverterException {
+		assertNull(converter.toDTOs(null));
+	}
 }

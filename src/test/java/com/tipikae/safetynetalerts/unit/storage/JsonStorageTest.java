@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -21,20 +22,22 @@ import com.tipikae.safetynetalerts.storage.JsonStorage;
 class JsonStorageTest {
 
 	@InjectMocks
-	private JsonStorage storage;
+	private JsonStorage jsonStorage;
 	
 	@Mock
 	private Properties prop;
+	@Mock
+	private File file;
 	
 	@Test
-	void testReadStorage_whenError() throws IOException {
+	void testReadStorage_whenPropLoadError() throws IOException {
 		doThrow(IOException.class).when(prop).load(any(InputStream.class));
-		assertThrows(StorageException.class, () -> storage.readStorage());
+		assertThrows(StorageException.class, () -> jsonStorage.readStorage());
 	}
 
 	@Test
-	void testWriteStorage_whenError() throws StorageException, IOException {
+	void testWriteStorage_whenPropLoadError() throws StorageException, IOException {
 		doThrow(IOException.class).when(prop).load(any(InputStream.class));
-		assertThrows(StorageException.class, () -> storage.writeStorage(null));
+		assertThrows(StorageException.class, () -> jsonStorage.writeStorage(null));
 	}
 }

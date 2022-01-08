@@ -14,20 +14,4 @@ public abstract class AbstractDAOImpl {
 	 * The Storage object.
 	 */
 	protected Storage storage;
-
-//	/**
-//	 * Get the Storage object.
-//	 * @return Storage
-//	 */
-//	public Storage getStorage() {
-//		return storage;
-//	}
-//
-//	/**
-//	 * Set the Storage.
-//	 * @param storage
-//	 */
-//	public void setStorage(Storage storage) {
-//		this.storage = storage;
-//	}
 }

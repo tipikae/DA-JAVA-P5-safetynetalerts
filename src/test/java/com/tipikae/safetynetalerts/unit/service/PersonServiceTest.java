@@ -1,6 +1,8 @@
 package com.tipikae.safetynetalerts.unit.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -45,24 +47,63 @@ public class PersonServiceTest {
 	}
 
 	@Test
-	void testAddPerson_whenException() throws StorageException, ConverterException {
+	void testAddPerson_whenOk() throws StorageException, ConverterException, ServiceException {
+		when(converter.toEntity(any(PersonDTO.class))).thenReturn(person);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
+		when(dao.save(any(Person.class))).thenReturn(person);
+		when(converter.toDTO(any(Person.class))).thenReturn(personDTO);
+		PersonDTO result = service.addPerson(personDTO);
+		assertEquals(result.getAddress(), personDTO.getAddress());
+	}
+
+	@Test
+	void testAddPerson_whenServiceException() throws StorageException, ConverterException {
+		when(converter.toEntity(personDTO)).thenReturn(person);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.of(person));
+		assertThrows(ServiceException.class, () -> service.addPerson(personDTO));
+	}
+
+	@Test
+	void testAddPerson_whenStorageException() throws StorageException, ConverterException {
 		when(converter.toEntity(personDTO)).thenReturn(person);
 		doThrow(StorageException.class).when(dao).save(person);
 		assertThrows(StorageException.class, () -> service.addPerson(personDTO));
 	}
 
 	@Test
-	void testUpdatePerson_whenException() throws StorageException, ConverterException {
+	void testUpdatePerson_whenOk() throws StorageException, ConverterException, ServiceException {
+		when(converter.toEntity(any(PersonDTO.class))).thenReturn(person);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.of(person));
+		when(dao.update(any(Person.class))).thenReturn(person);
+		when(converter.toDTO(any(Person.class))).thenReturn(personDTO);
+		PersonDTO result = service.updatePerson("Bob", "BOB", personDTO);
+		assertEquals(result.getAddress(), personDTO.getAddress());
+	}
+
+	@Test
+	void testUpdatePerson_whenServiceException() throws StorageException, ConverterException {
+		when(converter.toEntity(personDTO)).thenReturn(person);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
+		assertThrows(ServiceException.class, ()-> service.updatePerson("Bob", "BOB", personDTO));
+	}
+
+	@Test
+	void testUpdatePerson_whenStorageException() throws StorageException, ConverterException {
 		when(converter.toEntity(personDTO)).thenReturn(person);
 		doThrow(StorageException.class).when(dao).findByFirstnameLastname(anyString(), anyString());
 		assertThrows(StorageException.class, ()-> service.updatePerson("Bob", "BOB", personDTO));
 	}
 	
 	@Test
-	void testUpdatePerson_wheNull() throws StorageException, ConverterException {
+	void testUpdatePerson_whenNull() throws StorageException, ConverterException {
 		when(converter.toEntity(personDTO)).thenReturn(person);
 		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.updatePerson("Bob", "BOB", personDTO));
+	}
+	
+	@Test
+	void testUpdatePerson_whenDifferent() throws StorageException, ConverterException {
+		assertThrows(ServiceException.class, ()-> service.updatePerson("Bobby", "BOB", personDTO));
 	}
 	
 	@Test

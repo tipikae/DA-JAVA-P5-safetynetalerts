@@ -1,6 +1,7 @@
 package com.tipikae.safetynetalerts.unit.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -49,7 +50,24 @@ class MedicalRecordServiceTest {
 	}
 
 	@Test
-	void testAddMedicalRecord_whenException() throws StorageException, ConverterException {
+	void testAddMedicalRecord_whenOk() throws StorageException, ConverterException, ServiceException {
+		when(converter.toEntity(any(MedicalRecordDTO.class))).thenReturn(medicalRecord);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
+		when(dao.save(any(MedicalRecord.class))).thenReturn(medicalRecord);
+		when(converter.toDTO(any(MedicalRecord.class))).thenReturn(medicalRecordDTO);
+		MedicalRecordDTO result = service.addMedicalRecord(medicalRecordDTO);
+		assertEquals(result.getFirstName(), medicalRecordDTO.getFirstName());
+	}
+
+	@Test
+	void testAddFirestation_whenServiceException() throws StorageException, ConverterException {
+		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.of(medicalRecord));
+		assertThrows(ServiceException.class, () -> service.addMedicalRecord(medicalRecordDTO));
+	}
+
+	@Test
+	void testAddMedicalRecord_whenStorageException() throws StorageException, ConverterException {
 		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
 		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
 		doThrow(StorageException.class).when(dao).save(medicalRecord);
@@ -57,17 +75,39 @@ class MedicalRecordServiceTest {
 	}
 
 	@Test
-	void testUpdateMedicalRecord_whenException() throws StorageException, ConverterException {
+	void testUpdateMedicalRecord_whenOk() throws StorageException, ConverterException, ServiceException {
+		when(converter.toEntity(any(MedicalRecordDTO.class))).thenReturn(medicalRecord);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.of(medicalRecord));
+		when(dao.update(any(MedicalRecord.class))).thenReturn(medicalRecord);
+		when(converter.toDTO(any(MedicalRecord.class))).thenReturn(medicalRecordDTO);
+		MedicalRecordDTO result = service.updateMedicalRecord("Bob", "BOB", medicalRecordDTO);
+		assertEquals(result.getFirstName(), medicalRecordDTO.getFirstName());
+	}
+
+	@Test
+	void testUpdateMedicalRecord_whenServiceException() throws StorageException, ConverterException {
+		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
+		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
+		assertThrows(ServiceException.class, ()-> service.updateMedicalRecord("Bob", "BOB", medicalRecordDTO));
+	}
+
+	@Test
+	void testUpdateMedicalRecord_whenStorageException() throws StorageException, ConverterException {
 		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
 		doThrow(StorageException.class).when(dao).findByFirstnameLastname(anyString(), anyString());
 		assertThrows(StorageException.class, ()-> service.updateMedicalRecord("Bob", "BOB", medicalRecordDTO));
 	}
 	
 	@Test
-	void testUpdateMedicalRecord_wheNull() throws StorageException, ConverterException {
+	void testUpdateMedicalRecord_whenNull() throws StorageException, ConverterException {
 		when(converter.toEntity(medicalRecordDTO)).thenReturn(medicalRecord);
 		when(dao.findByFirstnameLastname(anyString(), anyString())).thenReturn(Optional.empty());
 		assertThrows(ServiceException.class, ()-> service.updateMedicalRecord("Bob", "BOB", medicalRecordDTO));
+	}
+	
+	@Test
+	void testUpdateMedicalRecord_whenDifferent() throws StorageException, ConverterException {
+		assertThrows(ServiceException.class, ()-> service.updateMedicalRecord("Bobby", "BOB", medicalRecordDTO));
 	}
 	
 	@Test

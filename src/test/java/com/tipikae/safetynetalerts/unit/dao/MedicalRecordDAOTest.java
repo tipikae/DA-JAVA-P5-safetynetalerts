@@ -66,9 +66,35 @@ class MedicalRecordDAOTest {
 	}
 
 	@Test
+	void testFindAll_whenOk() throws StorageException {
+		List<MedicalRecord> medicalRecords = new ArrayList<>();
+		medicalRecords.add(medicalRecord);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
+		assertEquals(1, dao.findAll().size());
+	}
+
+	@Test
 	void testFindAll_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
 		assertThrows(StorageException.class, () -> dao.findAll());
+	}
+
+	@Test
+	void testFindByFirstnameLastname_whenOk() throws StorageException {
+		List<MedicalRecord> medicalRecords = new ArrayList<>();
+		medicalRecords.add(medicalRecord);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
+		assertEquals(medicalRecord.getFirstName(), dao.findByFirstnameLastname("Bob", "BOB").get().getFirstName());
+	}
+
+	@Test
+	void testFindByFirstnameLastname_whenNotFound() throws StorageException {
+		List<MedicalRecord> medicalRecords = new ArrayList<>();
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getMedicalRecords()).thenReturn(medicalRecords);
+		assertFalse(dao.findByFirstnameLastname("bob", "BOB").isPresent());
 	}
 
 	@Test

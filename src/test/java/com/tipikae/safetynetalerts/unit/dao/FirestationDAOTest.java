@@ -1,6 +1,8 @@
 package com.tipikae.safetynetalerts.unit.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -63,9 +65,35 @@ class FirestationDAOTest {
 	}
 
 	@Test
+	void testFindAll_whenOk() throws StorageException {
+		List<Firestation> firestations = new ArrayList<>();
+		firestations.add(firestation);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getFirestations()).thenReturn(firestations);
+		assertEquals(1, dao.findAll().size());
+	}
+
+	@Test
 	void testFindAll_whenException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
 		assertThrows(StorageException.class, () -> dao.findAll());
+	}
+
+	@Test
+	void testFindByAddress_whenOk() throws StorageException {
+		List<Firestation> firestations = new ArrayList<>();
+		firestations.add(firestation);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getFirestations()).thenReturn(firestations);
+		assertEquals(firestation.getAddress(), dao.findByAddress("route").get().getAddress());
+	}
+
+	@Test
+	void testFindByAddress_whenNotFound() throws StorageException {
+		List<Firestation> firestations = new ArrayList<>();
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getFirestations()).thenReturn(firestations);
+		assertFalse(dao.findByAddress("route").isPresent());
 	}
 
 	@Test
@@ -75,7 +103,27 @@ class FirestationDAOTest {
 	}
 
 	@Test
-	void testFindByStation_whenException() throws StorageException {
+	void testFindByStation_whenOK() throws StorageException {
+		List<Firestation> firestations = new ArrayList<>();
+		firestations.add(firestation);
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getFirestations()).thenReturn(firestations);
+		assertEquals(firestations.get(0).getAddress(), dao.findByStation(1).get(0).getAddress());
+		
+		doThrow(StorageException.class).when(jsonStorage).readStorage();
+		assertThrows(StorageException.class, () -> dao.findByStation(1));
+	}
+
+	@Test
+	void testFindByStation_whenNotFound() throws StorageException {
+		List<Firestation> firestations = new ArrayList<>();
+		when(jsonStorage.readStorage()).thenReturn(storage);
+		when(storage.getFirestations()).thenReturn(firestations);
+		assertNull(dao.findByStation(1));
+	}
+
+	@Test
+	void testFindByStation_whenStorageException() throws StorageException {
 		doThrow(StorageException.class).when(jsonStorage).readStorage();
 		assertThrows(StorageException.class, () -> dao.findByStation(1));
 	}

@@ -43,7 +43,7 @@ class FirestationControllerTest {
 	}
 	
 	@Test
-	void testAddFirestationMapping_whenException() throws Exception {
+	void testAddFirestationMapping_whenStorageException() throws Exception {
 		doThrow(StorageException.class).when(service).addFirestationMapping(any(FirestationDTO.class));
 		mockMvc.perform(post("/firestation")
 				.contentType(MediaType.APPLICATION_JSON)

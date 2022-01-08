@@ -53,4 +53,9 @@ public class MedicalRecordConverterTest {
 	void testToDTOs() throws ConverterException {
 		assertEquals(dtos.get(0).getAllergies(), converter.toDTOs(entities).get(0).getAllergies());
 	}
+	
+	@Test
+	void testToDTOsWhenNull() throws ConverterException {
+		assertNull(converter.toDTOs(null));
+	}
 }
